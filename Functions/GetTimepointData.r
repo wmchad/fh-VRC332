@@ -1,7 +1,8 @@
+require(dplyr)
 source("~/Projects/VRC332/Code/fh-vrc332/Functions/BuildGroupData.r")
 
 ## Does not do anything with NA/negative values
-GetTimepointData <- function(vlData, tps, predSummary,
+GetTimepointData <- function(fcData, tps, predSummary,
                              includeGroups=TRUE, response="LogPeakVL") {
   predSummary <- predSummary %>%
     filter(substr(varName, 1, 1)=="X") %>%
@@ -9,15 +10,15 @@ GetTimepointData <- function(vlData, tps, predSummary,
 
   x <- NULL
   if ( includeGroups ) {
-    x <- BuildGroupData(vlData)
+    x <- BuildGroupData(fcData)
   }
-  x <- cbind(x, vlData %>% select(one_of(as.character(predSummary$shortVarName))))
-  y <- vlData[,response]
+  x <- cbind(x, fcData %>% select(one_of(as.character(predSummary$shortVarName))))
+  y <- fcData[,response]
 
   goodAnimalIndices <- apply(x, 1, function(x) { any(x[-(1:4)]>0) }) & y >= 0
   
   list(x=x[goodAnimalIndices,],
        y=y[goodAnimalIndices],
-       groups=vlData$GroupNm[goodAnimalIndices],
-       animalIds=vlData$AnimalID[goodAnimalIndices])
+       groups=fcData$GroupNm[goodAnimalIndices],
+       animalIds=fcData$AnimalID[goodAnimalIndices])
 }
