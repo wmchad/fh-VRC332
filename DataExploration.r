@@ -1,5 +1,6 @@
 library(VRC332); library(ggplot2)
 
+## load data
 data("FcCoreAssay")
 data("ICSStatsPreChallenge")
 data("PreChallengeCOMPASS8Color")
