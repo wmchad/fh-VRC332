@@ -34,7 +34,7 @@ RunRandomPartitionPredictions <- function(data, pTrain=0.75,
     fit <- GetRmse(train.x, train.y, test.x, test.y, method, ctrl)
     fits[[i]] <- list(fit=fit$fit, predicted=fit$predicted, actual=test.y,
                       testAnimals=data$animalIds[-inTrain])
-    compRmse[i,] <- c(RMSE(mean(train.y), test.y),
+    compRmse[i,] <- c(rmse(mean(train.y), test.y),
                       GroupRmse(train.x, train.y, test.x, test.y),
                       fit$rmse)
     if ( i %% progressEvery == 0 ) {

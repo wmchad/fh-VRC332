@@ -1,7 +1,8 @@
 source("~/Projects/VRC332/Code/fh-vrc332/Functions/GetVariableSetData.r")
 
 GetBestPredictorsData <- function(fcData, prevResults, nCutoff,
-                                  includeGroups=TRUE, response="LogPeakVL") {
+                                  includeGroups=TRUE, response="LogPeakVL",
+                                  varIndicator="var") {
   allPickedCoeffs <- NULL
   nPicked <- NULL
   for ( i in 1:length(prevResults$fits) ) {
@@ -16,7 +17,7 @@ GetBestPredictorsData <- function(fcData, prevResults, nCutoff,
   pickedTbl <- sort(pickedTbl, decreasing=TRUE)
 
   vars <- names(pickedTbl)[pickedTbl >= nCutoff]
-  vars <- vars[grepl("var", vars)]
+  vars <- vars[grepl(varIndicator, vars)]
 
   GetVariableSetData(fcData, vars, includeGroups, response)
 }
