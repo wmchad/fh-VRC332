@@ -18,10 +18,10 @@ aggPredSummary <- aggData$predSummary
 nRand <- 50
 pTrain <- 0.75
 ctrl <- trainControl(method="repeatedcv", repeats=20)
-outputFolder <- "~/Projects/VRC332/Data/PredictSetpointVL/AggregatePredictors"
+outputFolder <- "~/Projects/VRC332/Data/PredictNoChallenges/AggregatePredictors"
 for ( tp in 0:8 ) {
   cat("    Starting Timepoint", tp, "\n")
-  tpData <- GetTimepointData(fcAggData, tp, aggPredSummary, TRUE, "LogSetpointVL")
+  tpData <- GetTimepointData(fcAggData, tp, aggPredSummary, TRUE, "NoChallenges")
   outdir <- file.path(outputFolder, paste("tp", tp, "-", tpLabels[tp+1], sep=""))
   dir.create(outdir, showWarnings=FALSE, recursive=TRUE)
   predResults <- RunRandomPartitionPredictions(
@@ -32,7 +32,7 @@ for ( tp in 0:8 ) {
                    verbose=TRUE, progressEvery=10)
 
   bestPredData <- GetBestPredictorsData(fcAggData, predResults, nRand/2,
-                                        TRUE, "LogSetpointVL", "tp")
+                                        TRUE, "NoChallenges", "tp")
   predResults <- RunRandomPartitionPredictions(
                    bestPredData, pTrain=pTrain, nRand=nRand, method="glmnet", ctrl=ctrl,
                    outdir=outdir,
@@ -49,8 +49,8 @@ pTrain <- 0.75
 ctrl <- trainControl(method="repeatedcv", repeats=20)
 for ( i in 1:length(tpLevels) ) {
   cat("    Starting", tpLevels[i], "\n")
-  tpData <- GetTimepointData(fcAggData, tpSets[[i]], aggPredSummary, TRUE, "LogSetpointVL")
-  outdir <- file.path("~/Projects/VRC332/Data/PredictSetpointVL/AggregatePredictors", tpLevels[i])
+  tpData <- GetTimepointData(fcAggData, tpSets[[i]], aggPredSummary, TRUE, "NoChallenges")
+  outdir <- file.path("~/Projects/VRC332/Data/PredictNoChallenges/AggregatePredictors", tpLevels[i])
   dir.create(outdir, showWarnings=FALSE, recursive=TRUE)
   predResults <- RunRandomPartitionPredictions(
                    tpData, pTrain=pTrain, nRand=nRand, method="glmnet", ctrl=ctrl,
@@ -60,11 +60,47 @@ for ( i in 1:length(tpLevels) ) {
                    verbose=TRUE, progressEvery=10)
 
   bestPredData <- GetBestPredictorsData(fcAggData, predResults, nRand/2,
-                                        TRUE, "LogSetpointVL", "tp")
+                                        TRUE, "NoChallenges", "tp")
   predResults <- RunRandomPartitionPredictions(
                    bestPredData, pTrain=pTrain, nRand=nRand, method="glmnet", ctrl=ctrl,
                    outdir=outdir,
                    rmseFile=paste(tpLevels[i], "-BestPred-CompRmse.txt", sep=""),
                    fitsFile=paste(tpLevels[i], "-BestPred-Fits.rdata", sep=""),
                    verbose=TRUE, progressEvery=10)
+}
+
+outputFolder <- "~/Projects/VRC332/Data/PredictNoChallenges/AggregatePredictors"
+for ( tp in 0:8 ) {
+    print("==============================")
+    print(paste("tp", tp))
+    print("==============================")
+    outdir <- file.path(outputFolder, paste("tp", tp, "-", tpLabels[tp+1], sep=""))
+    resSummary <- GetRandomPartitionPredictions(
+        outdir=outdir,
+        rmseFile=paste("tp", tp, "-", tpLabels[tp+1], "-CompRmse.txt", sep=""),
+        fitsFile=paste("tp", tp, "-", tpLabels[tp+1], "-Fits.rdata", sep="")) %>%
+        SummarizePredictionResults()
+    resSummary <- GetRandomPartitionPredictions(
+        outdir=outdir,
+        rmseFile=paste("tp", tp, "-", tpLabels[tp+1], "-BestPred-CompRmse.txt", sep=""),
+        fitsFile=paste("tp", tp, "-", tpLabels[tp+1], "-BestPred-Fits.rdata", sep="")) %>%
+        SummarizePredictionResults()
+}
+
+outputFolder <- "~/Projects/VRC332/Data/PredictNoChallenges/AggregatePredictors"
+for ( i in 1:length(tpLevels) ) {
+    print("==============================")
+    print(tpLevels[i])
+    print("==============================")
+    outdir <- file.path(outputFolder, tpLevels[i])
+    resSummary <- GetRandomPartitionPredictions(
+        outdir=outdir,
+        rmseFile=paste(tpLevels[i], "-CompRmse.txt", sep=""),
+        fitsFile=paste(tpLevels[i], "-Fits.rdata", sep="")) %>%
+        SummarizePredictionResults()
+    resSummary <- GetRandomPartitionPredictions(
+        outdir=outdir,
+        rmseFile=paste(tpLevels[i], "-BestPred-CompRmse.txt", sep=""),
+        fitsFile=paste(tpLevels[i], "-BestPred-Fits.rdata", sep="")) %>%
+        SummarizePredictionResults()
 }

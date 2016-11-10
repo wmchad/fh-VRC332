@@ -1,5 +1,9 @@
 require(dplyr)
 require(tidyr)
+
+fnFolder <- "~/Projects/VRC332/Code/fh-vrc332/Functions"
+source(file.path(fnFolder, "ReplaceMissingWithMean.r"))
+
 setwd("~/Projects/VRC332/Data")
 predSummary = read.table("predSummary.txt", header=TRUE, stringsAsFactors=FALSE)
 predSummary <- predSummary %>%
