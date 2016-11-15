@@ -9,7 +9,7 @@ RunRandomPartitionPredictions <- function(data, pTrain=0.75,
                                           outdir="",
                                           rmseFile="rmseDefault.txt",
                                           fitsFile="fitsDefault.rdata",
-                                          verbose=TRUE, progressEvery=5) {
+                                          verbose=TRUE, progressEvery=5, ...) {
   vtimestamp <- function() {}
   vprint <- function(...) {}
   if ( verbose ) {
@@ -31,7 +31,7 @@ RunRandomPartitionPredictions <- function(data, pTrain=0.75,
     test.x <- data$x[-inTrain,]
     test.y <- data$y[-inTrain]
 
-    fit <- GetRmse(train.x, train.y, test.x, test.y, method, ctrl)
+    fit <- GetRmse(train.x, train.y, test.x, test.y, method, ctrl, ...)
     fits[[i]] <- list(fit=fit$fit, predicted=fit$predicted, actual=test.y,
                       testAnimals=data$animalIds[-inTrain])
     compRmse[i,] <- c(rmse(mean(train.y), test.y),

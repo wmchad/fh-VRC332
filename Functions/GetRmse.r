@@ -4,8 +4,9 @@ rmse <- function(predicted, actual) {
 
 GetRmse <- function(train.x, train.y, test.x, test.y,
                     method="glmnet",
-                    ctrl=trainControl(method="repeatedcv", repeats=5)) {
-  res <- train(x=train.x, y=train.y, method=method, trControl=ctrl)
+                    ctrl=trainControl(method="repeatedcv", repeats=5),
+                    ...) {
+  res <- train(x=train.x, y=train.y, method=method, trControl=ctrl, ...)
   pred <- predict(res, test.x)
   list(fit=res, predicted=pred, rmse=rmse(pred, test.y))
 }
