@@ -20,7 +20,7 @@ for ( i in 1:length(tpLevels) ) {
   cat("    Starting", tpLevels[i], "\n")
   tpData <- GetTimepointData(fcData, tpSets[[i]], predSummary, TRUE, "NoChallenges")
   tpData$x <- ReplaceMissingWithMean(tpData$x)
-  outdir <- file.path("~/Documents/Projects/MonkeySIV/Data/PredictNoChallenges", tpLevels[i])
+  outdir <- file.path("~/Projects/VRC332/Data/PredictNoChallenges", tpLevels[i])
   dir.create(outdir, showWarnings=FALSE, recursive=TRUE)
   predResults <- RunRandomPartitionPredictions(
                    tpData, pTrain=pTrain, nRand=nRand, method="glmnet", ctrl=ctrl,
