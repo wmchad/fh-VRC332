@@ -48,14 +48,6 @@ coefSummary %>% arrange(desc(abs(coef)))
 ## 16  6     R2A.4.high            SIV.E543.gp140      var1142  0.004377974
 ## 17  3          R3A.3            SIV.E543.gp140       var678  0.002951191
 
-vars <- coefSummary$shortVarName
-subData <- GetVariableSetData(fcData, vars, TRUE, "NoChallenges")
-
-coxModel <- coxph(vlData$surv~as.matrix(subData$x[,-(1:4)]), init=coefSummary$coef, iter=0)
-
-coxPredictions <- survfit(coxModel, newData=as.matrix(subData$x[,-(1:4)]))
-
-
 minCvs <- sapply(glmnetRes2$modlist, function(x) { min(x$cvm) })
 coef2 <- as.data.frame(summary(coef(glmnetRes2, alpha=glmnetRes2$alpha[minCvs == min(minCvs)])))
 coefSummary2 <- predSummary %>% filter(shortVarName %in% names(vlData$x)[coef2$i-1]) %>%
@@ -70,18 +62,28 @@ coefSummary2 %>% arrange(desc(abs(coef)))
 ## 6  8           C1q SIV.1A11.gp140      var1427  0.004988183
 ## 7  8    R2A.4.high SIV.1A11.gp140      var1485  0.004202754
 
-rmse(predict(glmnetRes,
-             newx=as.matrix(vlData$x),
+rmse(predict(glmnetRes, newx=as.matrix(vlData$x),
              s=glmnetRes$lambda.min, type="response"),
      vlData$y)
-## 5.676173
+## Not how to do prediction!
 
-sqrt(mean((predict(glmnetRes2,
-                   newx=as.matrix(vlData$x),
-                   alpha=glmnetRes2$alpha[minCvs==min(minCvs)],
-                   type="response") -
-           vlData$y)^2))
-## 5.606923
+rmse(predict(glmnetRes2, newx=as.matrix(vlData$x),
+             alpha=glmnetRes2$alpha[minCvs==min(minCvs)],
+             type="response"),
+           vlData$y)
+## Not how to do prediction!
+
+## Maybe how to do prediction?
+vars <- coefSummary$shortVarName
+subData <- GetVariableSetData(fcData, vars, TRUE, "NoChallenges")
+coxModel <- coxph(vlData$surv~as.matrix(subData$x[,-(1:4)]), init=coefSummary$coef, iter=0)
+coxFit <- survfit(coxModel, newData=as.matrix(subData$x[,-(1:4)]))
+s0 <- exp(-coxFit$cumhaz)
+preds <- sapply(1:nrow(subData$x), function(i) {
+    sum(s0^exp(sum(subData$x[i,-(1:4)] * coefSummary$coef)))
+})
+rmse(preds, vlData$y)
+## 3.897543
 
 pTrain <- 0.75
 nRand <- 50
