@@ -21,6 +21,8 @@ vlData$x[,-(1:4)] <- scale(vlData$x[,-(1:4)])
 glmnetRes <- cv.glmnet(x=as.matrix(vlData$x), y=vlData$y)
 glmnetRes2 <- cvAlpha.glmnet(x=as.matrix(vlData$x), y=vlData$y)
 
+glmnetRes.pois <- cv.glmnet(x=as.matrix(vlData$x), y=vlData$y, family="pois")
+
 coef1 <- as.data.frame(summary(predict(glmnetRes, type="coef", s=glmnetRes$lambda.min)))
 coefSummary <- predSummary %>% filter(shortVarName %in% names(vlData$x)[coef1[-1,"i"]-1]) %>%
     select(tp:ag, shortVarName) %>% mutate(coef=coef1$x[-1])
@@ -61,17 +63,60 @@ minCvs <- sapply(glmnetRes2$modlist, function(x) { min(x$cvm) })
 coef2 <- as.data.frame(summary(coef(glmnetRes2, alpha=glmnetRes2$alpha[minCvs == min(minCvs)])))
 ## 1037 x 3
 
+coef.pois <- as.data.frame(summary(predict(glmnetRes.pois, type="coef", s=glmnetRes.pois$lambda.min)))
+coefSummary.pois <- predSummary %>% filter(shortVarName %in% names(vlData$x)[coef.pois[-1,"i"]-1]) %>%
+    select(tp:ag, shortVarName) %>% mutate(coef=coef.pois$x[-1])
+coefSummary.pois %>% arrange(desc(abs(coef)))
+##   tp             re                 ag shortVarName         coef
+## 1   1  aRhIgG.PE.low SIVcpz.EK505.gp120       var204 -0.103339996
+## 2   6  aRhIgG.PE.low    SIVmac239.gp140      var1067  0.092846791
+## 3   2          R3A.3     SIV.1A11.gp140       var505  0.076526182
+## 4   1          R2A.3    SIVsmH4.p55.Gag       var270  0.036061347
+## 5   1          R2A.3    SIVmac239.gp120       var263 -0.035923521
+## 6   5 aRhIgG.PE.high               G119       var863  0.024533452
+## 7   2            C1q                G73       var391 -0.024258351
+## 8   6          R3A.3               G119      var1186 -0.011384760
+## 9   3          R3A.3  SIVmac251.BK.PR55       var684 -0.010070952
+## 10  1     R2A.4.high  SIVmac251.BK.PR55       var288  0.002319445
+
 sqrt(mean((predict(glmnetRes,
                    newx=as.matrix(vlData$x),
                    s=glmnetRes$lambda.min) -
            vlData$y)^2))
 ## 1.851807
 
+require(ggplot2)
+plotData <-  deltaData %>% select(AnimalId:NoChallenges) %>%
+                     mutate(predicted=predict(glmnetRes,
+                                              newx=as.matrix(vlData$x),
+                                              s=glmnetRes$lambda.min))
+
+predPlot <- ggplot(plotData, aes(NoChallenges, predicted)) +
+    geom_point(aes(color=GroupNm), alpha=0.7) +
+    geom_abline(intercept=0, slope=1, lty=2) +
+    labs(x="Number of Challenges", title="Prediction from lagged data, pre-challenge")
+
+residPlot <- ggplot(plotData, aes(NoChallenges, NoChallenges - predicted)) +
+    geom_point(aes(color=GroupNm), alpha=0.7) +
+    geom_hline(yintercept=0, lty=2) +
+    labs(x="Number of Challenges", y="Prediction Error (actual - predicted)",
+         title="Residuals from lagged data, pre-challenge")
+
+setwd("~/Projects/VRC332/Plots/PredictNoChallenges")
+ggsave("LagPredictions.png", predPlot, width=8, height=6)
+ggsave("LagResiduals.png", residPlot, width=8, height=6)
+
 sqrt(mean((predict(glmnetRes2,
                    newx=as.matrix(vlData$x),
                    alpha=glmnetRes2$alpha[minCvs==min(minCvs)]) -
            vlData$y)^2))
 ## 3.78923
+
+sqrt(mean((predict(glmnetRes.pois,
+                   newx=as.matrix(vlData$x),
+                   s=glmnetRes.pois$lambda.min) -
+           vlData$y)^2))
+## 4.609163
 
 pTrain <- 0.75
 nRand <- 50

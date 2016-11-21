@@ -1,3 +1,4 @@
+require(glmnet)
 fnFolder <- "~/Projects/VRC332/Code/fh-vrc332/Functions"
 
 source(file.path(fnFolder, "LoadFcData.r"))

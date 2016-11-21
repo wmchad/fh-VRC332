@@ -29,49 +29,52 @@ coef1 <- as.data.frame(summary(predict(glmnetRes, type="coef", s=glmnetRes$lambd
 coefSummary <- predSummary %>% filter(shortVarName %in% names(vlData$x)[coef1$i-1]) %>%
     select(tp:ag, shortVarName) %>% mutate(coef=as.numeric(coef1$x))
 coefSummary %>% arrange(desc(abs(coef)))
-##    tp             re                        ag shortVarName         coef
-## 1   5          R3A.3                     C1.TR      var1013 -0.249159481
-## 2   0  aRhIgG.PE.low            SIV.E543.gp140        var31 -0.156534056
-## 3   7          R3A.1             SIVsm.E660.84      var1353  0.148413418
-## 4   8            C1q            SIV.1A11.gp140      var1427  0.138364310
-## 5   7  aRhIgG.PE.low            SIV.1A11.gp140      var1234  0.137292435
-## 6   1     R2A.4.high J08.V1V2.E660.2A5.AVI.His       var279  0.105786372
-## 7   5          R3A.3                     C1.Ak      var1012 -0.080875241
-## 8   5          R3A.1            SIV.E543.gp140      var1002 -0.050433619
-## 9   7 aRhIgG.PE.high   SIVmac239.gp140.AVI.His      var1219 -0.049992260
-## 10  8 aRhIgG.PE.high   SIVmac239.gp140.AVI.His      var1391 -0.039623242
-## 11  3          R3A.3           SIVmac239.gp140       var682  0.029190090
-## 12  5          R3A.1            SIVsm.E660.2A5      var1008 -0.024624666
-## 13  5          R3A.3                       G49      var1016 -0.023656457
-## 14  1          R2A.3        SIVcpz.EK505.gp120       var262  0.021476501
-## 15  3          R3A.3            SIV.E543.gp140       var678  0.008011964
-## 16  2          R2A.2   J08.V1V2.mac239.AVI.His       var421  0.006003471
-## 17  6     R2A.4.high            SIV.E543.gp140      var1142  0.004563079
+##   tp             re                        ag shortVarName         coef
+## 1   5          R3A.3                     C1.TR      var1013 -0.240197502
+## 2   7          R3A.1             SIVsm.E660.84      var1353  0.153688069
+## 3   0  aRhIgG.PE.low            SIV.E543.gp140        var31 -0.144013992
+## 4   8            C1q            SIV.1A11.gp140      var1427  0.126951015
+## 5   7  aRhIgG.PE.low            SIV.1A11.gp140      var1234  0.124963595
+## 6   1     R2A.4.high J08.V1V2.E660.2A5.AVI.His       var279  0.097555202
+## 7   5          R3A.3                     C1.Ak      var1012 -0.070783505
+## 8   5          R3A.1            SIV.E543.gp140      var1002 -0.054112953
+## 9   7 aRhIgG.PE.high   SIVmac239.gp140.AVI.His      var1219 -0.044278760
+## 10  8 aRhIgG.PE.high   SIVmac239.gp140.AVI.His      var1391 -0.032838486
+## 11  5          R3A.3                       G49      var1016 -0.021182020
+## 12  3          R3A.3           SIVmac239.gp140       var682  0.016889695
+## 13  1          R2A.3        SIVcpz.EK505.gp120       var262  0.013744691
+## 14  5          R3A.1            SIVsm.E660.2A5      var1008 -0.013229371
+## 15  2          R2A.2   J08.V1V2.mac239.AVI.His       var421  0.005258732
+## 16  6     R2A.4.high            SIV.E543.gp140      var1142  0.004377974
+## 17  3          R3A.3            SIV.E543.gp140       var678  0.002951191
+
+vars <- coefSummary$shortVarName
+subData <- GetVariableSetData(fcData, vars, TRUE, "NoChallenges")
+
+coxModel <- coxph(vlData$surv~as.matrix(subData$x[,-(1:4)]), init=coefSummary$coef, iter=0)
+
+coxPredictions <- survfit(coxModel, newData=as.matrix(subData$x[,-(1:4)]))
+
 
 minCvs <- sapply(glmnetRes2$modlist, function(x) { min(x$cvm) })
 coef2 <- as.data.frame(summary(coef(glmnetRes2, alpha=glmnetRes2$alpha[minCvs == min(minCvs)])))
 coefSummary2 <- predSummary %>% filter(shortVarName %in% names(vlData$x)[coef2$i-1]) %>%
     select(tp:ag, shortVarName) %>% mutate(coef=as.numeric(coef2$x))
 coefSummary2 %>% arrange(desc(abs(coef)))
-##   tp            re                        ag shortVarName        coef
-## 1   7         R3A.1             SIVsm.E660.84      var1353  0.15559746
-## 2   5         R3A.3                     C1.TR      var1013 -0.15523835
-## 3   0 aRhIgG.PE.low            SIV.E543.gp140        var31 -0.06410573
-## 4   5         R3A.1            SIV.E543.gp140      var1002 -0.04923751
-## 5   7 aRhIgG.PE.low            SIV.1A11.gp140      var1234  0.04599086
-## 6   8           C1q            SIV.1A11.gp140      var1427  0.04562859
-## 7   1    R2A.4.high J08.V1V2.E660.2A5.AVI.His       var279  0.03680156
-## 8   5         R3A.3                     C1.Ak      var1012 -0.02133747
-## 9   8         R3A.1            SIVsm.E660.2A5      var1524  0.01666741
-## 10  5         R3A.3                       G49      var1016 -0.01472086
-## 11  5     R2A.4.low            SIV.E543.gp140       var990 -0.01171111
-## 12  8    R2A.4.high            SIV.1A11.gp140      var1485  0.00222758
+##  tp            re             ag shortVarName         coef
+## 1  7         R3A.1  SIVsm.E660.84      var1353  0.187128977
+## 2  5         R3A.3          C1.TR      var1013 -0.135933161
+## 3  0 aRhIgG.PE.low SIV.E543.gp140        var31 -0.018845743
+## 4  5         R3A.1 SIV.E543.gp140      var1002 -0.016195205
+## 5  8         R3A.1 SIVsm.E660.2A5      var1524  0.012197402
+## 6  8           C1q SIV.1A11.gp140      var1427  0.004988183
+## 7  8    R2A.4.high SIV.1A11.gp140      var1485  0.004202754
 
-sqrt(mean((predict(glmnetRes,
-                   newx=as.matrix(vlData$x),
-                   s=glmnetRes$lambda.min, type="response") -
-           vlData$y)^2))
-## 5.687537
+rmse(predict(glmnetRes,
+             newx=as.matrix(vlData$x),
+             s=glmnetRes$lambda.min, type="response"),
+     vlData$y)
+## 5.676173
 
 sqrt(mean((predict(glmnetRes2,
                    newx=as.matrix(vlData$x),
