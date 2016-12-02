@@ -13,6 +13,7 @@ SummarizePredictionResults <- function(results, verbose=TRUE) {
     PickedCoeffs <- NULL
     nPicked <- NULL
     nRep <- length(results$fits)
+    nvar <- sum(substr(rownames(results$fits[[1]]$fit$finalModel$beta), 1, 3) == "var")
     for ( i in 1:nRep ) {
         model <- results$fits[[i]]$fit$finalModel
         coeffs <- as.data.frame(summary(predict(model, type="coef", s=model$lambdaOpt)))[,c(1,3)]
@@ -28,6 +29,7 @@ SummarizePredictionResults <- function(results, verbose=TRUE) {
     pickedTbl <- pickedTbl[substr(names(pickedTbl), 1, 3) == "var"]
     vprint(pickedTbl[pickedTbl >= nRep/2])
     list(rmses=rmses,
+         nvar=nvar,
          pickedVars=pickedTbl,
          nPicked=sum(pickedTbl >= nRep/2))
 }

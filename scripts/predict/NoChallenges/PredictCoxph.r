@@ -26,52 +26,28 @@ glmnetRes <- cv.glmnet(x=as.matrix(vlData$x), y=vlData$surv, family="cox")
 glmnetRes2 <- cvAlpha.glmnet(x=as.matrix(vlData$x), y=vlData$surv, family="cox")
 
 coef1 <- as.data.frame(summary(predict(glmnetRes, type="coef", s=glmnetRes$lambda.min)))
-coefSummary <- predSummary %>% filter(shortVarName %in% names(vlData$x)[coef1$i-1]) %>%
+coefSummary <- predSummary %>% filter(shortVarName %in% names(vlData$x)[coef1$i]) %>%
     select(tp:ag, shortVarName) %>% mutate(coef=as.numeric(coef1$x))
 coefSummary %>% arrange(desc(abs(coef)))
-##   tp             re                        ag shortVarName         coef
-## 1   5          R3A.3                     C1.TR      var1013 -0.240197502
-## 2   7          R3A.1             SIVsm.E660.84      var1353  0.153688069
-## 3   0  aRhIgG.PE.low            SIV.E543.gp140        var31 -0.144013992
-## 4   8            C1q            SIV.1A11.gp140      var1427  0.126951015
-## 5   7  aRhIgG.PE.low            SIV.1A11.gp140      var1234  0.124963595
-## 6   1     R2A.4.high J08.V1V2.E660.2A5.AVI.His       var279  0.097555202
-## 7   5          R3A.3                     C1.Ak      var1012 -0.070783505
-## 8   5          R3A.1            SIV.E543.gp140      var1002 -0.054112953
-## 9   7 aRhIgG.PE.high   SIVmac239.gp140.AVI.His      var1219 -0.044278760
-## 10  8 aRhIgG.PE.high   SIVmac239.gp140.AVI.His      var1391 -0.032838486
-## 11  5          R3A.3                       G49      var1016 -0.021182020
-## 12  3          R3A.3           SIVmac239.gp140       var682  0.016889695
-## 13  1          R2A.3        SIVcpz.EK505.gp120       var262  0.013744691
-## 14  5          R3A.1            SIVsm.E660.2A5      var1008 -0.013229371
-## 15  2          R2A.2   J08.V1V2.mac239.AVI.His       var421  0.005258732
-## 16  6     R2A.4.high            SIV.E543.gp140      var1142  0.004377974
-## 17  3          R3A.3            SIV.E543.gp140       var678  0.002951191
+##   tp             re                      ag shortVarName         coef
+## 1   5          R3A.3                    G119      var1014 -0.240197502
+## 2   7          R3A.1         SIVsmH4.p55.Gag      var1354  0.153688069
+## 3   0  aRhIgG.PE.low      SIVcpz.EK505.gp120        var32 -0.144013992
+## 4   8            C1q          SIV.E543.gp140      var1428  0.126951015
+## 5   7  aRhIgG.PE.low          SIV.E543.gp140      var1235  0.124963595
+## 6   1     R2A.4.high J08.V1V2.mac239.AVI.His       var280  0.097555202
+## 7   5          R3A.3                   C1.TR      var1013 -0.070783505
+## 8   5          R3A.1      SIVcpz.EK505.gp120      var1003 -0.054112953
+## 9   7 aRhIgG.PE.high       SIVmac251.BK.PR55      var1220 -0.044278760
+## 10  8 aRhIgG.PE.high       SIVmac251.BK.PR55      var1392 -0.032838486
+## 11  5          R3A.3                     G73      var1017 -0.021182020
+## 12  3          R3A.3 SIVmac239.gp140.AVI.His       var683  0.016889695
+## 13  1          R2A.3         SIVmac239.gp120       var263  0.013744691
+## 14  5          R3A.1           SIVsm.E660.84      var1009 -0.013229371
+## 15  2          R2A.2         SIVmac239.gp140       var422  0.005258732
+## 16  6     R2A.4.high      SIVcpz.EK505.gp120      var1143  0.004377974
+## 17  3          R3A.3      SIVcpz.EK505.gp120       var679  0.002951191
 
-minCvs <- sapply(glmnetRes2$modlist, function(x) { min(x$cvm) })
-coef2 <- as.data.frame(summary(coef(glmnetRes2, alpha=glmnetRes2$alpha[minCvs == min(minCvs)])))
-coefSummary2 <- predSummary %>% filter(shortVarName %in% names(vlData$x)[coef2$i-1]) %>%
-    select(tp:ag, shortVarName) %>% mutate(coef=as.numeric(coef2$x))
-coefSummary2 %>% arrange(desc(abs(coef)))
-##  tp            re             ag shortVarName         coef
-## 1  7         R3A.1  SIVsm.E660.84      var1353  0.187128977
-## 2  5         R3A.3          C1.TR      var1013 -0.135933161
-## 3  0 aRhIgG.PE.low SIV.E543.gp140        var31 -0.018845743
-## 4  5         R3A.1 SIV.E543.gp140      var1002 -0.016195205
-## 5  8         R3A.1 SIVsm.E660.2A5      var1524  0.012197402
-## 6  8           C1q SIV.1A11.gp140      var1427  0.004988183
-## 7  8    R2A.4.high SIV.1A11.gp140      var1485  0.004202754
-
-rmse(predict(glmnetRes, newx=as.matrix(vlData$x),
-             s=glmnetRes$lambda.min, type="response"),
-     vlData$y)
-## Not how to do prediction!
-
-rmse(predict(glmnetRes2, newx=as.matrix(vlData$x),
-             alpha=glmnetRes2$alpha[minCvs==min(minCvs)],
-             type="response"),
-           vlData$y)
-## Not how to do prediction!
 
 ## Maybe how to do prediction?
 vars <- coefSummary$shortVarName
@@ -82,19 +58,98 @@ s0 <- exp(-coxFit$cumhaz)
 preds <- sapply(1:nrow(subData$x), function(i) {
     sum(s0^exp(sum(subData$x[i,-(1:4)] * coefSummary$coef)))
 })
+preds2 <- sapply(1:nrow(subData$x), function(i) {
+    sum(s0^predict(glmnetRes,
+                   newx=as.matrix(vlData$x[i,]),
+                   s=glmnetRes$lambda.min,
+                   type="response"))
+})
 rmse(preds, vlData$y)
-## 3.897543
+## 3.847226
+rmse(preds2, vlData$y)
+## 2.991508
 
 pTrain <- 0.75
 nRand <- 50
 ctrl <- trainControl(method="repeatedcv", repeats=20)
-outdir <- file.path("~/Documents/Projects/MonkeySIV/Data/PredictNoChallenges/StraightGlmnet/Delta")
+outdir <- file.path("~/Documents/Projects/MonkeySIV/Data/PredictNoChallenges/CoxPh")
 dir.create(outdir, showWarnings=FALSE, recursive=TRUE)
+rmseFile <- "coxph-CompRmse.txt"
+fitsFile <- "coxph-Fits.rdata"
 
 vars <- (predSummary %>%
-         filter(shortVarName %in% names(vlData$x)[coef1[-1,"i"]-1]) %>%
+         filter(shortVarName %in% names(vlData$x)[coef1$i]) %>%
          select(shortVarName))$shortVarName
-subData <- GetVariableSetData(deltaData, vars, TRUE, "NoChallenges")
+subData <- GetVariableSetData(fcData, vars, TRUE, "NoChallenges")
+event <- rep(1, length(subData$y))
+event[subData$y==13] <- 0
+subData$surv <- Surv(subData$y, event)
+
+vtimestamp <- function(){timestamp()}
+vprint <- function(..., sep=""){print(paste(..., sep=sep))}
+progressEvery <- 5
+
+curdir <- getwd()
+compRmse <- matrix(nrow=nRand, ncol=4)
+colnames(compRmse) <- c("baseline", "group", "predicted", "predicted2")
+fits <- NULL
+
+vtimestamp()
+vprint("Starting...")
+for ( i in 1:nRand ) {
+    inTrain = createDataPartition(subData$groups, p=0.75, list=FALSE)
+    train.x <- subData$x[inTrain,]
+    train.y <- subData$y[inTrain]
+    train.surv <- subData$surv[inTrain]
+    test.x <- subData$x[-inTrain,]
+    test.y <- subData$y[-inTrain]
+    test.surv <- subData$surv[-inTrain]
+
+    res <- cv.glmnet(x=as.matrix(train.x), y=train.surv, family="cox")
+    coef <- as.data.frame(summary(predict(res, type="coef", s=glmnetRes$lambda.min)))
+    vars <- (predSummary %>% filter(shortVarName %in% names(subData$x)[coef$i]))$shortVarName
+
+    coxModel <- coxph(train.surv~as.matrix(train.x[,coef$i]), init=coef$x, iter=0)
+    coxFit <- survfit(coxModel, newData=as.matrix(train.x[,coef$i]))
+    s0 <- exp(-coxFit$cumhaz)
+    preds <- sapply(1:nrow(test.x), function(i) {
+        sum(s0^exp(sum(test.x[i,coef$i] * coef$x)))
+    })
+    preds2 <- sapply(1:nrow(test.x), function(i) {
+        sum(s0^predict(res,
+                       newx=as.matrix(test.x[i,]),
+                       s=res$lambda.min,
+                       type="response"))
+    })
+
+    fit <- list(fit=res, predicted=preds, rmse=rmse(preds, test.y),
+                predicted2=preds2, rmse2=rmse(preds2, test.y))
+
+    fits[[i]] <- list(fit=fit$fit, predicted=fit$predicted,
+                      predicted2=fit$predicted2, actual=test.y,
+                      testAnimals=subData$animalIds[-inTrain])
+    compRmse[i,] <- c(rmse(mean(train.y), test.y),
+                      GroupRmse(train.x, train.y, test.x, test.y),
+                      fit$rmse, fit$rmse2)
+    if ( i %% progressEvery == 0 ) {
+        vtimestamp()
+        vprint(paste(i, "iterations finished"))
+        ## setwd(outdir)
+        ## write.table(compRmse, rmseFile,
+        ##             quote=FALSE, row.names=FALSE, col.names=FALSE)
+        ## save(fits, file=fitsFile)
+    }
+}
+
+setwd(outdir)
+write.table(compRmse, rmseFile,
+            quote=FALSE, row.names=FALSE, col.names=FALSE)
+save(fits, file=fitsFile)
+
+predResults <- list(compRmse=compRmse,
+                    fits=fits)
+
+
 predResults <- RunRandomPartitionPredictions(
     subData, pTrain=pTrain, nRand=nRand, method="glmnet", ctrl=ctrl,
     outdir=outdir,
