@@ -1,3 +1,4 @@
+require(glmnet)
 fnFolder <- "~/Projects/VRC332/Code/fh-vrc332/Functions"
 
 source(file.path(fnFolder, "LoadFcData.r"))
@@ -122,9 +123,9 @@ GetSelectedVars <- function(dataFolder, predictionFolder,
                header=T, stringsAsFactors=FALSE)
 }
 
-tbl1 <- GetSelectedVars(dataFolder, noChallengesFolder, "Lag", "AllPreChallenge")
-tbl2 <- GetSelectedVars(dataFolder, noChallengesFolder, "Adjusted", "AllPreChallenge")
-tbl3 <- GetSelectedVars(dataFolder, noChallengesFolder, "Original", "AllPreChallenge")
+tbl1 <- GetSelectedVars(dataFolder, noChallengesFolder, "Lag", "AllPreChallenge") ## 29.7%
+tbl2 <- GetSelectedVars(dataFolder, noChallengesFolder, "Adjusted", "AllPreChallenge") ## 28.3%
+tbl3 <- GetSelectedVars(dataFolder, noChallengesFolder, "Original", "AllPreChallenge") ## 23.3%
 
 ## Common between Lag and Adjusted
 ## tp            re                 ag shortVarName nPicked
@@ -149,3 +150,39 @@ tbl3 <- GetSelectedVars(dataFolder, noChallengesFolder, "Original", "AllPreChall
 ## tp            re                 ag shortVarName nPicked
 ##  2         R3A.3  SIVmac251.BK.PR55       var512      37
 ##  3    R2A.4.high     SIV.1A11.gp140       var625      31
+
+tbl1 <- GetSelectedVars(dataFolder, peakVLFolder, "Lag", "AllPreChallenge") ## 12.8%
+tbl2 <- GetSelectedVars(dataFolder, peakVLFolder, "Adjusted", "AllPreChallenge") ## 14.8%
+tbl3 <- GetSelectedVars(dataFolder, peakVLFolder, "Original", "AllPreChallenge") ## 10.3%
+
+## Common between Lag and Original
+## tp      re                ag shortVarName nPicked
+##  5   R2A.3               G49       var943      38
+
+## Common between Lag and Adjusted
+## tp            re                      ag shortVarName nPicked
+##  1 aRhIgG.PE.low J08.V1V2.mac239.AVI.His       var201      26
+
+## Common between Adjusted and Original
+## tp         re              ag shortVarName nPicked
+##  2 R2A.4.high SIVsmH4.p55.Gag       var463      29
+## Lag:
+## tp         re              ag shortVarName nPicked
+## 1  R2A.4.high SIVsmH4.p55.Gag       var291      28
+
+## Similar:
+## Lag:
+## tp         re              ag shortVarName nPicked
+##  5        MBL             G49       var926      25
+##  3      R2A.3           C1.Ak       var595      25
+## Adjusted:
+## tp         re              ag shortVarName nPicked
+##  4        MBL             G49       var754      39
+## Original:
+## tp         re              ag shortVarName nPicked
+##  4      R2A.3           C1.Ak       var767      46
+
+tbl1 <- GetSelectedVars(dataFolder, setpointVLFolder, "Original", "tp0-Baseline") ## 27.3%
+tbl2 <- GetSelectedVars(dataFolder, setpointVLFolder, "Original", "AllPreChallenge") ## 26.2%
+tbl3 <- GetSelectedVars(dataFolder, setpointVLFolder, "Lag", "tp2-2xDna") ## 15.3%
+

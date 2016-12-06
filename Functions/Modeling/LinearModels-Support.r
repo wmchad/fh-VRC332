@@ -15,6 +15,7 @@ BuildFitCoefData <- function(fit, tps, grps, animalIds, ags, res) {
     coefDf$tp <- NA
     for ( tp in tps ) {
         coefDf$tp[grep(paste("as.factor\\(tp\\)", tp, sep=""), coefDf$var)] <- tp
+        coefDf$tp[grep(paste("tp", tp, sep=""), coefDf$var)] <- tp
     }
     coefDf$group <- NA
     for ( grp in grps ) {
@@ -112,12 +113,12 @@ RunAndSummarizeModel <- function(data, dataName,
                                  modelFormula, modelName,
                                  dataDir, tps,
                                  grps, animalIds,
-                                 ags, res){
+                                 ags, res) {
     fit <- lm(modelFormula, data=data, model=FALSE)
     setwd(dataDir)
     saveRDS(fit, FitName(dataName, modelName))
     coefs <- BuildFitCoefData(fit, tps, grps, animalIds, ags, res)
-    data <- data %>% mutate(predicted=predict(fit),
+    data <- data %>% mutate(predicted=predict(fit, newdata=data),
                             resid=resid(fit))
     rm(fit)
     list(data=data, coefs=coefs)
@@ -135,4 +136,14 @@ ModelSummaryPlots <- function(data, plotDir, ags, res) {
 
 GetModelFit <- function(dataName, modelName, dataDir) {
     readRDS(file.path(dataDir, FitName(dataName, modelName)))
+}
+
+GetModelSummary <- function(data, dataName, modelName, dataDir,
+                            tps, grps, animalIds, ags, res) {
+    fit <- GetModelFit(dataName, modelName, dataDir)
+    coefs <- BuildFitCoefData(fit, tps, grps, animalIds, ags, res)
+    data <- data %>% mutate(predicted=predict(fit, newdata=data),
+                            resid=resid(fit))
+    rm(fit)
+    list(data=data, coefs=coefs)
 }

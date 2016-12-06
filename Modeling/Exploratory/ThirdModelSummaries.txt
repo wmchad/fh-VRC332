@@ -1,0 +1,384 @@
+Third Pass Model Summaries
+12/05/2016
+William Chad Young
+
+Model: log(readout) ~ Group * (Timepoint + re + ag)
+
+
+--------------------------------------------------------------------------------
+Original Data
+--------------------------------------------------------------------------------
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.0936 -1.0097 -0.0771  0.9803  5.4393 
+
+Residual standard error: 1.464 on 109718 degrees of freedom
+Multiple R-squared:  0.5612,	Adjusted R-squared:  0.5604 
+F-statistic: 742.4 on 189 and 109718 DF,  p-value: < 2.2e-16
+
+table(results.orig3$coefs %>% filter(pval <= 0.05) %>% select(predictorGroup))
+
+##                   Antigen           Group   Group:Antigen   Group:Reagent         Reagent 
+##         1              20               1              41              28               9 
+## Timepoint Timepoint:Group 
+##         5              25 
+table(results.orig3$coefs %>% filter(pval <= 0.01) %>% select(predictorGroup))
+##                   Antigen           Group   Group:Antigen   Group:Reagent         Reagent 
+##         1              18               1              39              26               9 
+## Timepoint Timepoint:Group 
+##         5              25
+	      
+results.orig3$coef %>% filter(pval <= 0.05) %>%
+  select(var, predictorGroup, beta:pval) %>% arrange(pval)
+
+                                         var  predictorGroup       beta         se       tval
+1                                                             7.1970744 0.06300874 114.223437
+2                                          8       Timepoint  2.5782502 0.04378656  58.882235
+3                                  R2A.4.low         Reagent -2.2334342 0.04797238 -46.556664
+4                                        MBL         Reagent -1.9672013 0.05204077 -37.801158
+5                                   5:x_PARI Timepoint:Group  2.0114885 0.05746261  35.005170
+6                         SIVcpz.EK505.gp120         Antigen -2.5700844 0.07382415 -34.813599
+7                                  5:SIV_Env Timepoint:Group  2.1898021 0.06467703  33.857494
+8                                      R3A.1         Reagent  1.4662638 0.04502282  32.567125
+9                                  7:SIV_Env Timepoint:Group  1.9918279 0.06467703  30.796528
+10                             aRhIgG.PE.low         Reagent -1.2670263 0.04234874 -29.918865
+11                                  7:x_PARI Timepoint:Group  1.7001637 0.05746261  29.587301
+12                             SIVsm.E660.84         Antigen -2.0536567 0.07059986 -29.088679
+13                           SIVmac239.gp130         Antigen -2.0292812 0.07059986 -28.743416
+14                         SIVmac251.BK.PR55         Antigen -2.0135864 0.07059986 -28.521110
+15                          7:SIV_Mosaic_Env Timepoint:Group  1.6933631 0.05982382  28.305832
+16                                     R2A.2         Reagent -1.8433842 0.06538372 -28.193323
+17                            SIVsm.E660.2A5         Antigen -1.8925244 0.07059986 -26.806347
+18                                       C1q         Reagent -1.1429969 0.04295485 -26.609266
+19                           SIVmac239.gp120         Antigen -1.8047772 0.07059986 -25.563466
+20                          5:SIV_Mosaic_Env Timepoint:Group  1.5183296 0.05982382  25.380016
+21                                  6:x_PARI Timepoint:Group  1.4525575 0.05746261  25.278306
+22                            SIV.E543.gp140         Antigen -1.6511736 0.06801476 -24.276695
+23                                 6:SIV_Env Timepoint:Group  1.5414488 0.06467703  23.833019
+24                                x_PARI:C1q   Group:Reagent -1.3031920 0.05637113 -23.118075
+25                    x_PARI:SIVmac239.gp140   Group:Antigen  1.9788017 0.08713150  22.710520
+26                                         7       Timepoint  0.9679526 0.04378656  22.106160
+27                   SIV_Env:SIVmac239.gp140   Group:Antigen  2.0716144 0.09807084  21.123653
+28                    x_PARI:SIVmac239.gp120   Group:Antigen  1.7847416 0.09265065  19.263132
+29                            SIV.1A11.gp140         Antigen -1.3541303 0.07059986 -19.180353
+30                          6:SIV_Mosaic_Env Timepoint:Group  1.0765047 0.05982382  17.994581
+31                    x_PARI:SIVmac239.gp130   Group:Antigen  1.6354326 0.09265065  17.651605
+32                              x_PARI:R2A.2   Group:Reagent -1.5089976 0.08580531 -17.586295
+33                                  3:x_PARI Timepoint:Group  0.9774032 0.05746261  17.009376
+34                   SIV_Env:SIVmac239.gp120   Group:Antigen  1.7622767 0.10428291  16.898999
+35                                 3:SIV_Env Timepoint:Group  1.0730515 0.06467703  16.590921
+36                             SIV_Env:R2A.2   Group:Reagent -1.5804608 0.09657815 -16.364579
+37            SIV_Mosaic_Env:SIVmac239.gp140   Group:Antigen  1.4410787 0.09071184  15.886334
+38                                 2:SIV_Env Timepoint:Group  1.0201711 0.06467703  15.773314
+39                   J08.V1V2.mac239.AVI.His         Antigen -1.0077262 0.06458608 -15.602838
+40                               SIV_Env:C1q   Group:Reagent -0.9886218 0.06344851 -15.581481
+41                               SIV_Env:MBL   Group:Reagent -1.1764258 0.07686931 -15.304233
+42                   SIV_Env:SIVmac239.gp130   Group:Antigen  1.5845700 0.10428291  15.194916
+43                   SIV_Gag:SIVsmH4.p55.Gag   Group:Antigen  1.4318226 0.09445415  15.158917
+44                          x_PARI:R2A.4.low   Group:Reagent -0.9339295 0.06295582 -14.834681
+45                         SIV_Env:R2A.4.low   Group:Reagent -1.0074768 0.07085991 -14.217867
+46            x_PARI:J08.V1V2.mac239.AVI.His   Group:Antigen  1.1878968 0.08475855  14.015067
+47                                     R3A.3         Reagent -0.5871772 0.04234874 -13.865279
+48                         x_PARI:R2A.4.high   Group:Reagent -0.7517568 0.05557572 -13.526713
+49                                  2:x_PARI Timepoint:Group  0.7731654 0.05746261  13.455104
+50                 J08.V1V2.E660.2A5.AVI.His         Antigen -0.8663613 0.06458608 -13.414056
+51                           SIVmac239.gp140         Antigen -0.8819349 0.06639427 -13.283298
+52                 J08.V1V2.E660.084.AVI.His         Antigen -0.8507025 0.06588715 -12.911509
+53                                x_PARI:MBL   Group:Reagent -0.8296974 0.06829490 -12.148745
+54                      SIV_Mosaic_Env:R2A.2   Group:Reagent -1.0553733 0.08933116 -11.814168
+55            SIV_Mosaic_Env:SIVmac239.gp120   Group:Antigen  1.1188500 0.09645778  11.599376
+56           SIV_Env:J08.V1V2.mac239.AVI.His   Group:Antigen  1.0991545 0.09539996  11.521540
+57                  SIV_Mosaic_Env:R2A.4.low   Group:Reagent -0.7453968 0.06554275 -11.372681
+58                        SIV_Mosaic_Env:C1q   Group:Reagent -0.6638621 0.05868749 -11.311815
+59                    SIV_Env:SIV.E543.gp140   Group:Antigen  1.1293650 0.10046446  11.241438
+60                        SIV_Mosaic_Env:MBL   Group:Reagent -0.7644312 0.07110123 -10.751308
+61            SIV_Mosaic_Env:SIVmac239.gp130   Group:Antigen  1.0228919 0.09645778  10.604557
+62             SIV_Mosaic_Env:SIV.E543.gp140   Group:Antigen  0.9807467 0.09292585  10.554077
+63                        SIV_Env:R2A.4.high   Group:Reagent -0.6589937 0.06255324 -10.534925
+64                                  G145.146         Antigen -0.6904294 0.06630467 -10.412982
+65                           SIVsmH4.p55.Gag         Antigen -0.6994950 0.06801476 -10.284459
+66          x_PARI:J08.V1V2.E660.2A5.AVI.His   Group:Antigen  0.8313022 0.08475855   9.807886
+67                     x_PARI:SIVsm.E660.2A5   Group:Antigen  0.8839781 0.09265065   9.540982
+68                     x_PARI:SIV.E543.gp140   Group:Antigen  0.8491574 0.08925813   9.513502
+69                 SIV_Mosaic_Env:R2A.4.high   Group:Reagent -0.5354351 0.05785940  -9.254072
+70                    SIV_Env:SIVsm.E660.2A5   Group:Antigen  0.9619942 0.10428291   9.224850
+71                                     C1.TR         Antigen  0.6064322 0.06767663   8.960732
+72                                 8:SIV_Gag Timepoint:Group -0.5389416 0.06080771  -8.863047
+73                                      G119         Antigen -0.5693414 0.06458608  -8.815234
+74          x_PARI:J08.V1V2.E660.084.AVI.His   Group:Antigen  0.7598783 0.08646599   8.788175
+75         SIV_Env:J08.V1V2.E660.2A5.AVI.His   Group:Antigen  0.8372897 0.09539996   8.776625
+76                                 7:SIV_Gag Timepoint:Group  0.5248338 0.06080771   8.631040
+77    SIV_Mosaic_Env:J08.V1V2.mac239.AVI.His   Group:Antigen  0.7230182 0.08824139   8.193641
+78                               SIV_Env:V1a   Group:Antigen  0.7787355 0.09732177   8.001657
+79         SIV_Env:J08.V1V2.E660.084.AVI.His   Group:Antigen  0.7722729 0.09732177   7.935253
+80                                x_PARI:V1a   Group:Antigen  0.6628973 0.08646599   7.666567
+81             SIV_Mosaic_Env:SIVsm.E660.2A5   Group:Antigen  0.7215636 0.09645778   7.480616
+82                     x_PARI:SIV.1A11.gp140   Group:Antigen  0.6918917 0.09265065   7.467749
+83  SIV_Mosaic_Env:J08.V1V2.E660.2A5.AVI.His   Group:Antigen  0.6118265 0.08824139   6.933555
+84                              x_PARI:R3A.1   Group:Reagent -0.4054489 0.05908501  -6.862128
+85                                     R2A.3         Reagent -0.2898734 0.04234874  -6.844911
+86                             SIV_Env:R3A.1   Group:Reagent -0.4380358 0.06650311  -6.586697
+87  SIV_Mosaic_Env:J08.V1V2.E660.084.AVI.His   Group:Antigen  0.5854390 0.09001899   6.503505
+88                                  4:x_PARI Timepoint:Group  0.3711018 0.05746261   6.458143
+89                          3:SIV_Mosaic_Env Timepoint:Group  0.3777973 0.05982382   6.315165
+90                      SIV_Mosaic_Env:R3A.1   Group:Reagent -0.3814021 0.06151288  -6.200361
+91                    SIV_Env:SIV.1A11.gp140   Group:Antigen  0.6286880 0.10428291   6.028677
+92                          8:SIV_Mosaic_Env Timepoint:Group -0.3410572 0.05982382  -5.701026
+93                          2:SIV_Mosaic_Env Timepoint:Group  0.3363576 0.05982382   5.622469
+94                              x_PARI:R2A.3   Group:Reagent  0.2905427 0.05557572   5.227870
+95             SIV_Mosaic_Env:SIV.1A11.gp140   Group:Antigen  0.4961555 0.09645778   5.143758
+96                 SIV_Env:SIVmac251.BK.PR55   Group:Antigen -0.5279765 0.10428291  -5.062924
+97              SIV_Mosaic_Env:aRhIgG.PE.low   Group:Reagent -0.2857808 0.05785940  -4.939229
+98                                 4:SIV_Env Timepoint:Group  0.3120224 0.06467703   4.824315
+99                                         5       Timepoint  0.2100344 0.04378656   4.796779
+100                            SIV_Env:R2A.3   Group:Reagent  0.2978983 0.06255324   4.762317
+101                    SIV_Env:SIVsm.E660.84   Group:Antigen  0.4877963 0.10428291   4.677624
+102                     x_PARI:SIVsm.E660.84   Group:Antigen  0.4288385 0.09265065   4.628553
+103                            SIV_Env:R3A.3   Group:Reagent  0.2878221 0.06255324   4.601234
+104                       SIV_Mosaic_Env:V1a   Group:Antigen  0.4070260 0.09001899   4.521558
+105                                      G73         Antigen -0.2629205 0.06609070  -3.978177
+106         SIV_Mosaic_Env:SIVmac251.BK.PR55   Group:Antigen -0.3762873 0.09645778  -3.901057
+107                               R2A.4.high         Reagent  0.1649086 0.04234874   3.894060
+108                    SIV_Env:aRhIgG.PE.low   Group:Reagent -0.2354279 0.06255324  -3.763641
+109             SIV_Mosaic_Env:SIVsm.E660.84   Group:Antigen  0.3593376 0.09645778   3.725336
+110                 x_PARI:SIVmac251.BK.PR55   Group:Antigen -0.3014175 0.09265065  -3.253269
+111                     x_PARI:aRhIgG.PE.low   Group:Reagent -0.1791367 0.05557572  -3.223291
+112                                        3       Timepoint  0.1366794 0.04378656   3.121493
+113                                        1       Timepoint -0.1336282 0.04378656  -3.051810
+114                         4:SIV_Mosaic_Env Timepoint:Group  0.1806968 0.05982382   3.020482
+115                                8:SIV_Env Timepoint:Group  0.1860097 0.06467703   2.875978
+116               SIV_Env:SIVcpz.EK505.gp120   Group:Antigen -0.3129873 0.10904550  -2.870245
+117                             x_PARI:R3A.3   Group:Reagent  0.1589507 0.05557572   2.860074
+118                              SIV_Gag:C1q   Group:Reagent -0.1700647 0.05965269  -2.850914
+119                                   x_PARI           Group -0.2260684 0.08268855  -2.733975
+120                                      G49         Antigen -0.1781710 0.06588715  -2.704184
+121                                 8:x_PARI Timepoint:Group  0.1540944 0.05746261   2.681646
+122                                 1:x_PARI Timepoint:Group  0.1530856 0.05746261   2.664091
+123                  SIV_Env:SIVsmH4.p55.Gag   Group:Antigen -0.2645072 0.10046446  -2.632843
+124                                6:SIV_Gag Timepoint:Group  0.1582556 0.06080771   2.602558
+125                   x_PARI:SIVsmH4.p55.Gag   Group:Antigen -0.2077026 0.08925813  -2.326988
+126                  SIVmac239.gp140.AVI.His         Antigen -0.1574694 0.06767663  -2.326791
+127                                      V1a         Antigen  0.1479020 0.06588715   2.244777
+128                        SIV_Gag:R2A.4.low   Group:Reagent -0.1458479 0.06662070  -2.189229
+129                       SIV_Gag:R2A.4.high   Group:Reagent -0.1224547 0.05881098  -2.082173
+130                             x_PARI:C1.TR   Group:Antigen -0.1769357 0.08881439  -1.992196
+
+--------------------------------------------------------------------------------
+Baseline-adjusted Data
+--------------------------------------------------------------------------------
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.6472 -0.8504 -0.1065  0.7077  6.2600 
+
+Residual standard error: 1.349 on 97511 degrees of freedom
+Multiple R-squared:  0.5404,	Adjusted R-squared:  0.5396 
+F-statistic: 623.2 on 184 and 97511 DF,  p-value: < 2.2e-16
+
+table(results.adj3$coefs %>% filter(pval <= 0.05) %>% select(predictorGroup))
+##                   Antigen           Group   Group:Antigen   Group:Reagent         Reagent 
+##         1              12               1              47              27               7 
+## Timepoint Timepoint:Group 
+##         6              22 
+
+table(results.adj3$coefs %>% filter(pval <= 0.01) %>% select(predictorGroup))
+##                   Antigen           Group   Group:Antigen   Group:Reagent         Reagent 
+##         1              12               1              43              27               7 
+## Timepoint Timepoint:Group 
+##         6              20 
+
+results.adj3$coef %>% filter(pval <= 0.05) %>%
+  select(var, predictorGroup, beta:pval) %>% arrange(pval)
+                                         var  predictorGroup       beta         se       tval
+1                                          8       Timepoint  2.7118785 0.04033114  67.240305
+2                                   5:x_PARI Timepoint:Group  1.8584029 0.05292796  35.111933
+3                                  5:SIV_Env Timepoint:Group  2.0862008 0.05957305  35.019204
+4                                  7:SIV_Env Timepoint:Group  1.8882266 0.05957305  31.695987
+5                           7:SIV_Mosaic_Env Timepoint:Group  1.6179944 0.05510283  29.363180
+6                                   7:x_PARI Timepoint:Group  1.5470780 0.05292796  29.229883
+7                                          7       Timepoint  1.1015808 0.04033114  27.313403
+8                           5:SIV_Mosaic_Env Timepoint:Group  1.4429609 0.05510283  26.186691
+9                    SIV_Env:SIVmac239.gp140   Group:Antigen  2.4549614 0.09581112  25.622927
+10                                  6:x_PARI Timepoint:Group  1.2994719 0.05292796  24.551710
+11                                 6:SIV_Env Timepoint:Group  1.4378475 0.05957305  24.135873
+12                    x_PARI:SIVmac239.gp140   Group:Antigen  1.7950885 0.08512385  21.087962
+13                                x_PARI:C1q   Group:Reagent -1.1554145 0.05507225 -20.979978
+14                   SIV_Env:SIVmac239.gp120   Group:Antigen  2.0113892 0.10188005  19.742719
+15                              x_PARI:R2A.2   Group:Reagent -1.6425588 0.08382821 -19.594343
+16            SIV_Mosaic_Env:SIVmac239.gp140   Group:Antigen  1.6809739 0.08862169  18.967974
+17                               SIV_Env:MBL   Group:Reagent -1.4163988 0.07509811 -18.860645
+18                   SIV_Gag:SIVsmH4.p55.Gag   Group:Antigen  1.7132961 0.09227777  18.566727
+19                         SIV_Env:R2A.4.low   Group:Reagent -1.2784240 0.06922717 -18.467084
+20                             SIV_Env:R2A.2   Group:Reagent -1.7282053 0.09435282 -18.316413
+21                   SIV_Env:SIVmac239.gp130   Group:Antigen  1.8615855 0.10188005  18.272325
+22                          6:SIV_Mosaic_Env Timepoint:Group  1.0011360 0.05510283  18.168502
+23                          x_PARI:R2A.4.low   Group:Reagent -1.1162118 0.06150521 -18.148247
+24                           SIVmac239.gp140         Antigen  1.1484047 0.06486444  17.704689
+25                    x_PARI:SIVmac239.gp120   Group:Antigen  1.5983607 0.09051582  17.658358
+26                            SIV.E543.gp140         Antigen  1.1163558 0.06644759  16.800547
+27                                 3:SIV_Env Timepoint:Group  0.9694501 0.05957305  16.273301
+28                            SIVsm.E660.2A5         Antigen  1.0991436 0.06897312  15.935826
+29                                  3:x_PARI Timepoint:Group  0.8243176 0.05292796  15.574331
+30                                 2:SIV_Env Timepoint:Group  0.9165697 0.05957305  15.385644
+31                               SIV_Env:C1q   Group:Reagent -0.9458859 0.06198655 -15.259534
+32                    x_PARI:SIVmac239.gp130   Group:Antigen  1.3681536 0.09051582  15.115078
+33           SIV_Env:J08.V1V2.mac239.AVI.His   Group:Antigen  1.3088760 0.09320179  14.043465
+34                                x_PARI:MBL   Group:Reagent -0.9233558 0.06672127 -13.839002
+35                    SIV_Env:SIV.E543.gp140   Group:Antigen  1.3506193 0.09814959  13.760825
+36            x_PARI:J08.V1V2.mac239.AVI.His   Group:Antigen  1.1186221 0.08280557  13.509020
+37                                       C1q         Reagent -0.5546594 0.04196509 -13.217161
+38            SIV_Mosaic_Env:SIVmac239.gp120   Group:Antigen  1.2244706 0.09423522  12.993768
+39                  SIV_Mosaic_Env:R2A.4.low   Group:Reagent -0.8094353 0.06403254 -12.641000
+40                         x_PARI:R2A.4.high   Group:Reagent -0.6740190 0.05429516 -12.413979
+41            SIV_Mosaic_Env:SIVmac239.gp130   Group:Antigen  1.1526864 0.09423522  12.232012
+42             SIV_Mosaic_Env:SIV.E543.gp140   Group:Antigen  1.0935314 0.09078469  12.045329
+43                                  2:x_PARI Timepoint:Group  0.6200798 0.05292796  11.715543
+44                      SIV_Mosaic_Env:R2A.2   Group:Reagent -0.9691076 0.08727282 -11.104346
+45                    SIV_Env:SIVsm.E660.2A5   Group:Antigen  1.0990137 0.10188005  10.787330
+46         SIV_Env:J08.V1V2.E660.2A5.AVI.His   Group:Antigen  0.9694785 0.09320179  10.401930
+47                           SIVsmH4.p55.Gag         Antigen  0.6855945 0.06644759  10.317823
+48                                 8:SIV_Gag Timepoint:Group -0.5644763 0.05600908 -10.078300
+49                        SIV_Env:R2A.4.high   Group:Reagent -0.6133533 0.06111191 -10.036560
+50                              x_PARI:R3A.1   Group:Reagent -0.5690368 0.05772359  -9.857959
+51         SIV_Env:J08.V1V2.E660.084.AVI.His   Group:Antigen  0.9372013 0.09507932   9.857047
+52    SIV_Mosaic_Env:J08.V1V2.mac239.AVI.His   Group:Antigen  0.8248500 0.08620815   9.568120
+53                             SIVsm.E660.84         Antigen  0.6482314 0.06897312   9.398319
+54                           SIVmac239.gp120         Antigen  0.6217239 0.06897312   9.014003
+55                           SIVmac239.gp130         Antigen  0.6155704 0.06897312   8.924786
+56                                 7:SIV_Gag Timepoint:Group  0.4992991 0.05600908   8.914611
+57                    x_PARI:SIVsmH4.p55.Gag   Group:Antigen -0.7615480 0.08720147  -8.733202
+58                        SIV_Mosaic_Env:C1q   Group:Reagent -0.4982742 0.05733523  -8.690541
+59                               SIV_Env:V1a   Group:Antigen  0.8260635 0.09507932   8.688152
+60                             SIV_Env:R3A.1   Group:Reagent -0.5639148 0.06497077  -8.679516
+61                  x_PARI:SIVmac251.BK.PR55   Group:Antigen -0.7832576 0.09051582  -8.653268
+62          x_PARI:J08.V1V2.E660.2A5.AVI.His   Group:Antigen  0.7103404 0.08280557   8.578413
+63                                         5       Timepoint  0.3436627 0.04033114   8.521024
+64                        SIV_Mosaic_Env:MBL   Group:Reagent -0.5869850 0.06946293  -8.450334
+65             SIV_Mosaic_Env:SIVsm.E660.2A5   Group:Antigen  0.7884768 0.09423522   8.367113
+66                            SIV.1A11.gp140         Antigen  0.5703705 0.06897312   8.269461
+67                                     R2A.3         Reagent  0.3418540 0.04137296   8.262741
+68          x_PARI:J08.V1V2.E660.084.AVI.His   Group:Antigen  0.6961706 0.08447367   8.241273
+69                                                           -0.4917494 0.06072553  -8.097901
+70  SIV_Mosaic_Env:J08.V1V2.E660.084.AVI.His   Group:Antigen  0.7052412 0.08794480   8.019135
+71  SIV_Mosaic_Env:J08.V1V2.E660.2A5.AVI.His   Group:Antigen  0.6905586 0.08620815   8.010363
+72                         SIV_Gag:R2A.4.low   Group:Reagent -0.5184708 0.06508564  -7.965978
+73                          8:SIV_Mosaic_Env Timepoint:Group -0.4164259 0.05510283  -7.557250
+74                    SIV_Env:SIV.1A11.gp140   Group:Antigen  0.7691411 0.10188005   7.549477
+75                 J08.V1V2.E660.2A5.AVI.His         Antigen  0.4674561 0.06309791   7.408424
+76                 J08.V1V2.E660.084.AVI.His         Antigen  0.4594279 0.06436900   7.137410
+77                     x_PARI:SIVsm.E660.2A5   Group:Antigen  0.6306112 0.09051582   6.966862
+78                                     R3A.1         Reagent  0.3056039 0.04398542   6.947847
+79                                         3       Timepoint  0.2703077 0.04033114   6.702207
+80                 SIV_Mosaic_Env:R2A.4.high   Group:Reagent -0.3701078 0.05652622  -6.547542
+81                                R2A.4.high         Reagent -0.2629164 0.04137296  -6.354788
+82                 x_PARI:SIVcpz.EK505.gp120   Group:Antigen -0.5994300 0.09464967  -6.333144
+83                                x_PARI:V1a   Group:Antigen  0.5212703 0.08447367   6.170802
+84                                     R3A.3         Reagent  0.2497938 0.04137296   6.037610
+85             SIV_Mosaic_Env:SIV.1A11.gp140   Group:Antigen  0.5663872 0.09423522   6.010356
+86                              x_PARI:R2A.3   Group:Reagent  0.3245935 0.05429516   5.978313
+87                     x_PARI:SIV.E543.gp140   Group:Antigen  0.5094372 0.08720147   5.842072
+88                     SIV_Env:SIVsm.E660.84   Group:Antigen  0.5800485 0.10188005   5.693446
+89                          3:SIV_Mosaic_Env Timepoint:Group  0.3024286 0.05510283   5.488440
+90                      x_PARI:aRhIgG.PE.low   Group:Reagent -0.2928075 0.05429516  -5.392884
+91                      SIV_Mosaic_Env:R3A.1   Group:Reagent -0.3188283 0.06009552  -5.305359
+92                   J08.V1V2.mac239.AVI.His         Antigen  0.3340148 0.06309791   5.293596
+93                                       V1a         Antigen  0.3299036 0.06436900   5.125193
+94                             SIV_Env:R3A.3   Group:Reagent  0.3088799 0.06111191   5.054332
+95                          2:SIV_Mosaic_Env Timepoint:Group  0.2609889 0.05510283   4.736397
+96                                 R2A.4.low         Reagent -0.2189710 0.04686702  -4.672176
+97              SIV_Mosaic_Env:SIVsm.E660.84   Group:Antigen  0.4242255 0.09423522   4.501772
+98                              x_PARI:R3A.3   Group:Reagent  0.2428900 0.05429516   4.473511
+99                 SIV_Env:SIVmac251.BK.PR55   Group:Antigen -0.4265523 0.10188005  -4.186808
+100                  SIV_Gag:SIVmac239.gp140   Group:Antigen  0.3755921 0.09007920   4.169577
+101                       SIV_Mosaic_Env:V1a   Group:Antigen  0.3651462 0.08794480   4.151993
+102                                 4:x_PARI Timepoint:Group  0.2180161 0.05292796   4.119111
+103                            SIV_Env:R2A.3   Group:Reagent  0.2501135 0.06111191   4.092713
+104                                        4       Timepoint  0.1647713 0.04033114   4.085462
+105                    SIV_Env:aRhIgG.PE.low   Group:Reagent -0.2492114 0.06111191  -4.077952
+106                               x_PARI:G49   Group:Antigen -0.3355972 0.08447367  -3.972802
+107                SIV_Gag:SIVmac251.BK.PR55   Group:Antigen  0.3673570 0.09578505   3.835223
+108                     SIV_Mosaic_Env:R3A.3   Group:Reagent  0.2128545 0.05652622   3.765589
+109                                        2       Timepoint  0.1476622 0.04033114   3.661245
+110                                   x_PARI           Group  0.2819028 0.07969222   3.537394
+111         SIV_Mosaic_Env:SIVmac251.BK.PR55   Group:Antigen -0.3330984 0.09423522  -3.534755
+112                                4:SIV_Env Timepoint:Group  0.2084210 0.05957305   3.498580
+113                                    R2A.2         Reagent -0.2234223 0.06387716  -3.497686
+114           SIV_Mosaic_Env:SIVsmH4.p55.Gag   Group:Antigen -0.2981361 0.09078469  -3.283991
+115             SIV_Mosaic_Env:aRhIgG.PE.low   Group:Reagent -0.1780836 0.05652622  -3.150460
+116                   SIV_Gag:SIV.E543.gp140   Group:Antigen  0.2608349 0.09227777   2.826628
+117               SIV_Env:SIVcpz.EK505.gp120   Group:Antigen -0.2903256 0.10653291  -2.725220
+118                             x_PARI:C1.TR   Group:Antigen -0.2155360 0.08676796  -2.484050
+119                             SIV_Env:G119   Group:Antigen  0.2270765 0.09320179   2.436396
+120                    x_PARI:SIV.1A11.gp140   Group:Antigen  0.2172671 0.09051582   2.400322
+121                                6:SIV_Gag Timepoint:Group  0.1327209 0.05600908   2.369633
+122                                4:SIV_Gag Timepoint:Group -0.1171073 0.05600908  -2.090863
+123                       SIV_Mosaic_Env:G73   Group:Antigen  0.1736661 0.08821649   1.968635
+
+--------------------------------------------------------------------------------
+Lagged Data
+--------------------------------------------------------------------------------
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-7.8154 -0.6224 -0.0772  0.4880  6.6125 
+
+Residual standard error: 1.256 on 97511 degrees of freedom
+Multiple R-squared:  0.3057,	Adjusted R-squared:  0.3044 
+F-statistic: 233.3 on 184 and 97511 DF,  p-value: < 2.2e-16
+
+table(results.lag3$coefs %>% filter(pval <= 0.05) %>% select(predictorGroup))
+##           Antigen           Group         Reagent       Timepoint Timepoint:Group 
+## 1              12               1               7               6              21 
+ table(results.lag3$coefs %>% filter(pval <= 0.01) %>% select(predictorGroup))
+##           Antigen           Group         Reagent       Timepoint Timepoint:Group 
+## 1              12               1               7               6              19 
+
+results.lag3$coef %>% filter(pval <= 0.05) %>%
+  select(var, predictorGroup, beta:pval) %>% arrange(pval)
+                         var  predictorGroup       beta         se       tval          pval
+1                          8       Timepoint  1.7439259 0.03756581  46.423223  0.000000e+00
+2           8:SIV_Mosaic_Env Timepoint:Group -2.1097890 0.05132466 -41.106727  0.000000e+00
+3                   8:x_PARI Timepoint:Group -1.6991549 0.04929891 -34.466378 9.320841e-259
+4                  8:SIV_Env Timepoint:Group -1.9094195 0.05548838 -34.411163 6.110092e-258
+5                  5:SIV_Env Timepoint:Group  1.7741784 0.05548838  31.973875 3.620707e-223
+6                          7       Timepoint  1.1803779 0.03756581  31.421603 1.234187e-215
+7                   5:x_PARI Timepoint:Group  1.4873012 0.04929891  30.169047 5.005024e-199
+8           5:SIV_Mosaic_Env Timepoint:Group  1.2622641 0.05132466  24.593714 3.764821e-133
+9                  8:SIV_Gag Timepoint:Group -1.0893101 0.05216877 -20.880501  1.312268e-96
+10                 4:SIV_Env Timepoint:Group -0.8646304 0.05548838 -15.582190  1.120091e-54
+11                  4:x_PARI Timepoint:Group -0.7593870 0.04929891 -15.403728  1.786637e-53
+12                 2:SIV_Env Timepoint:Group  0.8129684 0.05548838  14.651148  1.492063e-48
+13                  6:x_PARI Timepoint:Group -0.7120167 0.04929891 -14.442848  3.112146e-47
+14                 6:SIV_Env Timepoint:Group -0.7519546 0.05548838 -13.551569  8.462843e-42
+15          7:SIV_Mosaic_Env Timepoint:Group  0.5414897 0.05132466  10.550283  5.230724e-26
+16            SIV.E543.gp140         Antigen  0.6445047 0.06189155  10.413451  2.219796e-25
+17            SIVsm.E660.2A5         Antigen  0.6575308 0.06424393  10.234911  1.423426e-24
+18           SIVmac239.gp140         Antigen  0.6129564 0.06041695  10.145437  3.569627e-24
+19          6:SIV_Mosaic_Env Timepoint:Group -0.5171936 0.05132466 -10.076902  7.180320e-24
+20                  2:x_PARI Timepoint:Group  0.4669942 0.04929891   9.472708  2.784935e-21
+21                         5       Timepoint  0.3125195 0.03756581   8.319255  8.964244e-17
+22             SIVsm.E660.84         Antigen  0.4939636 0.06424393   7.688876  1.498139e-14
+23                         2       Timepoint  0.2812904 0.03756581   7.487937  7.055048e-14
+24                       C1q         Reagent -0.2761717 0.03908772  -7.065433  1.611830e-12
+25           SIVmac239.gp120         Antigen  0.4386071 0.06424393   6.827216  8.708256e-12
+26                         3       Timepoint  0.2562737 0.03756581   6.821994  9.030663e-12
+27                 7:SIV_Gag Timepoint:Group  0.3410435 0.05216877   6.537311  6.294220e-11
+28           SIVmac239.gp130         Antigen  0.4190960 0.06424393   6.523512  6.901438e-11
+29 J08.V1V2.E660.2A5.AVI.His         Antigen  0.3831932 0.05877155   6.520046  7.062727e-11
+30           SIVsmH4.p55.Gag         Antigen  0.4027667 0.06189155   6.507620  7.671882e-11
+31            SIV.1A11.gp140         Antigen  0.4026801 0.06424393   6.267987  3.672690e-10
+32                 7:SIV_Env Timepoint:Group  0.3467777 0.05548838   6.249556  4.133157e-10
+33 J08.V1V2.E660.084.AVI.His         Antigen  0.3709367 0.05995549   6.186867  6.161442e-10
+34                       MBL         Reagent -0.2776751 0.04735566  -5.863610  4.543639e-09
+35                                           -0.3260611 0.05656184  -5.764684  8.205691e-09
+36          4:SIV_Mosaic_Env Timepoint:Group -0.2724692 0.05132466  -5.308738  1.106277e-07
+37                 R2A.4.low         Reagent -0.2251828 0.04365354  -5.158409  2.495427e-07
+38                     R2A.2         Reagent -0.2982372 0.05949738  -5.012611  5.379007e-07
+39   J08.V1V2.mac239.AVI.His         Antigen  0.2756715 0.05877155   4.690560  2.728268e-06
+40                       V1a         Antigen  0.2493177 0.05995549   4.158380  3.207863e-05
+41                         6       Timepoint -0.1552033 0.03756581  -4.131504  3.606975e-05
+42          2:SIV_Mosaic_Env Timepoint:Group  0.1856202 0.05132466   3.616589  2.986614e-04
+43                     R3A.3         Reagent  0.1379602 0.03853619   3.580016  3.437405e-04
+44                     R2A.3         Reagent  0.1301322 0.03853619   3.376883  7.334091e-04
+45                R2A.4.high         Reagent -0.1277031 0.03853619  -3.313848  9.205513e-04
+46                    x_PARI           Group  0.2228837 0.07422806   3.002688  2.676748e-03
+47                 5:SIV_Gag Timepoint:Group  0.1281533 0.05216877   2.456513  1.403099e-02
+48                 2:SIV_Gag Timepoint:Group -0.1069592 0.05216877  -2.050254  4.034235e-02

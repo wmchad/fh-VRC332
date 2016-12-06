@@ -8,6 +8,13 @@ Model: log(readout) ~ Group * Timepoint + Animal * (re + ag)
 --------------------------------------------------------------------------------
 Original Data
 --------------------------------------------------------------------------------
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-5.8817 -0.9948 -0.0745  0.9684  5.2672 
+
+Residual standard error: 1.454 on 107738 degrees of freedom
+Multiple R-squared:  0.5753,	Adjusted R-squared:  0.5667 
+F-statistic: 67.28 on 2169 and 107738 DF,  p-value: < 2.2e-16
 
 table(coef.orig %>% filter(pval < 0.05) %>% select(predictorGroup))
 ##                    Animal  Animal:Antigen  Animal:Reagent         Antigen         Reagent 
