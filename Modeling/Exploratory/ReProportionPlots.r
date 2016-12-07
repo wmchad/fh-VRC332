@@ -45,10 +45,13 @@ for ( anId in animalIds ) {
 
 
 
-testData <- propData %>% filter(AnimalId==anId, re==res[4])
+testData <- propData %>% filter(AnimalId==anId, re==res[2])
 testGroup <- first(testData$GroupNm)
 
 ggplot(testData) +
     geom_line(aes(tp, reProp, color=ag), alpha=0.6) +
     labs(x="Timepoint", y="Proportion",
          title=paste("Reagent proportion plot, animal ", anId, ", ", testGroup, sep=""))
+
+testData <- propData %>% filter(AnimalId==anId, ag==ags[14])
+ggplot(testData) + geom_area(aes(tp, reProp, color=re, fill=re), position="stack")

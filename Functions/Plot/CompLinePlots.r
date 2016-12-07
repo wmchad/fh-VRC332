@@ -19,3 +19,29 @@ CompLinePlots <- function(compRmse) {
   list(baselineComp=baseComp,
        groupComp=groupComp)
 }
+
+
+
+
+
+
+
+
+target <- "SetpointVL"
+targetFolder <- setpointVLFolder
+dataName <- "Original"
+i <- 3
+
+outdir <- file.path(dataFolder, targetFolder, dataName, tpLevs[i])
+resSummary <- SummarizePredictionResults(
+    GetRandomPartitionPredictions(
+        outdir=outdir,
+        rmseFile=paste(tpLevs[i], "-CompRmse.txt", sep=""),
+        fitsFile=paste(tpLevs[i], "-Fits.rdata", sep="")),
+    FALSE)
+resSummary2 <- SummarizePredictionResults(
+    GetRandomPartitionPredictions(
+        outdir=outdir,
+        rmseFile=paste(tpLevs[i], "-BestPred-CompRmse.txt", sep=""),
+        fitsFile=paste(tpLevs[i], "-BestPred-Fits.rdata", sep="")),
+    FALSE)

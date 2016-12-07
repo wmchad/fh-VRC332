@@ -4,6 +4,7 @@ fnFolder <- "~/Projects/VRC332/Code/fh-vrc332/Functions"
 source(file.path(fnFolder, "LoadFcData.r"))
 source(file.path(fnFolder, "RunRandomPartitionPredictions.r"))
 source(file.path(fnFolder, "SummarizePredictionResults.r"))
+source(file.path(fnFolder, "Prediction/GetEffectDirections.r"))
 
 dataNames <- c("Original", "Adjusted", "Lag")
 tps <- 0:8
@@ -123,6 +124,18 @@ GetSelectedVars <- function(dataFolder, predictionFolder,
                header=T, stringsAsFactors=FALSE)
 }
 
+GetEffects <- function(dataFolder, predictionFolder,
+                       dataName, tpSetName, predSummary) {
+        outdir <- file.path(dataFolder, predictionFolder, dataName, tpSetName)
+        rmseFile <- paste(tpSetName, "-BestPred-CompRmse.txt", sep="")
+        fitsFile <- paste(tpSetName, "-BestPred-Fits.rdata", sep="")
+        effects <- GetRandomPartitionPredictions(outdir, rmseFile, fitsFile) %>%
+            GetResultBetas()
+        predSummary %>%
+            filter(shortVarName %in% names(effects)) %>%
+            mutate(beta=effects[shortVarName])
+}
+
 tbl1 <- GetSelectedVars(dataFolder, noChallengesFolder, "Lag", "AllPreChallenge") ## 29.7%
 tbl2 <- GetSelectedVars(dataFolder, noChallengesFolder, "Adjusted", "AllPreChallenge") ## 28.3%
 tbl3 <- GetSelectedVars(dataFolder, noChallengesFolder, "Original", "AllPreChallenge") ## 23.3%
@@ -186,3 +199,5 @@ tbl1 <- GetSelectedVars(dataFolder, setpointVLFolder, "Original", "tp0-Baseline"
 tbl2 <- GetSelectedVars(dataFolder, setpointVLFolder, "Original", "AllPreChallenge") ## 26.2%
 tbl3 <- GetSelectedVars(dataFolder, setpointVLFolder, "Lag", "tp2-2xDna") ## 15.3%
 
+
+effects <- GetEffects(dataFolder, setpointVLFolder, "Original", "tp0-Baseline", predSummary)

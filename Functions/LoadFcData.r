@@ -12,4 +12,4 @@ fcData[,-(1:7)] <- ReplaceMissingWithMean(fcData[,-(1:7)])
 
 tpLabels <- c("Baseline", "1xDna", "2xDna", "PeakPostPrime",
               "PreBoost", "PeakPostBoost", "PreChallenge",
-              "PostChallenge", "Terminal")
+              "PeakVL", "Terminal")
