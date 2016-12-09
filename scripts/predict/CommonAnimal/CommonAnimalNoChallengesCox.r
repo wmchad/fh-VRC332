@@ -102,7 +102,7 @@ RunPrediction_CoxPh<- function(data, target, outputFolder, tps=0:8, tpLabs=tpLab
                 fitsFile=paste(tpLevs[i], "-BestPred-Fits.rdata", sep=""),
                 verbose=TRUE, progressEvery=50)
            z <- apply(predResults$compRmse, 2, mean)
-            cat("Full data improvement:\n")
+            cat("Best data improvement:\n")
             cat("  cox:        ", round(100*(z[2]-z[3])/z[2], 2), "%\n", sep="")
             cat("  cox shrunk: ", round(100*(z[2]-z[4])/z[2], 2), "%\n", sep="")
         }
