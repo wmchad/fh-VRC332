@@ -9,7 +9,7 @@ fnFolder <- "~/Projects/VRC332/Code/fh-vrc332/Functions"
 
 source(file.path(fnFolder, "LoadFcData.r"))
 source(file.path(fnFolder, "GetTimepointData.r"))
-source(file.path(fnFolder, "GetBestPredictorsData.r"))
+source(file.path(fnFolder, "GetBestPredictorsData_CoxPh.r"))
 source(file.path(fnFolder, "GetVariableSetData.r"))
 source(file.path(fnFolder, "ReplaceMissingWithMean.r"))
 source(file.path(fnFolder, "RunRandomPartitionPredictions_CoxPh.r"))
