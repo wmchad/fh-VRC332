@@ -42,6 +42,7 @@ RunRandomPartitionPredictions_CoxPh <- function(data,
       coef <- as.data.frame(summary(predict(res, type="coef", s=res$lambda.min)))
       vars <- (predSummary %>% filter(shortVarName %in% names(data$x)[coef$i]))$shortVarName
       preds <- rep(mean(train.y), length(test.y))
+      preds2 <- rep(mean(train.y), length(test.y))
       if ( nrow(coef) > 0 ) {
           preds <- CoxPhPredictions(train.x[,coef$i], train.surv,
                                     test.x[,coef$i], coef$x, coxIter)

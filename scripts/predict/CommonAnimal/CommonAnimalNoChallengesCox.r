@@ -101,7 +101,7 @@ RunPrediction_CoxPh<- function(data, target, outputFolder, tps=0:8, tpLabs=tpLab
                 rmseFile=paste(tpLevs[i], "-BestPred-CompRmse.txt", sep=""),
                 fitsFile=paste(tpLevs[i], "-BestPred-Fits.rdata", sep=""),
                 verbose=TRUE, progressEvery=50)
-            z <- apply(predResults$compRmse, 2, mean)
+           z <- apply(predResults$compRmse, 2, mean)
             cat("Full data improvement:\n")
             cat("  cox:        ", round(100*(z[2]-z[3])/z[2], 2), "%\n", sep="")
             cat("  cox shrunk: ", round(100*(z[2]-z[4])/z[2], 2), "%\n", sep="")
@@ -113,7 +113,7 @@ cat("============================================================\n")
 cat("Running # Challenges, Original Data\n")
 cat("============================================================\n")
 RunPrediction_CoxPh(origData, "NoChallenges",
-                    file.path(dataFolder, noChallengesFolder, "Original"), 3:8)
+                    file.path(dataFolder, noChallengesFolder, "Original"), 7:8)
 cat("============================================================\n")
 cat("Running # Challenges, Adjusted Data\n")
 cat("============================================================\n")
