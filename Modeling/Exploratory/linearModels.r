@@ -10,7 +10,7 @@ lagData <- GetDeltaData(origData, predSummary)
 longData.orig <- ConvertToLongData(origData, predSummary) %>%
     filter(value >= 0) %>%
     select(AnimalId, GroupNm, tp, re, ag, value)
-
+n
 longData.adj <- ConvertToLongData(adjData, predSummary) %>%
     select(AnimalId, GroupNm, tp, re, ag, value)
 

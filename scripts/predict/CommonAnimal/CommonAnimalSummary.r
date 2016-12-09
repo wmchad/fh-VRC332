@@ -200,4 +200,4 @@ tbl2 <- GetSelectedVars(dataFolder, setpointVLFolder, "Original", "AllPreChallen
 tbl3 <- GetSelectedVars(dataFolder, setpointVLFolder, "Lag", "tp2-2xDna") ## 15.3%
 
 
-effects <- GetEffects(dataFolder, setpointVLFolder, "Original", "tp0-Baseline", predSummary)
+effects <- GetEffects(dataFolder, setpointVLFolder, "Original", "AllPreChallenge", predSummary)
