@@ -65,8 +65,8 @@ RunPrediction_CoxPh<- function(data, target, outputFolder, tps=0:8, tpLabs=tpLab
             predResults <- RunRandomPartitionPredictions_CoxPh(
                 bestPredData, pTrain=pTrain, nRand=nRand, coxIter=coxIter,
                 outdir=outdir,
-                rmseFile=paste("tp", tp, "-", tpLabs[tp+1], "-BestPred-CompRmse.txt", sep=""),
-                fitsFile=paste("tp", tp, "-", tpLabs[tp+1], "-BestPred-Fits.rdata", sep=""),
+                rmseFile=paste("tp", tp, "-", tpLabs[tp+1], "-BestPred-CompRmse.tmp.txt", sep=""),
+                fitsFile=paste("tp", tp, "-", tpLabs[tp+1], "-BestPred-Fits.tmp.rdata", sep=""),
                 verbose=TRUE, progressEvery=50)
             z <- apply(predResults$compRmse, 2, mean)
             cat("Best data improvement:\n")
@@ -113,17 +113,17 @@ cat("============================================================\n")
 cat("Running # Challenges, Original Data\n")
 cat("============================================================\n")
 RunPrediction_CoxPh(origData, "NoChallenges",
-                    file.path(dataFolder, noChallengesFolder, "Original"), 7:8)
+                    file.path(dataFolder, noChallengesFolder, "Original"), 0:8)
 cat("============================================================\n")
 cat("Running # Challenges, Adjusted Data\n")
 cat("============================================================\n")
 RunPrediction_CoxPh(adjData, "NoChallenges",
-                    file.path(dataFolder, noChallengesFolder, "Adjusted"), NULL)
+                    file.path(dataFolder, noChallengesFolder, "Adjusted"), 1:8)
 cat("============================================================\n")
 cat("Running # Challenges, Lag Data\n")
 cat("============================================================\n")
 RunPrediction_CoxPh(lagData, "NoChallenges",
-                    file.path(dataFolder, noChallengesFolder, "Lag"), 3:8)
+                    file.path(dataFolder, noChallengesFolder, "Lag"), 1:8)
 
 
 

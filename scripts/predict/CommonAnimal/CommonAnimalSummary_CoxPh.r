@@ -170,3 +170,38 @@ GetSelectedVars(dataFolder, noChallengesFolder, "Adjusted", "tp4-PreBoost")
 ## 3  4  aRhIgG.PE.low SIVcpz.EK505.gp120       var720     149
 ## 4  4 aRhIgG.PE.high              C1.TR       var690     130
 ## 5  4  aRhIgG.PE.low    SIVmac239.gp130       var722     115
+
+
+plot1 <- ggplot(lagData) + geom_point(aes(var1242, NoChallenges, color=GroupNm)) +
+    labs(x="aRhIgG.PE.low, SIVsm.E660.2A5, lagged, Peak VL Timepoint (scaled)",
+         y="Number of Challenges") +
+    guides(color=guide_legend(title="Group"))
+
+plot2 <- ggplot(adjData) + geom_point(aes(var824, NoChallenges, color=GroupNm)) +
+    labs(x="R3A.1, G145.146, adjusted, Pre-Boost Timepoint (scaled)",
+         y="Number of Challenges") +
+    guides(color=guide_legend(title="Group"))
+
+plot3 <- ggplot(adjData) + geom_point(aes(var712, NoChallenges, color=GroupNm)) +
+    labs(x="aRhIgG.PE.low, G145.146, adjusted, Pre-Boost Timepoint (scaled)",
+         y="Number of Challenges") +
+    guides(color=guide_legend(title="Group"))
+
+plot4 <- ggplot(adjData) + geom_point(aes(var720, NoChallenges, color=GroupNm)) +
+    labs(x="aRhIgG.PE.low, SIVcpz.EK505.gp120, adjusted, Pre-Boost Timepoint (scaled)",
+         y="Number of Challenges") +
+    guides(color=guide_legend(title="Group"))
+
+plot5 <- ggplot(adjData) + geom_point(aes(var690, NoChallenges, color=GroupNm)) +
+    labs(x="aRhIgG.PE.high, C1.TR, adjusted, Pre-Boost Timepoint (scaled)",
+         y="Number of Challenges") +
+    guides(color=guide_legend(title="Group"))
+
+plot6 <- ggplot(adjData) + geom_point(aes(var722, NoChallenges, color=GroupNm)) +
+    labs(x="aRhIgG.PE.low, SIVmac239.gp130, adjusted, Pre-Boost Timepoint (scaled)",
+         y="Number of Challenges") +
+    guides(color=guide_legend(title="Group"))
+
+setwd("~/Projects/VRC332/Plots/PredictNoChallenges/CommonAnimals/CoxPh")
+ggsave("BestVar-lag-tp7.png", plot1, height=6, width=8)
+ggsave("BestVar-adj-tp4.png", plot2, height=6, width=8)
