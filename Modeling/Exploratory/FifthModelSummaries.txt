@@ -1,0 +1,358 @@
+Fifth Model Summaries
+12/13/2016
+William Chad Young
+
+Model: log(readout) ~ re * ag
+
+
+--------------------------------------------------------------------------------
+Original Data
+--------------------------------------------------------------------------------
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-5.3652 -0.9355 -0.2383  0.4844  6.0317 
+
+Residual standard error: 1.678 on 102718 degrees of freedom
+Multiple R-squared:  0.4423,	Adjusted R-squared:  0.4415 
+F-statistic: 509.2 on 160 and 102718 DF,  p-value: < 2.2e-16
+
+table(results.orig5$coef %>% filter(pval < 0.05) %>% select(predictorGroup))
+                        Antigen Antigen:Reagent         Reagent 
+              1              17             111               8 
+table(results.orig5$coef %>% filter(pval < 0.01) %>% select(predictorGroup))
+                        Antigen Antigen:Reagent         Reagent 
+              1              15             103               8 
+
+results.orig5$coef %>%
+  filter(pval <= 0.05) %>%
+  select(var, predictorGroup, beta:pval) %>%
+  arrange(pval)
+                                     var  predictorGroup       beta         se       tval
+1                                                         6.9901348 0.06637196 105.317586
+2                                  R2A.2         Reagent -4.4427162 0.09386413 -47.331353
+3           SIVmac251.BK.PR55:R2A.4.high Antigen:Reagent -4.9518333 0.13274392 -37.303653
+4              SIV.1A11.gp140:R2A.4.high Antigen:Reagent -4.7919370 0.13274392 -36.099106
+5                SIVmac251.BK.PR55:R3A.1 Antigen:Reagent -4.7376503 0.13274392 -35.690148
+6             SIVmac239.gp120:R2A.4.high Antigen:Reagent -4.5496519 0.13274392 -34.273899
+7             SIVmac239.gp130:R2A.4.high Antigen:Reagent -4.3293690 0.13274392 -32.614442
+8              SIVsm.E660.2A5:R2A.4.high Antigen:Reagent -4.3107232 0.13274392 -32.473977
+9               SIVsm.E660.84:R2A.4.high Antigen:Reagent -4.0098688 0.13274392 -30.207551
+10                                 R3A.1         Reagent  2.7898933 0.09386413  29.722679
+11            SIVsmH4.p55.Gag:R2A.4.high Antigen:Reagent -3.8117039 0.13274392 -28.714714
+12                  SIV.1A11.gp140:R3A.1 Antigen:Reagent -3.7999724 0.13274392 -28.626337
+13                            G119:R2A.2 Antigen:Reagent  3.7891670 0.13274392  28.544937
+14             SIV.E543.gp140:R2A.4.high Antigen:Reagent -3.6621128 0.13274392 -27.587800
+15                 SIVmac239.gp120:R3A.1 Antigen:Reagent -3.6109737 0.13274392 -27.202554
+16                  SIVsm.E660.2A5:R3A.1 Antigen:Reagent -3.5936174 0.13274392 -27.071803
+17                   SIVsm.E660.84:R3A.1 Antigen:Reagent -3.5544960 0.13274392 -26.777090
+18                             G73:R2A.2 Antigen:Reagent  3.3957676 0.13274392  25.581341
+19                        G145.146:R2A.2 Antigen:Reagent  4.0665465 0.16257744  25.012981
+20              SIVcpz.EK505.gp120:R3A.1 Antigen:Reagent -3.2375314 0.13274392 -24.389300
+21                 SIVmac239.gp130:R3A.1 Antigen:Reagent -3.2093818 0.13274392 -24.177241
+22               SIVmac251.BK.PR55:R2A.3 Antigen:Reagent -3.1366503 0.13274392 -23.629332
+23                            R2A.4.high         Reagent  2.1981935 0.09386413  23.418888
+24                  SIV.E543.gp140:R3A.1 Antigen:Reagent -3.0485788 0.13274392 -22.965863
+25                 SIVsmH4.p55.Gag:R3A.1 Antigen:Reagent -3.0287062 0.13274392 -22.816157
+26         SIVcpz.EK505.gp120:R2A.4.high Antigen:Reagent -3.0043994 0.13274392 -22.633046
+27            SIVmac239.gp140:R2A.4.high Antigen:Reagent -2.9658299 0.13274392 -22.342491
+28               SIVmac251.BK.PR55:R3A.3 Antigen:Reagent -2.9520005 0.13274392 -22.238310
+29    J08.V1V2.mac239.AVI.His:R2A.4.high Antigen:Reagent -2.9448717 0.13274392 -22.184607
+30                 SIVmac239.gp140:R3A.1 Antigen:Reagent -2.8836214 0.13274392 -21.723189
+31  J08.V1V2.E660.2A5.AVI.His:R2A.4.high Antigen:Reagent -2.7925999 0.13274392 -21.037497
+32                       SIVmac239.gp140         Antigen  1.7827266 0.09386413  18.992629
+33                         aRhIgG.PE.low         Reagent -1.6238858 0.09386413 -17.300388
+34  J08.V1V2.E660.084.AVI.His:R2A.4.high Antigen:Reagent -2.1821009 0.13274392 -16.438424
+35     J08.V1V2.mac239.AVI.His:R2A.4.low Antigen:Reagent -2.1684251 0.13274392 -16.335400
+36                   SIVmac239.gp120:C1q Antigen:Reagent -2.1495620 0.13274392 -16.193299
+37             SIVmac239.gp140:R2A.4.low Antigen:Reagent -2.1413467 0.13274392 -16.131410
+38                              G145.146         Antigen -1.4844372 0.09386413 -15.814745
+39              SIV.E543.gp140:R2A.4.low Antigen:Reagent -2.0722078 0.13274392 -15.610566
+40                             G49:R3A.1 Antigen:Reagent  2.0337089 0.13274392  15.320542
+41                                   V1a         Antigen  1.4120766 0.09386413  15.043836
+42                 SIVmac239.gp120:R2A.3 Antigen:Reagent -1.9802609 0.13274392 -14.917902
+43                   SIVsm.E660.84:R2A.3 Antigen:Reagent -1.9424953 0.13274392 -14.633403
+44             SIVsmH4.p55.Gag:R2A.4.low Antigen:Reagent -1.9384067 0.13274392 -14.602602
+45                             R2A.4.low         Reagent -1.3614030 0.09386413 -14.503976
+46                  SIVsm.E660.2A5:R2A.3 Antigen:Reagent -1.8937997 0.13274392 -14.266564
+47                    SIVsm.E660.2A5:C1q Antigen:Reagent -1.8485267 0.13274392 -13.925509
+48                    SIVcpz.EK505.gp120         Antigen -1.2852056 0.09386413 -13.692191
+49                 SIVsmH4.p55.Gag:R2A.3 Antigen:Reagent -1.8126896 0.13274392 -13.655537
+50                        G145.146:R3A.1 Antigen:Reagent  2.2077712 0.16257744  13.579813
+51                  SIV.1A11.gp140:R3A.3 Antigen:Reagent -1.8001272 0.13274392 -13.560901
+52   J08.V1V2.E660.2A5.AVI.His:R2A.4.low Antigen:Reagent -1.7952416 0.13274392 -13.524097
+53                         V1a:R2A.4.low Antigen:Reagent -1.7672391 0.13274392 -13.313145
+54                    SIV.1A11.gp140:C1q Antigen:Reagent -1.7505727 0.13274392 -13.187592
+55                 SIVsmH4.p55.Gag:R3A.3 Antigen:Reagent -1.7484341 0.13274392 -13.171482
+56                 SIVmac239.gp120:R3A.3 Antigen:Reagent -1.7446942 0.13274392 -13.143307
+57   J08.V1V2.E660.084.AVI.His:R2A.4.low Antigen:Reagent -1.7064791 0.13274392 -12.855422
+58              SIVcpz.EK505.gp120:R2A.3 Antigen:Reagent -1.7008556 0.13274392 -12.813058
+59                       SIVmac239.gp120         Antigen  1.1721040 0.09386413  12.487241
+60                   SIVmac239.gp130:C1q Antigen:Reagent -1.6299513 0.13274392 -12.278915
+61                  SIVsm.E660.2A5:R3A.3 Antigen:Reagent -1.6164822 0.13274392 -12.177448
+62                        V1a:R2A.4.high Antigen:Reagent -1.5739397 0.13274392 -11.856962
+63                 SIVmac239.gp130:R2A.3 Antigen:Reagent -1.5672673 0.13274392 -11.806697
+64                   SIVsm.E660.84:R3A.3 Antigen:Reagent -1.5507044 0.13274392 -11.681924
+65           J08.V1V2.mac239.AVI.His:C1q Antigen:Reagent -1.5335469 0.13274392 -11.552671
+66         J08.V1V2.mac239.AVI.His:R2A.3 Antigen:Reagent -1.4245664 0.13274392 -10.731688
+67                            G119:R3A.1 Antigen:Reagent  1.4093086 0.13274392  10.616746
+68                  SIV.E543.gp140:R2A.3 Antigen:Reagent -1.4045148 0.13274392 -10.580633
+69                                 R2A.3         Reagent  0.9895152 0.09386413  10.541995
+70                                   C1q         Reagent -0.9857733 0.09386413 -10.502130
+71                     SIVsm.E660.84:C1q Antigen:Reagent -1.3891919 0.13274392 -10.465201
+72       J08.V1V2.E660.2A5.AVI.His:R2A.2 Antigen:Reagent  1.3680590 0.13274392  10.306001
+73              SIVcpz.EK505.gp120:R3A.3 Antigen:Reagent -1.3648325 0.13274392 -10.281695
+74               J08.V1V2.mac239.AVI.His         Antigen  0.9461627 0.09386413  10.080131
+75       J08.V1V2.E660.2A5.AVI.His:R2A.3 Antigen:Reagent -1.3237504 0.13274392  -9.972211
+76                 SIVmac239.gp130:R3A.3 Antigen:Reagent -1.3078686 0.13274392  -9.852569
+77                       SIVsmH4.p55.Gag         Antigen  0.9213386 0.09386413   9.815662
+78         J08.V1V2.mac239.AVI.His:R3A.3 Antigen:Reagent -1.2993856 0.13274392  -9.788663
+79                   SIVmac239.gp140:C1q Antigen:Reagent -1.2189905 0.13274392  -9.183023
+80         J08.V1V2.E660.2A5.AVI.His:C1q Antigen:Reagent -1.2112067 0.13274392  -9.124385
+81                 SIVmac251.BK.PR55:C1q Antigen:Reagent -1.2080862 0.13274392  -9.100878
+82       J08.V1V2.E660.2A5.AVI.His:R3A.3 Antigen:Reagent -1.1803779 0.13274392  -8.892143
+83                 SIVmac239.gp140:R2A.3 Antigen:Reagent -1.1769815 0.13274392  -8.866557
+84                  SIV.E543.gp140:R3A.3 Antigen:Reagent -1.1719167 0.13274392  -8.828402
+85                        SIV.1A11.gp140         Antigen  0.8079933 0.09386413   8.608116
+86                                  G119         Antigen -0.7968666 0.09386413  -8.489576
+87             J08.V1V2.E660.2A5.AVI.His         Antigen  0.7488758 0.09386413   7.978296
+88                    SIV.E543.gp140:C1q Antigen:Reagent -1.0470485 0.13274392  -7.887732
+89       J08.V1V2.E660.084.AVI.His:R2A.3 Antigen:Reagent -1.0281808 0.13274392  -7.745596
+90                 SIVmac239.gp140:R3A.3 Antigen:Reagent -1.0102850 0.13274392  -7.610781
+91         J08.V1V2.mac239.AVI.His:R2A.2 Antigen:Reagent  0.9950850 0.13274392   7.496275
+92                               V1a:C1q Antigen:Reagent -0.9736272 0.13274392  -7.334627
+93                             V1a:R2A.3 Antigen:Reagent -0.9617117 0.13274392  -7.244864
+94                             V1a:R3A.3 Antigen:Reagent -0.9529686 0.13274392  -7.179000
+95                G145.146:aRhIgG.PE.low Antigen:Reagent  0.9411034 0.13274392   7.089615
+96                       C1.TR:R2A.4.low Antigen:Reagent  0.9317263 0.13274392   7.018975
+97      SIVcpz.EK505.gp120:aRhIgG.PE.low Antigen:Reagent  0.9186899 0.13274392   6.920768
+98                                   G49         Antigen -0.6368586 0.09386413  -6.784899
+99       J08.V1V2.E660.084.AVI.His:R3A.3 Antigen:Reagent -0.8973075 0.13274392  -6.759688
+100                                R3A.3         Reagent  0.6101555 0.09386413   6.500412
+101                 SIV.1A11.gp140:R2A.3 Antigen:Reagent -0.8162673 0.13274392  -6.149188
+102         SIV.1A11.gp140:aRhIgG.PE.low Antigen:Reagent  0.7896468 0.13274392   5.948648
+103        J08.V1V2.E660.084.AVI.His:C1q Antigen:Reagent -0.7802696 0.13274392  -5.878006
+104                      SIVmac239.gp130         Antigen  0.5108169 0.09386413   5.442089
+105                       SIVsm.E660.2A5         Antigen  0.5036892 0.09386413   5.366152
+106                          C1.TR:R3A.3 Antigen:Reagent  0.6779467 0.13274392   5.107177
+107                          C1.TR:R2A.3 Antigen:Reagent  0.6646240 0.13274392   5.006813
+108                              G73:C1q Antigen:Reagent  0.6568404 0.13274392   4.948177
+109                         G145.146:C1q Antigen:Reagent  0.6568311 0.13274392   4.948107
+110                       G49:R2A.4.high Antigen:Reagent  0.6493963 0.13274392   4.892098
+111        SIVmac239.gp130:aRhIgG.PE.low Antigen:Reagent  0.6358575 0.13274392   4.790106
+112                       SIV.E543.gp140         Antigen  0.4427091 0.09386413   4.716488
+113            J08.V1V2.E660.084.AVI.His         Antigen  0.4415944 0.09386413   4.704613
+114                  SIVsmH4.p55.Gag:C1q Antigen:Reagent  0.5906278 0.13274392   4.449378
+115                      G119:R2A.4.high Antigen:Reagent -0.5844095 0.13274392  -4.402533
+116                     C1.TR:R2A.4.high Antigen:Reagent  0.5740649 0.13274392   4.324604
+117                            G73:R3A.3 Antigen:Reagent -0.5551984 0.13274392  -4.182477
+118        SIVmac239.gp140:aRhIgG.PE.low Antigen:Reagent  0.5526511 0.13274392   4.163287
+119                            C1.TR:C1q Antigen:Reagent  0.4807024 0.13274392   3.621276
+120         SIV.E543.gp140:aRhIgG.PE.low Antigen:Reagent  0.4792839 0.13274392   3.610590
+121          SIVsm.E660.84:aRhIgG.PE.low Antigen:Reagent  0.4609061 0.13274392   3.472144
+122                   G119:aRhIgG.PE.low Antigen:Reagent  0.4445050 0.13274392   3.348590
+123   SIVmac239.gp140.AVI.His:R2A.4.high Antigen:Reagent -0.4322955 0.13274392  -3.256612
+124                       G73:R2A.4.high Antigen:Reagent -0.4130165 0.13274392  -3.111378
+125        J08.V1V2.mac239.AVI.His:R3A.1 Antigen:Reagent -0.4129119 0.13274392  -3.110590
+126                            G73:R2A.3 Antigen:Reagent -0.3544030 0.13274392  -2.669824
+127         SIVsm.E660.2A5:aRhIgG.PE.low Antigen:Reagent  0.3488407 0.13274392   2.627922
+128                                  G73         Antigen -0.2402163 0.09386413  -2.559191
+129                    G49:aRhIgG.PE.low Antigen:Reagent  0.3281411 0.13274392   2.471986
+130                   G145.146:R2A.4.low Antigen:Reagent  0.3280812 0.13274392   2.471535
+131      J08.V1V2.E660.2A5.AVI.His:R3A.1 Antigen:Reagent -0.3228203 0.13274392  -2.431903
+132                           G119:R2A.3 Antigen:Reagent -0.3204776 0.13274392  -2.414254
+133                    SIVmac251.BK.PR55         Antigen  0.2198789 0.09386413   2.342524
+134                        G73:R2A.4.low Antigen:Reagent -0.3061647 0.13274392  -2.306431
+135                              G49:C1q Antigen:Reagent  0.2959140 0.13274392   2.229209
+136                    V1a:aRhIgG.PE.low Antigen:Reagent -0.2855156 0.13274392  -2.150875
+137                           G119:R3A.3 Antigen:Reagent -0.2849609 0.13274392  -2.146697
+
+
+
+--------------------------------------------------------------------------------
+Baseline-adjusted Data
+--------------------------------------------------------------------------------
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.7495 -0.9938 -0.2084  0.6486  6.2167 
+
+Residual standard error: 1.739 on 91287 degrees of freedom
+Multiple R-squared:  0.2715,	Adjusted R-squared:  0.2703 
+F-statistic: 212.7 on 160 and 91287 DF,  p-value: < 2.2e-16
+
+table(results.adj5$coef %>% filter(pval < 0.05) %>% select(predictorGroup))
+        Antigen Antigen:Reagent         Reagent 
+             15              82               6 
+table(results.adj5$coef %>% filter(pval < 0.01) %>% select(predictorGroup))
+        Antigen Antigen:Reagent         Reagent 
+             15              67               5 
+
+results.adj5$coef %>%
+  filter(pval <= 0.05) %>%
+  select(var, predictorGroup, beta:pval) %>%
+  arrange(pval)
+                                        var  predictorGroup       beta        se       tval
+1                                     R2A.2         Reagent -3.2058556 0.1032165 -31.059540
+2                           SIVmac239.gp140         Antigen  3.1774770 0.1032165  30.784598
+3                            SIV.E543.gp140         Antigen  2.9518712 0.1032165  28.598844
+4                                 G73:R2A.2 Antigen:Reagent  3.2827814 0.1459701  22.489408
+5                           SIVmac239.gp130         Antigen  2.2181593 0.1032165  21.490365
+6                                G119:R2A.2 Antigen:Reagent  2.9994240 0.1459701  20.548207
+7                            SIVsm.E660.2A5         Antigen  2.0643688 0.1032165  20.000385
+8                  SIV.E543.gp140:R2A.4.low Antigen:Reagent -2.8116895 0.1459701 -19.262091
+9                 J08.V1V2.E660.084.AVI.His         Antigen  1.9873967 0.1032165  19.254650
+10                           G145.146:R2A.2 Antigen:Reagent  3.4110174 0.1787761  19.079825
+11                  J08.V1V2.mac239.AVI.His         Antigen  1.9232457 0.1032165  18.633131
+12                          SIVmac239.gp120         Antigen  1.8494167 0.1032165  17.917848
+13                J08.V1V2.E660.2A5.AVI.His         Antigen  1.8471754 0.1032165  17.896133
+14                    SIVmac239.gp120:R3A.1 Antigen:Reagent  2.2365818 0.1459701  15.322190
+15                            SIVsm.E660.84         Antigen  1.5487283 0.1032165  15.004665
+16                SIVmac239.gp140:R2A.4.low Antigen:Reagent -2.0757860 0.1459701 -14.220624
+17                    SIVmac239.gp140:R3A.1 Antigen:Reagent  1.9662838 0.1459701  13.470455
+18      J08.V1V2.E660.084.AVI.His:R2A.4.low Antigen:Reagent -1.9445165 0.1459701 -13.321334
+19                     SIV.1A11.gp140:R3A.1 Antigen:Reagent  1.9340849 0.1459701  13.249870
+20        J08.V1V2.mac239.AVI.His:R2A.4.low Antigen:Reagent -1.8939130 0.1459701 -12.974663
+21                     SIVsm.E660.2A5:R3A.1 Antigen:Reagent  1.8196543 0.1459701  12.465938
+22      J08.V1V2.E660.2A5.AVI.His:R2A.4.low Antigen:Reagent -1.8161053 0.1459701 -12.441625
+23                    SIVsmH4.p55.Gag:R3A.1 Antigen:Reagent  1.7131800 0.1459701  11.736513
+24                                      V1a         Antigen  1.2022580 0.1032165  11.647930
+25                           SIV.1A11.gp140         Antigen  1.1752667 0.1032165  11.386428
+26                    SIVmac239.gp130:R3A.1 Antigen:Reagent  1.6266250 0.1459701  11.143549
+27                  SIVmac251.BK.PR55:R3A.1 Antigen:Reagent  1.6141370 0.1459701  11.057997
+28                                    R3A.1         Reagent -1.1306368 0.1032165 -10.954037
+29                       SIV.E543.gp140:C1q Antigen:Reagent -1.5879133 0.1459701 -10.878346
+30                      SIVmac239.gp130:C1q Antigen:Reagent -1.4805793 0.1459701 -10.143031
+31                      SIVsm.E660.84:R3A.1 Antigen:Reagent  1.3893014 0.1459701   9.517711
+32          J08.V1V2.E660.2A5.AVI.His:R2A.2 Antigen:Reagent  1.3740379 0.1459701   9.413146
+33                     SIV.E543.gp140:R2A.3 Antigen:Reagent -1.3546689 0.1459701  -9.280454
+34            J08.V1V2.mac239.AVI.His:R2A.2 Antigen:Reagent  1.3195006 0.1459701   9.039526
+35                          SIVsmH4.p55.Gag         Antigen  0.8719740 0.1032165   8.448013
+36            J08.V1V2.E660.084.AVI.His:C1q Antigen:Reagent -1.1762408 0.1459701  -8.058094
+37                       SIVsm.E660.2A5:C1q Antigen:Reagent -1.1313357 0.1459701  -7.750462
+38                        SIVsm.E660.84:C1q Antigen:Reagent -1.0998284 0.1459701  -7.534614
+39                            V1a:R2A.4.low Antigen:Reagent -1.0785610 0.1459701  -7.388917
+40                      SIVmac239.gp140:C1q Antigen:Reagent -1.0494989 0.1459701  -7.189821
+41                                    R2A.3         Reagent  0.7306978 0.1032165   7.079276
+42               SIVmac239.gp130:R2A.4.high Antigen:Reagent -1.0262798 0.1459701  -7.030753
+43                 SIVcpz.EK505.gp120:R2A.3 Antigen:Reagent -1.0111163 0.1459701  -6.926872
+44     J08.V1V2.E660.084.AVI.His:R2A.4.high Antigen:Reagent -1.0003631 0.1459701  -6.853205
+45                SIV.E543.gp140:R2A.4.high Antigen:Reagent -0.9998874 0.1459701  -6.849946
+46                      SIVmac239.gp120:C1q Antigen:Reagent -0.9904854 0.1459701  -6.785536
+47                                G49:R3A.1 Antigen:Reagent  0.9567115 0.1459701   6.554160
+48              J08.V1V2.mac239.AVI.His:C1q Antigen:Reagent -0.9433480 0.1459701  -6.462611
+49                     SIV.E543.gp140:R3A.1 Antigen:Reagent  0.9015896 0.1459701   6.176536
+50                           G145.146:R3A.1 Antigen:Reagent  1.1007514 0.1787761   6.157149
+51             SIV.E543.gp140:aRhIgG.PE.low Antigen:Reagent -0.8733224 0.1459701  -5.982885
+52                 SIVcpz.EK505.gp120:R3A.1 Antigen:Reagent  0.8631959 0.1459701   5.913511
+53                     SIV.E543.gp140:R3A.3 Antigen:Reagent -0.8613743 0.1459701  -5.901032
+54                 SIVsm.E660.84:R2A.4.high Antigen:Reagent -0.8481427 0.1459701  -5.810386
+55            SIVmac239.gp130:aRhIgG.PE.low Antigen:Reagent -0.8421863 0.1459701  -5.769581
+56            J08.V1V2.E660.2A5.AVI.His:C1q Antigen:Reagent -0.8347657 0.1459701  -5.718744
+57                SIVsmH4.p55.Gag:R2A.4.low Antigen:Reagent -0.8257165 0.1459701  -5.656751
+58                 SIVcpz.EK505.gp120:R3A.3 Antigen:Reagent -0.7658956 0.1459701  -5.246935
+59                SIVsm.E660.2A5:R2A.4.high Antigen:Reagent -0.7613324 0.1459701  -5.215673
+60                                    R3A.3         Reagent  0.5369138 0.1032165   5.201824
+61    J08.V1V2.mac239.AVI.His:aRhIgG.PE.low Antigen:Reagent -0.7351048 0.1459701  -5.035996
+62                      SIVsm.E660.84:R2A.3 Antigen:Reagent -0.6903740 0.1459701  -4.729558
+63                                      C1q         Reagent -0.4630198 0.1032165  -4.485911
+64                               G119:R3A.1 Antigen:Reagent  0.6209071 0.1459701   4.253659
+65       J08.V1V2.mac239.AVI.His:R2A.4.high Antigen:Reagent -0.5952007 0.1459701  -4.077552
+66     J08.V1V2.E660.2A5.AVI.His:R2A.4.high Antigen:Reagent -0.5924129 0.1459701  -4.058453
+67  J08.V1V2.E660.2A5.AVI.His:aRhIgG.PE.low Antigen:Reagent -0.5875991 0.1459701  -4.025476
+68  J08.V1V2.E660.084.AVI.His:aRhIgG.PE.low Antigen:Reagent -0.5847085 0.1459701  -4.005673
+69                           V1a:R2A.4.high Antigen:Reagent -0.5843310 0.1459701  -4.003087
+70                       SIVcpz.EK505.gp120         Antigen  0.4090567 0.1032165   3.963096
+71                                     G119         Antigen  0.4013671 0.1032165   3.888596
+72               SIVmac239.gp120:R2A.4.high Antigen:Reagent -0.5422956 0.1459701  -3.715114
+73              SIVsm.E660.84:aRhIgG.PE.low Antigen:Reagent -0.5116259 0.1459701  -3.505004
+74             SIV.1A11.gp140:aRhIgG.PE.low Antigen:Reagent -0.5040994 0.1459701  -3.453442
+75                  SIVmac239.gp140.AVI.His         Antigen  0.3484256 0.1032165   3.375679
+76                           G119:R2A.4.low Antigen:Reagent -0.4801954 0.1459701  -3.289683
+77          J08.V1V2.E660.084.AVI.His:R3A.1 Antigen:Reagent -0.4658528 0.1459701  -3.191426
+78                                  V1a:C1q Antigen:Reagent -0.4588300 0.1459701  -3.143315
+79            SIVmac239.gp140:aRhIgG.PE.low Antigen:Reagent -0.4514194 0.1459701  -3.092547
+80                       SIV.1A11.gp140:C1q Antigen:Reagent -0.4285077 0.1459701  -2.935585
+81                      SIVsmH4.p55.Gag:C1q Antigen:Reagent -0.4280132 0.1459701  -2.932197
+82                     SIV.1A11.gp140:R2A.3 Antigen:Reagent -0.4206673 0.1459701  -2.881873
+83                          G119:R2A.4.high Antigen:Reagent -0.4159275 0.1459701  -2.849402
+84                    SIVmac239.gp130:R2A.3 Antigen:Reagent -0.4008929 0.1459701  -2.746404
+85         SIVcpz.EK505.gp120:aRhIgG.PE.low Antigen:Reagent -0.3911762 0.1459701  -2.679838
+86             SIVmac251.BK.PR55:R2A.4.high Antigen:Reagent  0.3863747 0.1459701   2.646944
+87                                  G73:C1q Antigen:Reagent -0.3800449 0.1459701  -2.603580
+88                     SIVsm.E660.2A5:R2A.3 Antigen:Reagent -0.3742935 0.1459701  -2.564179
+89                      SIVsm.E660.84:R3A.3 Antigen:Reagent -0.3718628 0.1459701  -2.547527
+90               SIVmac239.gp140:R2A.4.high Antigen:Reagent -0.3687145 0.1459701  -2.525959
+91                SIV.1A11.gp140:R2A.4.high Antigen:Reagent -0.3595162 0.1459701  -2.462944
+92        SIVmac239.gp140.AVI.His:R2A.4.low Antigen:Reagent -0.3567853 0.1459701  -2.444236
+93                               G119:R3A.3 Antigen:Reagent -0.3529120 0.1459701  -2.417701
+94                            aRhIgG.PE.low         Reagent  0.2448847 0.1032165   2.372535
+95              SIVmac239.gp140.AVI.His:C1q Antigen:Reagent -0.3400119 0.1459701  -2.329325
+96                    SIVmac239.gp120:R3A.3 Antigen:Reagent  0.3328838 0.1459701   2.280493
+97                    SIVsmH4.p55.Gag:R3A.3 Antigen:Reagent  0.3253599 0.1459701   2.228949
+98                                 G119:C1q Antigen:Reagent -0.3157923 0.1459701  -2.163404
+99                                G49:R3A.3 Antigen:Reagent -0.3140237 0.1459701  -2.151288
+100      SIVmac239.gp140.AVI.His:R2A.4.high Antigen:Reagent -0.3139032 0.1459701  -2.150462
+101           SIVmac239.gp120:aRhIgG.PE.low Antigen:Reagent -0.3072920 0.1459701  -2.105171
+102                              G119:R2A.3 Antigen:Reagent -0.2957987 0.1459701  -2.026433
+103                   SIVmac239.gp140:R2A.3 Antigen:Reagent -0.2951680 0.1459701  -2.022113
+
+
+--------------------------------------------------------------------------------
+Lagged Data
+--------------------------------------------------------------------------------
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-8.5026 -0.6760 -0.1817  0.3598  6.8574 
+
+Residual standard error: 1.514 on 91287 degrees of freedom
+Multiple R-squared:  0.0376,	Adjusted R-squared:  0.03592 
+F-statistic: 22.29 on 160 and 91287 DF,  p-value: < 2.2e-16
+
+table(results.lag5$coef %>% filter(pval < 0.05) %>% select(predictorGroup))
+        Antigen Antigen:Reagent         Reagent 
+             12              23               2 
+table(results.lag5$coef %>% filter(pval < 0.01) %>% select(predictorGroup))
+        Antigen Antigen:Reagent         Reagent 
+             12              19               2 
+
+results.lag5$coef %>%
+  filter(pval <= 0.05) %>%
+  select(var, predictorGroup, beta:pval) %>%
+  arrange(pval)
+                                   var  predictorGroup       beta         se      tval         pval
+1                       SIV.E543.gp140         Antigen  0.7660319 0.08981245  8.529240 1.495215e-17
+2                                R2A.2         Reagent -0.6902176 0.08981245 -7.685100 1.543937e-14
+3                      SIVmac239.gp140         Antigen  0.6753692 0.08981245  7.519773 5.537096e-14
+4                       SIVsm.E660.2A5         Antigen  0.6437769 0.08981245  7.168014 7.666659e-13
+5            J08.V1V2.E660.084.AVI.His         Antigen  0.5888135 0.08981245  6.556035 5.555043e-11
+6                      SIVmac239.gp130         Antigen  0.5739624 0.08981245  6.390678 1.659442e-10
+7                        SIVsm.E660.84         Antigen  0.5675365 0.08981245  6.319130 2.642484e-10
+8            J08.V1V2.E660.2A5.AVI.His         Antigen  0.5570142 0.08981245  6.201972 5.599813e-10
+9              J08.V1V2.mac239.AVI.His         Antigen  0.4987226 0.08981245  5.552934 2.816926e-08
+10                     SIVmac239.gp120         Antigen  0.4853478 0.08981245  5.404015 6.532824e-08
+11                           G73:R2A.2 Antigen:Reagent  0.6839579 0.12701398  5.384902 7.266243e-08
+12            SIV.E543.gp140:R2A.4.low Antigen:Reagent -0.6523177 0.12701398 -5.135795 2.815302e-07
+13                          G119:R2A.2 Antigen:Reagent  0.6259959 0.12701398  4.928559 8.298318e-07
+14               SIVmac239.gp120:R3A.1 Antigen:Reagent  0.6192873 0.12701398  4.875741 1.085824e-06
+15                SIV.1A11.gp140:R3A.1 Antigen:Reagent  0.6154237 0.12701398  4.845322 1.266131e-06
+16                      SIV.1A11.gp140         Antigen  0.4062431 0.08981245  4.523239 6.097709e-06
+17                SIVsm.E660.2A5:R3A.1 Antigen:Reagent  0.5694578 0.12701398  4.483427 7.354316e-06
+18 J08.V1V2.E660.084.AVI.His:R2A.4.low Antigen:Reagent -0.5569099 0.12701398 -4.384635 1.163102e-05
+19                      G145.146:R2A.2 Antigen:Reagent  0.6792024 0.15555972  4.366184 1.265748e-05
+20                     SIVsmH4.p55.Gag         Antigen  0.3846415 0.08981245  4.282720 1.848110e-05
+21                                 V1a         Antigen  0.3782303 0.08981245  4.211335 2.541090e-05
+22                 SIVsm.E660.84:R3A.1 Antigen:Reagent  0.5227790 0.12701398  4.115917 3.859809e-05
+23 J08.V1V2.E660.2A5.AVI.His:R2A.4.low Antigen:Reagent -0.5214319 0.12701398 -4.105311 4.041212e-05
+24             SIVmac251.BK.PR55:R3A.1 Antigen:Reagent  0.5130368 0.12701398  4.039216 5.367406e-05
+25               SIVmac239.gp130:R3A.1 Antigen:Reagent  0.5093153 0.12701398  4.009916 6.078870e-05
+26                               R3A.1         Reagent -0.3511419 0.08981245 -3.909725 9.246816e-05
+27               SIVsmH4.p55.Gag:R3A.1 Antigen:Reagent  0.4956677 0.12701398  3.902466 9.528598e-05
+28               SIVmac239.gp140:R3A.1 Antigen:Reagent  0.4898554 0.12701398  3.856705 1.150046e-04
+29   J08.V1V2.mac239.AVI.His:R2A.4.low Antigen:Reagent -0.4878485 0.12701398 -3.840904 1.226647e-04
+30                SIV.E543.gp140:R3A.1 Antigen:Reagent  0.3945419 0.12701398  3.106287 1.895107e-03
+31                   SIVsm.E660.84:C1q Antigen:Reagent -0.3832367 0.12701398 -3.017279 2.551249e-03
+32           SIVsmH4.p55.Gag:R2A.4.low Antigen:Reagent -0.3681273 0.12701398 -2.898321 3.752558e-03
+33                 SIVmac239.gp130:C1q Antigen:Reagent -0.3527173 0.12701398 -2.776996 5.487502e-03
+34                       V1a:R2A.4.low Antigen:Reagent -0.3229063 0.12701398 -2.542290 1.101452e-02
+35            SIVcpz.EK505.gp120:R3A.1 Antigen:Reagent  0.2793406 0.12701398  2.199290 2.785980e-02
+36            SIVcpz.EK505.gp120:R2A.3 Antigen:Reagent -0.2594795 0.12701398 -2.042921 4.106315e-02
+37                          G119:R3A.1 Antigen:Reagent  0.2515995 0.12701398  1.980880 4.760769e-02

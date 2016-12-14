@@ -1,0 +1,47 @@
+Baseline Model Summaries
+12/14/2016
+William Chad Young
+
+Model: log(readout) ~ 1
+
+
+--------------------------------------------------------------------------------
+Original Data
+--------------------------------------------------------------------------------
+Residuals:
+   Min     1Q Median     3Q    Max 
+-4.445 -1.867 -0.702  1.450  5.649 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 6.642217   0.006999     949   <2e-16 ***
+
+Residual standard error: 2.245 on 102878 degrees of freedom
+
+
+--------------------------------------------------------------------------------
+Baseline-adjusted Data
+--------------------------------------------------------------------------------
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.4103 -1.1653 -0.8438  0.3362  7.2083 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 1.048059   0.006733   155.6   <2e-16 ***
+
+Residual standard error: 2.036 on 91447 degrees of freedom
+
+
+--------------------------------------------------------------------------------
+Lagged Data
+--------------------------------------------------------------------------------
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-8.0256 -0.6071 -0.2758  0.2455  7.3344 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 0.329818   0.005097    64.7   <2e-16 ***
+
+Residual standard error: 1.541 on 91447 degrees of freedom
