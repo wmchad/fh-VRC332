@@ -27,7 +27,7 @@ table(results.orig2$coef %>% filter(pval < 0.01) %>% select(predictorGroup))
               1              19              16              10              16              10 
         Reagent       Timepoint Timepoint:Group 
               6               4              23 
-results.orig2$coef %>
+results.orig2$coef %>%
   filter(pval <= 0.05) %>%
   select(var, predictorGroup, beta:pval) %>%
   arrange(pval)

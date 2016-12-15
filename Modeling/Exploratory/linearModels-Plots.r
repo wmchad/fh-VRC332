@@ -57,6 +57,46 @@ dev.off()
 
 
 
+library(formula.tools)
+
+modelComp <- data.frame(data      = character(0),
+                        modelName = character(0),
+                        model     = character(0),
+                        rse       = numeric(0),
+                        r2        = numeric(0),
+                        nSig      = numeric(0),
+                        stringsAsFactors = FALSE)
+
+for ( modelName in paste("model", 1:9, sep="") ) {
+    for ( dataName in c("orig", "adj", "lag") ) {
+        fit <- summary(GetModelFit(dataName, modelName, dataDir))
+        modelComp[nrow(modelComp)+1,1:3] <- c(dataName, modelName,
+                                              as.character(get(modelName)))
+        modelComp[nrow(modelComp),4:6] <- c(fit$sigma, fit$r.squared,
+                                            sum(fit$coefficients[,4] <= 0.05))
+    }
+}
+
+## time-series clustering
+modelComp[nrow(modelComp)+1,1:3] <- c("adj", "hclust", "Time series hclust")
+modelComp[nrow(modelComp),4:6] <- c(0.903, 0.802, 0)
+modelComp[nrow(modelComp)+1,1:3] <- c("lag", "hclust", "Time series hclust")
+modelComp[nrow(modelComp),4:6] <- c(0.942, 0.627, 0)
+
+
+## null model
+modelComp[nrow(modelComp)+1,1:3] <- c("adj", "null", "value ~ 1")
+modelComp[nrow(modelComp),4:6] <- c(2.036, 0, 0)
+modelComp[nrow(modelComp)+1,1:3] <- c("lag", "null", "value ~ 1")
+modelComp[nrow(modelComp),4:6] <- c(1.541, 0, 0)
+modelComp[nrow(modelComp)+1,1:3] <- c("orig", "null", "value ~ 1")
+modelComp[nrow(modelComp),4:6] <- c(2.245, 0, 0)
+
+setwd(dataDir)
+write.table(modelComp, "ModelComparison.txt", row.names=FALSE)
+
+
+
 modelComp <- data.frame(data  = sort(rep(c("Original", "Adjusted", "Lagged"), 7)),
                         model = c("value ~ 1",
                                   "value ~ Group * tp + Animal * (ag + re)",
@@ -68,7 +108,7 @@ modelComp <- data.frame(data  = sort(rep(c("Original", "Adjusted", "Lagged"), 7)
                         rse   = 0,
                         r2    = 0,
                         nSig  = 0,
-                        stringsAsFactors = 0)
+                        stringsAsFactors = FALSE)
 
 ## Baseline-Adjusted
 modelComp[1,3:5] <- c(2.036, 0,      0)
@@ -96,3 +136,9 @@ modelComp[18,3:5] <- c(1.478, 0.5674, 124)
 modelComp[19,3:5] <- c(1.47,  0.5724, 164)
 modelComp[20,3:5] <- c(1.678, 0.4423, 136)
 modelComp[21,3:5] <- c(1.107, 0.7604, 449)
+
+## time-series clustering
+modelComp[22,1:2] <- c("Adjusted", "Time series hclust")
+modelComp[22,3:5] <- c(0.903, 0.802, 0)
+modelComp[23,1:2] <- c("Lagged", "Time series hclust")
+modelComp[23,3:5] <- c(0.942, 0.627, 0)

@@ -1,0 +1,1611 @@
+Eighth Model Summaries
+12/14/2016
+William Chad Young
+
+Model: log(readout) ~ re * ag * tp + Group * tp
+
+
+--------------------------------------------------------------------------------
+Original Data
+--------------------------------------------------------------------------------
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-7.0857 -0.4443 -0.0237  0.4339  6.1646 
+
+Residual standard error: 0.9873 on 101394 degrees of freedom
+Multiple R-squared:  0.8094,	Adjusted R-squared:  0.8066 
+F-statistic: 290.1 on 1484 and 101394 DF,  p-value: < 2.2e-16
+
+table(results.orig8$coef %>% filter(pval < 0.05) %>% select(predictorGroup))
+                                            Antigen           Antigen:Reagent 
+                        1                        15                        88 
+                    Group                   Reagent                 Timepoint 
+                        2                         7                         7 
+        Timepoint:Antigen Timepoint:Antigen:Reagent           Timepoint:Group 
+                       86                       361                        26 
+        Timepoint:Reagent 
+                       34 
+table(results.orig8$coef %>% filter(pval < 0.01) %>% select(predictorGroup))
+                                            Antigen           Antigen:Reagent 
+                        1                        13                        77 
+                    Group                   Reagent                 Timepoint 
+                        2                         6                         7 
+        Timepoint:Antigen Timepoint:Antigen:Reagent           Timepoint:Group 
+                       80                       284                        26 
+        Timepoint:Reagent 
+                       28 
+
+results.orig8$coef %>%
+  filter(pval <= 0.05) %>%
+  select(var, predictorGroup, beta:pval) %>%
+  arrange(pval)
+                                           var            predictorGroup       beta         se
+1                                                                         6.8964959 0.11878120
+2                                    5:SIV_Env           Timepoint:Group  2.3512241 0.04507969
+3                                    7:SIV_Env           Timepoint:Group  2.1432138 0.04507969
+4                             5:SIV_Mosaic_Env           Timepoint:Group  1.6234049 0.04169702
+5                             7:SIV_Mosaic_Env           Timepoint:Group  1.8007473 0.04169702
+6                                     5:x_PARI           Timepoint:Group  2.1276713 0.04005127
+7                                     7:x_PARI           Timepoint:Group  1.8111036 0.04005127
+8                                    6:SIV_Env           Timepoint:Group  1.6799308 0.04507969
+9                                     6:x_PARI           Timepoint:Group  1.4883579 0.04005127
+10                            6:SIV_Mosaic_Env           Timepoint:Group  1.1556752 0.04169702
+11                     SIVmac251.BK.PR55:R3A.1           Antigen:Reagent -6.1724387 0.23433767
+12                            8:SIV.E543.gp140         Timepoint:Antigen  6.1282549 0.23433767
+13                                    3:x_PARI           Timepoint:Group  1.0297342 0.04005127
+14                                   3:SIV_Env           Timepoint:Group  1.1586242 0.04507969
+15                                   2:SIV_Env           Timepoint:Group  1.0801274 0.04507969
+16                       SIVmac239.gp120:R3A.1           Antigen:Reagent -5.5990464 0.23433767
+17                                     8:R2A.2         Timepoint:Reagent -5.5217411 0.23433767
+18                        SIV.1A11.gp140:R3A.1           Antigen:Reagent -5.5191589 0.23433767
+19                            7:SIV.E543.gp140         Timepoint:Antigen  5.4311796 0.23433767
+20                           8:SIVmac239.gp140         Timepoint:Antigen  5.4029534 0.23433767
+21                                       R3A.1                   Reagent  3.7949038 0.16570176
+22                SIVmac251.BK.PR55:R2A.4.high           Antigen:Reagent -5.2952775 0.23433767
+23                                     7:R2A.2         Timepoint:Reagent -5.2575606 0.23433767
+24                        SIVsm.E660.2A5:R3A.1           Antigen:Reagent -5.2110878 0.23433767
+25                            8:SIVsm.E660.2A5         Timepoint:Antigen  5.1502152 0.23433767
+26                           7:SIVmac239.gp140         Timepoint:Antigen  4.9491705 0.23433767
+27                         SIVsm.E660.84:R3A.1           Antigen:Reagent -4.7894306 0.23433767
+28                                    2:x_PARI           Timepoint:Group  0.8097819 0.04005127
+29                 8:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  4.7105082 0.23433767
+30                       SIVmac239.gp130:R3A.1           Antigen:Reagent -4.6552707 0.23433767
+31                       SIVmac239.gp140:R3A.1           Antigen:Reagent -4.6314292 0.23433767
+32                           8:SIVmac239.gp130         Timepoint:Antigen  4.5916995 0.23433767
+33                       SIVsmH4.p55.Gag:R3A.1           Antigen:Reagent -4.5515329 0.23433767
+34                             8:SIVsm.E660.84         Timepoint:Antigen  4.5402919 0.23433767
+35                   SIV.1A11.gp140:R2A.4.high           Antigen:Reagent -4.4723671 0.23433767
+36                 8:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  4.4561139 0.23433767
+37                            7:SIVsm.E660.2A5         Timepoint:Antigen  4.1186732 0.23433767
+38                  SIVmac239.gp120:R2A.4.high           Antigen:Reagent -4.0676113 0.23433767
+39                    SIVcpz.EK505.gp120:R3A.1           Antigen:Reagent -4.0048167 0.23433767
+40                   8:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  3.9897810 0.23433767
+41                  SIVsmH4.p55.Gag:R2A.4.high           Antigen:Reagent -3.9847313 0.23433767
+42                           8:SIVmac239.gp120         Timepoint:Antigen  3.8827822 0.23433767
+43                                 8:G73:R2A.2 Timepoint:Antigen:Reagent  5.4716630 0.33140352
+44                        SIV.E543.gp140:R3A.1           Antigen:Reagent -3.8499918 0.23433767
+45                                     5:R2A.2         Timepoint:Reagent -3.7638615 0.23433767
+46                                 7:G73:R2A.2 Timepoint:Antigen:Reagent  5.2852678 0.33140352
+47                  8:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -5.2185416 0.33140352
+48                           7:SIVmac239.gp130         Timepoint:Antigen  3.6832359 0.23433767
+49                  7:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -5.1942451 0.33140352
+50                   SIVsm.E660.2A5:R2A.4.high           Antigen:Reagent -3.6339833 0.23433767
+51                 7:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  3.5427746 0.23433767
+52                                8:G119:R2A.2 Timepoint:Antigen:Reagent  5.0079670 0.33140352
+53                     8:SIVmac239.gp120:R3A.1 Timepoint:Antigen:Reagent  4.9542984 0.33140352
+54                                7:G119:R2A.2 Timepoint:Antigen:Reagent  4.9400469 0.33140352
+55                      8:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent  4.9233895 0.33140352
+56                  SIVmac239.gp130:R2A.4.high           Antigen:Reagent -3.4171202 0.23433767
+57                                  R2A.4.high                   Reagent  2.3765915 0.16570176
+58                           6:SIVmac239.gp140         Timepoint:Antigen  3.3471548 0.23433767
+59                 7:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  3.3100089 0.23433767
+60                            5:SIV.E543.gp140         Timepoint:Antigen  3.3014774 0.23433767
+61                           5:SIVmac239.gp140         Timepoint:Antigen  3.2665052 0.23433767
+62                    SIVsm.E660.84:R2A.4.high           Antigen:Reagent -3.2559642 0.23433767
+63                            8:SIV.1A11.gp140         Timepoint:Antigen  3.2499449 0.23433767
+64                      8:SIVsm.E660.2A5:R3A.1 Timepoint:Antigen:Reagent  4.5556627 0.33140352
+65                                   8:SIV_Gag           Timepoint:Group -0.5760762 0.04238279
+66                                     6:R2A.2         Timepoint:Reagent -3.1848933 0.23433767
+67                             7:SIVsm.E660.84         Timepoint:Antigen  3.1546170 0.23433767
+68       8:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -4.4552792 0.33140352
+69                                   7:SIV_Gag           Timepoint:Group  0.5696459 0.04238279
+70                            8:G145.146:R2A.2 Timepoint:Antigen:Reagent  5.4336189 0.40588476
+71                   7:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  3.1219744 0.23433767
+72                           3:SIVmac239.gp140         Timepoint:Antigen  3.1150752 0.23433767
+73                                     3:R2A.2         Timepoint:Reagent -3.1026170 0.23433767
+74                              SIV.E543.gp140                   Antigen -2.1811765 0.16570176
+75                           8:SIVsmH4.p55.Gag         Timepoint:Antigen  3.0771323 0.23433767
+76                     7:SIVmac239.gp120:R3A.1 Timepoint:Antigen:Reagent  4.3426555 0.33140352
+77                                       8:V1a         Timepoint:Antigen  3.0258423 0.23433767
+78                      7:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent  4.2667324 0.33140352
+79                           7:SIVmac239.gp120         Timepoint:Antigen  2.9893853 0.23433767
+80                     SIVmac251.BK.PR55:R2A.3           Antigen:Reagent -2.9864868 0.23433767
+81                            6:SIV.E543.gp140         Timepoint:Antigen  2.9808919 0.23433767
+82                     SIVmac251.BK.PR55:R3A.3           Antigen:Reagent -2.9636340 0.23433767
+83                       8:SIVsm.E660.84:R3A.1 Timepoint:Antigen:Reagent  4.1822322 0.33140352
+84                      7:SIVsm.E660.2A5:R3A.1 Timepoint:Antigen:Reagent  4.1800534 0.33140352
+85                            7:G145.146:R2A.2 Timepoint:Antigen:Reagent  5.1166911 0.40588476
+86       8:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -4.1714555 0.33140352
+87                   8:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent  4.1042947 0.33140352
+88                     8:SIVmac239.gp130:R3A.1 Timepoint:Antigen:Reagent  4.0745227 0.33140352
+89                                     8:R3A.1         Timepoint:Reagent -2.8091353 0.23433767
+90                     8:SIVsmH4.p55.Gag:R3A.1 Timepoint:Antigen:Reagent  3.9653416 0.33140352
+91                   SIV.E543.gp140:R2A.4.high           Antigen:Reagent -2.7733240 0.23433767
+92                     8:SIVmac239.gp140:R3A.1 Timepoint:Antigen:Reagent  3.9188435 0.33140352
+93               SIVcpz.EK505.gp120:R2A.4.high           Antigen:Reagent -2.7696313 0.23433767
+94                     7:SIVsmH4.p55.Gag:R3A.1 Timepoint:Antigen:Reagent  3.9038114 0.33140352
+95         8:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -3.9027883 0.33140352
+96                           2:SIVmac239.gp140         Timepoint:Antigen  2.6544621 0.23433767
+97                  SIVmac239.gp140:R2A.4.high           Antigen:Reagent -2.6380837 0.23433767
+98                               aRhIgG.PE.low                   Reagent -1.8415611 0.16570176
+99                     5:SIVmac239.gp120:R3A.1 Timepoint:Antigen:Reagent  3.6397979 0.33140352
+100                          5:SIVmac239.gp130         Timepoint:Antigen  2.5626215 0.23433767
+101                                    2:R2A.2         Timepoint:Reagent -2.5592597 0.23433767
+102                    7:SIVmac239.gp140:R3A.1 Timepoint:Antigen:Reagent  3.5609281 0.33140352
+103                 5:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -3.5394707 0.33140352
+104      7:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -3.5215259 0.33140352
+105                          6:SIVmac239.gp130         Timepoint:Antigen  2.4704293 0.23433767
+106                    7:SIVmac239.gp130:R3A.1 Timepoint:Antigen:Reagent  3.4723470 0.33140352
+107         J08.V1V2.mac239.AVI.His:R2A.4.high           Antigen:Reagent -2.4158044 0.23433767
+108                           3:SIV.E543.gp140         Timepoint:Antigen  2.4031462 0.23433767
+109                6:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent -3.3980190 0.33140352
+110                      7:SIVsm.E660.84:R3A.1 Timepoint:Antigen:Reagent  3.3804636 0.33140352
+111      7:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -3.3408518 0.33140352
+112                     5:SIVsm.E660.2A5:R3A.1 Timepoint:Antigen:Reagent  3.3337648 0.33140352
+113                                3:G73:R2A.2 Timepoint:Antigen:Reagent  3.3329264 0.33140352
+114                         SIVcpz.EK505.gp120                   Antigen -1.6488116 0.16570176
+115                  7:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent  3.2348737 0.33140352
+116                  5:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  2.2771859 0.23433767
+117                3:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent -3.2180633 0.33140352
+118                                6:G73:R2A.2 Timepoint:Antigen:Reagent  3.2141725 0.33140352
+119                          4:SIVmac239.gp140         Timepoint:Antigen  2.2724467 0.23433767
+120                     5:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent  3.2132417 0.33140352
+121       J08.V1V2.E660.2A5.AVI.His:R2A.4.high           Antigen:Reagent -2.2660107 0.23433767
+122                           5:SIVsm.E660.2A5         Timepoint:Antigen  2.2636812 0.23433767
+123                                      R2A.2                   Reagent -1.5930668 0.16570176
+124                                    7:R3A.1         Timepoint:Reagent -2.2528365 0.23433767
+125                           7:SIV.1A11.gp140         Timepoint:Antigen  2.2479167 0.23433767
+126                5:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  2.2466408 0.23433767
+127                                5:G73:R2A.2 Timepoint:Antigen:Reagent  3.1729087 0.33140352
+128                           3:SIV_Mosaic_Env           Timepoint:Group  0.3988071 0.04169702
+129                     8:SIV.E543.gp140:R3A.1 Timepoint:Antigen:Reagent  3.1563352 0.33140352
+130                 6:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -3.1416563 0.33140352
+131        7:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -3.1001562 0.33140352
+132                                      7:V1a         Timepoint:Antigen  2.1746904 0.23433767
+133                                   4:x_PARI           Timepoint:Group  0.3710834 0.04005127
+134                        8:SIVsm.E660.84:C1q Timepoint:Antigen:Reagent -3.0658933 0.33140352
+135                    5:SIVmac239.gp140:R3A.1 Timepoint:Antigen:Reagent  3.0483656 0.33140352
+136                      SIVmac239.gp120:R2A.3           Antigen:Reagent -2.1303366 0.23433767
+137                           5:G145.146:R2A.2 Timepoint:Antigen:Reagent  3.6887557 0.40588476
+138                               3:G119:R2A.2 Timepoint:Antigen:Reagent  3.0090103 0.33140352
+139                          5:SIVmac239.gp120         Timepoint:Antigen  2.1183883 0.23433767
+140                               6:G119:R2A.2 Timepoint:Antigen:Reagent  2.9956853 0.33140352
+141                    5:SIVmac239.gp130:R3A.1 Timepoint:Antigen:Reagent  2.9803940 0.33140352
+142                           6:SIVsm.E660.2A5         Timepoint:Antigen  2.1043981 0.23433767
+143                           8:SIV_Mosaic_Env           Timepoint:Group -0.3728056 0.04169702
+144                8:SIVsmH4.p55.Gag:R2A.4.low Timepoint:Antigen:Reagent -2.9450181 0.33140352
+145                          6:SIVmac239.gp120         Timepoint:Antigen  2.0698086 0.23433767
+146                            SIVmac239.gp130                   Antigen -1.4608802 0.16570176
+147                                2:G73:R2A.2 Timepoint:Antigen:Reagent  2.9025978 0.33140352
+148                5:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  2.0406151 0.23433767
+149                      SIVmac239.gp120:R3A.3           Antigen:Reagent -2.0405909 0.23433767
+150                      SIVsmH4.p55.Gag:R3A.3           Antigen:Reagent -2.0376429 0.23433767
+151                       SIV.1A11.gp140:R3A.3           Antigen:Reagent -2.0325649 0.23433767
+152                           3:G145.146:R2A.2 Timepoint:Antigen:Reagent  3.5067184 0.40588476
+153                              SIVsm.E660.84                   Antigen -1.4258441 0.16570176
+154                       6:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -2.8422530 0.33140352
+155                      8:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -2.8217386 0.33140352
+156                                   G145.146                   Antigen -1.3917272 0.16570176
+157                      SIVsmH4.p55.Gag:R2A.3           Antigen:Reagent -1.9586209 0.23433767
+158                     7:SIV.E543.gp140:R3A.1 Timepoint:Antigen:Reagent  2.7503356 0.33140352
+159                                    4:R2A.2         Timepoint:Reagent -1.9272164 0.23433767
+160                                  R2A.4.low                   Reagent -1.3600183 0.16570176
+161                  6:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  1.9231376 0.23433767
+162                           6:G145.146:R2A.2 Timepoint:Antigen:Reagent  3.3273164 0.40588476
+163                           2:SIV_Mosaic_Env           Timepoint:Group  0.3364015 0.04169702
+164                             SIVsm.E660.2A5                   Antigen -1.3313053 0.16570176
+165                               5:G119:R2A.2 Timepoint:Antigen:Reagent  2.6538674 0.33140352
+166                  J08.V1V2.E660.084.AVI.His                   Antigen -1.3249804 0.16570176
+167                               2:G119:R2A.2 Timepoint:Antigen:Reagent  2.6374238 0.33140352
+168                6:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  1.8510491 0.23433767
+169                            8:V1a:R2A.4.low Timepoint:Antigen:Reagent -2.5832508 0.33140352
+170                           2:G145.146:R2A.2 Timepoint:Antigen:Reagent  3.1307942 0.40588476
+171                4:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent -2.5298279 0.33140352
+172                      6:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -2.5279273 0.33140352
+173                 3:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -2.5261665 0.33140352
+174                                  4:SIV_Env           Timepoint:Group  0.3410336 0.04507969
+175                      3:SIVmac239.gp140:C1q Timepoint:Antigen:Reagent -2.4892629 0.33140352
+176                           2:SIV.E543.gp140         Timepoint:Antigen  1.7489793 0.23433767
+177                            5:SIVsm.E660.84         Timepoint:Antigen  1.7473466 0.23433767
+178                          7:SIVsmH4.p55.Gag         Timepoint:Antigen  1.7390887 0.23433767
+179                          3:SIVmac239.gp130         Timepoint:Antigen  1.7264202 0.23433767
+180                3:SIV.E543.gp140:R2A.4.high Timepoint:Antigen:Reagent -2.4389923 0.33140352
+181                       3:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -2.4246259 0.33140352
+182                      5:SIVsm.E660.84:R3A.1 Timepoint:Antigen:Reagent  2.4179257 0.33140352
+183                6:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  1.6885043 0.23433767
+184                2:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent -2.3612069 0.33140352
+185                    5:SIVsmH4.p55.Gag:R3A.1 Timepoint:Antigen:Reagent  2.3543149 0.33140352
+186                  3:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  1.6561791 0.23433767
+187      5:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -2.3201776 0.33140352
+188        5:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -2.3175590 0.33140352
+189                                       G119                   Antigen -1.1536374 0.16570176
+190                                    5:R3A.1         Timepoint:Reagent -1.6227072 0.23433767
+191                  5:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent  2.2738568 0.33140352
+192                       SIVsm.E660.2A5:R3A.3           Antigen:Reagent -1.6061753 0.23433767
+193                 8:SIVcpz.EK505.gp120:R3A.1 Timepoint:Antigen:Reagent  2.2347246 0.33140352
+194                                4:G73:R2A.2 Timepoint:Antigen:Reagent  2.2333669 0.33140352
+195                      6:SIVmac239.gp140:C1q Timepoint:Antigen:Reagent -2.2134166 0.33140352
+196                       SIVsm.E660.2A5:R2A.3           Antigen:Reagent -1.5610943 0.23433767
+197                7:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent -2.2019654 0.33140352
+198               6:SIVmac239.gp130:R2A.4.high Timepoint:Antigen:Reagent -2.1789906 0.33140352
+199                     5:SIV.E543.gp140:R3A.1 Timepoint:Antigen:Reagent  2.1715855 0.33140352
+200                        7:SIVsm.E660.84:C1q Timepoint:Antigen:Reagent -2.1672448 0.33140352
+201      5:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -2.1481328 0.33140352
+202              J08.V1V2.mac239.AVI.His:R2A.3           Antigen:Reagent -1.5169901 0.23433767
+203                3:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  1.5158739 0.23433767
+204                       6:SIVsm.E660.2A5:C1q Timepoint:Antigen:Reagent -2.1435524 0.33140352
+205                           4:SIV.E543.gp140         Timepoint:Antigen  1.5141203 0.23433767
+206                               4:G119:R2A.2 Timepoint:Antigen:Reagent  2.1292442 0.33140352
+207                          3:SIVmac239.gp120         Timepoint:Antigen  1.5025972 0.23433767
+208                                          6                 Timepoint -1.0729156 0.16798199
+209                      4:SIVmac239.gp140:C1q Timepoint:Antigen:Reagent -2.1045473 0.33140352
+210                            6:SIVsm.E660.84         Timepoint:Antigen  1.4876813 0.23433767
+211                            SIVmac239.gp140                   Antigen -1.0416974 0.16570176
+212                 8:SIVcpz.EK505.gp120:R2A.3 Timepoint:Antigen:Reagent -2.0758359 0.33140352
+213                      6:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent -2.0719283 0.33140352
+214                6:SIV.E543.gp140:R2A.4.high Timepoint:Antigen:Reagent -2.0700328 0.33140352
+215        6:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -2.0464651 0.33140352
+216                      SIVmac251.BK.PR55:C1q           Antigen:Reagent -1.4420099 0.23433767
+217                    6:SIVmac239.gp120:R3A.1 Timepoint:Antigen:Reagent  2.0391027 0.33140352
+218                       5:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -2.0387450 0.33140352
+219              J08.V1V2.mac239.AVI.His:R3A.3           Antigen:Reagent -1.4339929 0.23433767
+220                               8:G119:R3A.1 Timepoint:Antigen:Reagent  2.0127960 0.33140352
+221                           4:G145.146:R2A.2 Timepoint:Antigen:Reagent  2.4604191 0.40588476
+222                       7:SIVsm.E660.2A5:C1q Timepoint:Antigen:Reagent -1.9754192 0.33140352
+223                          2:SIVmac239.gp130         Timepoint:Antigen  1.3947576 0.23433767
+224                3:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  1.3938724 0.23433767
+225                     4:SIV.E543.gp140:R2A.3 Timepoint:Antigen:Reagent -1.9700300 0.33140352
+226      6:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.9609984 0.33140352
+227                  2:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  1.3860106 0.23433767
+228              SIVmac239.gp130:aRhIgG.PE.low           Antigen:Reagent  1.3844675 0.23433767
+229                         SIV.1A11.gp140:C1q           Antigen:Reagent -1.3696770 0.23433767
+230                           8:G145.146:R3A.1 Timepoint:Antigen:Reagent  2.3673231 0.40588476
+231                      2:SIVmac239.gp140:C1q Timepoint:Antigen:Reagent -1.9175214 0.33140352
+232                                8:G49:R3A.1 Timepoint:Antigen:Reagent  1.9097752 0.33140352
+233                                      5:V1a         Timepoint:Antigen  1.3470102 0.23433767
+234                  8:SIVmac239.gp140.AVI.His         Timepoint:Antigen  1.3464472 0.23433767
+235                6:SIVsm.E660.2A5:R2A.4.high Timepoint:Antigen:Reagent -1.8886127 0.33140352
+236                 7:SIVcpz.EK505.gp120:R2A.3 Timepoint:Antigen:Reagent -1.8864721 0.33140352
+237                                    8:R2A.3         Timepoint:Reagent  1.3319530 0.23433767
+238            7:J08.V1V2.mac239.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.8825884 0.33140352
+239                                      8:C1q         Timepoint:Reagent -1.3306050 0.23433767
+240                        SIVsm.E660.84:R2A.3           Antigen:Reagent -1.3288295 0.23433767
+241                     3:SIV.E543.gp140:R2A.3 Timepoint:Antigen:Reagent -1.8737669 0.33140352
+242    8:J08.V1V2.mac239.AVI.His:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.8511618 0.33140352
+243      6:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.8369545 0.33140352
+244            J08.V1V2.E660.2A5.AVI.His:R2A.3           Antigen:Reagent -1.2981879 0.23433767
+245       J08.V1V2.E660.084.AVI.His:R2A.4.high           Antigen:Reagent -1.2928893 0.23433767
+246          3:J08.V1V2.E660.2A5.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.8229668 0.33140352
+247                                      7:C1q         Timepoint:Reagent -1.2861671 0.23433767
+248                 7:SIVcpz.EK505.gp120:R3A.1 Timepoint:Antigen:Reagent  1.8111916 0.33140352
+249                       8:SIVcpz.EK505.gp120         Timepoint:Antigen  1.2782975 0.23433767
+250               3:SIVmac239.gp130:R2A.4.high Timepoint:Antigen:Reagent -1.8032722 0.33140352
+251                      8:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent -1.8017067 0.33140352
+252                        SIVmac239.gp120:C1q           Antigen:Reagent -1.2691305 0.23433767
+253                2:SIV.E543.gp140:R2A.4.high Timepoint:Antigen:Reagent -1.7930058 0.33140352
+254                                    7:R2A.3         Timepoint:Reagent  1.2672554 0.23433767
+255           SIVcpz.EK505.gp120:aRhIgG.PE.low           Antigen:Reagent  1.2664021 0.23433767
+256                  J08.V1V2.E660.2A5.AVI.His                   Antigen -0.8930578 0.16570176
+257               SIV.E543.gp140:aRhIgG.PE.low           Antigen:Reagent  1.2555704 0.23433767
+258                           6:SIV.1A11.gp140         Timepoint:Antigen  1.2465415 0.23433767
+259                           5:SIV.1A11.gp140         Timepoint:Antigen  1.2444665 0.23433767
+260                           3:SIVsm.E660.2A5         Timepoint:Antigen  1.2443337 0.23433767
+261                 4:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -1.7520793 0.33140352
+262               SIV.1A11.gp140:aRhIgG.PE.low           Antigen:Reagent  1.2377352 0.23433767
+263                       7:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -1.7477160 0.33140352
+264              6:J08.V1V2.mac239.AVI.His:C1q Timepoint:Antigen:Reagent -1.7460710 0.33140352
+265                     4:SIV.E543.gp140:R3A.3 Timepoint:Antigen:Reagent -1.7396552 0.33140352
+266            J08.V1V2.E660.2A5.AVI.His:R3A.3           Antigen:Reagent -1.2293893 0.23433767
+267        3:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.7353863 0.33140352
+268            8:SIVmac239.gp130:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.7309955 0.33140352
+269                            7:V1a:R2A.4.low Timepoint:Antigen:Reagent -1.7305084 0.33140352
+270                        SIVsm.E660.84:R3A.3           Antigen:Reagent -1.2201597 0.23433767
+271                      SIVmac239.gp130:R2A.3           Antigen:Reagent -1.2109180 0.23433767
+272                  SIVsmH4.p55.Gag:R2A.4.low           Antigen:Reagent -1.2044364 0.23433767
+273                 5:SIVcpz.EK505.gp120:R2A.3 Timepoint:Antigen:Reagent -1.6989890 0.33140352
+274                      3:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -1.6928292 0.33140352
+275                2:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  1.1955637 0.23433767
+276                                  V1a:R3A.3           Antigen:Reagent -1.1932675 0.23433767
+277            6:J08.V1V2.E660.084.AVI.His:C1q Timepoint:Antigen:Reagent -1.6852866 0.33140352
+278                          2:SIVmac239.gp120         Timepoint:Antigen  1.1916448 0.23433767
+279                          4:SIVmac239.gp130         Timepoint:Antigen  1.1871666 0.23433767
+280                                7:G49:R3A.1 Timepoint:Antigen:Reagent  1.6780352 0.33140352
+281                                  G49:R3A.1           Antigen:Reagent  1.1832987 0.23433767
+282                                    5:R2A.3         Timepoint:Reagent  1.1795038 0.23433767
+283                                  V1a:R2A.3           Antigen:Reagent -1.1777832 0.23433767
+284                      5:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -1.6653265 0.33140352
+285                       8:SIVsm.E660.2A5:C1q Timepoint:Antigen:Reagent -1.6630055 0.33140352
+286                    3:SIVmac239.gp140:R3A.1 Timepoint:Antigen:Reagent  1.6564321 0.33140352
+287          6:J08.V1V2.E660.2A5.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.6520439 0.33140352
+288          2:J08.V1V2.E660.2A5.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.6390187 0.33140352
+289          7:J08.V1V2.E660.2A5.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.6289411 0.33140352
+290                        6:SIVsm.E660.84:C1q Timepoint:Antigen:Reagent -1.6146918 0.33140352
+291                     2:SIV.E543.gp140:R2A.3 Timepoint:Antigen:Reagent -1.6146595 0.33140352
+292                    3:SIVmac239.gp120:R3A.1 Timepoint:Antigen:Reagent  1.6026360 0.33140352
+293            8:J08.V1V2.E660.084.AVI.His:C1q Timepoint:Antigen:Reagent -1.6015793 0.33140352
+294               6:SIVmac239.gp120:R2A.4.high Timepoint:Antigen:Reagent -1.5958030 0.33140352
+295            6:J08.V1V2.E660.2A5.AVI.His:C1q Timepoint:Antigen:Reagent -1.5893893 0.33140352
+296            3:J08.V1V2.mac239.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.5891552 0.33140352
+297                                 G119:R2A.2           Antigen:Reagent  1.1230123 0.23433767
+298                                     x_PARI                     Group -0.1352989 0.02832052
+299                2:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  1.1127655 0.23433767
+300              8:J08.V1V2.mac239.AVI.His:C1q Timepoint:Antigen:Reagent -1.5690838 0.33140352
+301                8:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent -1.5533698 0.33140352
+302     8:J08.V1V2.E660.084.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -1.5508447 0.33140352
+303                       2:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -1.5497579 0.33140352
+304      3:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.5490566 0.33140352
+305                7:SIVsmH4.p55.Gag:R2A.4.low Timepoint:Antigen:Reagent -1.5481819 0.33140352
+306                    6:SIVmac239.gp140:R3A.1 Timepoint:Antigen:Reagent  1.5465422 0.33140352
+307          4:J08.V1V2.E660.2A5.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.5454122 0.33140352
+308                     5:SIV.E543.gp140:R2A.3 Timepoint:Antigen:Reagent -1.5411101 0.33140352
+309            7:J08.V1V2.E660.084.AVI.His:C1q Timepoint:Antigen:Reagent -1.5304511 0.33140352
+310               3:SIVmac239.gp120:R2A.4.high Timepoint:Antigen:Reagent -1.5298328 0.33140352
+311                    J08.V1V2.mac239.AVI.His                   Antigen -0.7633891 0.16570176
+312                      SIVmac239.gp130:R3A.3           Antigen:Reagent -1.0773069 0.23433767
+313            5:J08.V1V2.E660.084.AVI.His:C1q Timepoint:Antigen:Reagent -1.5217707 0.33140352
+314                       5:SIVsm.E660.2A5:C1q Timepoint:Antigen:Reagent -1.5152300 0.33140352
+315                                  8:SIV_Env           Timepoint:Group  0.2051917 0.04507969
+316                      SIVmac239.gp140:R3A.3           Antigen:Reagent -1.0632010 0.23433767
+317                           4:SIV_Mosaic_Env           Timepoint:Group  0.1889140 0.04169702
+318                 5:SIVsm.E660.84:R2A.4.high Timepoint:Antigen:Reagent -1.4998681 0.33140352
+319                             V1a:R2A.4.high           Antigen:Reagent -1.0545344 0.23433767
+320      3:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.4801721 0.33140352
+321                      3:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent -1.4786688 0.33140352
+322                                  6:SIV_Gag           Timepoint:Group  0.1881159 0.04238279
+323                4:SIV.E543.gp140:R2A.4.high Timepoint:Antigen:Reagent -1.4656052 0.33140352
+324                 6:SIVsm.E660.84:R2A.4.high Timepoint:Antigen:Reagent -1.4589223 0.33140352
+325                       4:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -1.4532057 0.33140352
+326                                      6:V1a         Timepoint:Antigen  1.0260104 0.23433767
+327                 8:SIVcpz.EK505.gp120:R3A.3 Timepoint:Antigen:Reagent -1.4471414 0.33140352
+328                                          5                 Timepoint -0.7326382 0.16798199
+329     6:J08.V1V2.E660.084.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -1.4436088 0.33140352
+330                 2:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -1.4403717 0.33140352
+331                    2:SIVmac239.gp120:R3A.1 Timepoint:Antigen:Reagent  1.4376076 0.33140352
+332                    2:SIVmac239.gp140:R3A.1 Timepoint:Antigen:Reagent  1.4357343 0.33140352
+333            6:J08.V1V2.mac239.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.4343525 0.33140352
+334                      7:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -1.4342865 0.33140352
+335              3:J08.V1V2.mac239.AVI.His:C1q Timepoint:Antigen:Reagent -1.4321751 0.33140352
+336            8:J08.V1V2.mac239.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.4275817 0.33140352
+337            4:J08.V1V2.mac239.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.4199219 0.33140352
+338                             G145.146:R3A.1           Antigen:Reagent  1.2293256 0.28700387
+339               2:SIVmac239.gp130:R2A.4.high Timepoint:Antigen:Reagent -1.4189526 0.33140352
+340                                    G73:C1q           Antigen:Reagent  0.9946581 0.23433767
+341                     6:SIVsm.E660.2A5:R3A.1 Timepoint:Antigen:Reagent  1.4036064 0.33140352
+342                        5:SIVsm.E660.84:C1q Timepoint:Antigen:Reagent -1.4021393 0.33140352
+343            2:J08.V1V2.mac239.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.4004611 0.33140352
+344                                      5:C1q         Timepoint:Reagent -0.9899351 0.23433767
+345                                          7                 Timepoint -0.7089092 0.16798199
+346                3:SIVsm.E660.2A5:R2A.4.high Timepoint:Antigen:Reagent -1.3974412 0.33140352
+347            3:J08.V1V2.E660.084.AVI.His:C1q Timepoint:Antigen:Reagent -1.3970278 0.33140352
+348                     6:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent  1.3902672 0.33140352
+349        8:SIVmac239.gp140.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.3899093 0.33140352
+350                                    8:R3A.3         Timepoint:Reagent  0.9804334 0.23433767
+351                                    3:R3A.1         Timepoint:Reagent -0.9791394 0.23433767
+352                     8:SIV.E543.gp140:R2A.3 Timepoint:Antigen:Reagent -1.3836453 0.33140352
+353                        SIVsmH4.p55.Gag:C1q           Antigen:Reagent  0.9710840 0.23433767
+354  8:J08.V1V2.E660.2A5.AVI.His:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.3646127 0.33140352
+355                          4:SIVmac239.gp120         Timepoint:Antigen  0.9627406 0.23433767
+356                                      3:V1a         Timepoint:Antigen  0.9609177 0.23433767
+357  8:J08.V1V2.E660.084.AVI.His:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.3580159 0.33140352
+358                     7:SIV.E543.gp140:R2A.3 Timepoint:Antigen:Reagent -1.3526400 0.33140352
+359                               7:G119:R3A.1 Timepoint:Antigen:Reagent  1.3501835 0.33140352
+360                           7:G145.146:R3A.1 Timepoint:Antigen:Reagent  1.6534268 0.40588476
+361              SIVmac239.gp140:aRhIgG.PE.low           Antigen:Reagent  0.9539128 0.23433767
+362                                        G49                   Antigen -0.6739859 0.16570176
+363                5:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent -1.3461802 0.33140352
+364                               7:R2A.4.high         Timepoint:Reagent -0.9505549 0.23433767
+365                    4:SIVmac239.gp130:R2A.3 Timepoint:Antigen:Reagent -1.3309855 0.33140352
+366                     G145.146:aRhIgG.PE.low           Antigen:Reagent  0.9398101 0.23433767
+367               4:SIVmac239.gp140:R2A.4.high Timepoint:Antigen:Reagent -1.3179861 0.33140352
+368                     3:SIV.E543.gp140:R3A.3 Timepoint:Antigen:Reagent -1.3161780 0.33140352
+369                           8:V1a:R2A.4.high Timepoint:Antigen:Reagent -1.2994205 0.33140352
+370                    6:SIVmac239.gp130:R3A.1 Timepoint:Antigen:Reagent  1.2984965 0.33140352
+371              8:SIVmac239.gp140.AVI.His:C1q Timepoint:Antigen:Reagent -1.2954321 0.33140352
+372                SIVsm.E660.84:aRhIgG.PE.low           Antigen:Reagent  0.9156846 0.23433767
+373                      SIVmac239.gp140:R2A.3           Antigen:Reagent -0.9146099 0.23433767
+374                 8:SIVsm.E660.84:R2A.4.high Timepoint:Antigen:Reagent -1.2916216 0.33140352
+375                      6:SIVsm.E660.84:R2A.3 Timepoint:Antigen:Reagent -1.2858016 0.33140352
+376                            5:V1a:R2A.4.low Timepoint:Antigen:Reagent -1.2833746 0.33140352
+377             8:SIVmac251.BK.PR55:R2A.4.high Timepoint:Antigen:Reagent  1.2799913 0.33140352
+378                  4:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  0.9030644 0.23433767
+379                    4:SIVmac239.gp130:R3A.3 Timepoint:Antigen:Reagent -1.2646155 0.33140352
+380            3:J08.V1V2.E660.2A5.AVI.His:C1q Timepoint:Antigen:Reagent -1.2533777 0.33140352
+381                                5:G49:R3A.1 Timepoint:Antigen:Reagent  1.2484696 0.33140352
+382                    7:SIVsmH4.p55.Gag:R3A.3 Timepoint:Antigen:Reagent  1.2455532 0.33140352
+383             8:SIV.E543.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.2451223 0.33140352
+384             6:SIV.E543.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.2436862 0.33140352
+385                    6:SIVsmH4.p55.Gag:R3A.1 Timepoint:Antigen:Reagent  1.2402622 0.33140352
+386          5:J08.V1V2.E660.2A5.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.2397433 0.33140352
+387                     2:SIV.E543.gp140:R3A.3 Timepoint:Antigen:Reagent -1.2294138 0.33140352
+388     7:J08.V1V2.E660.084.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -1.2247963 0.33140352
+389                                    SIV_Gag                     Group  0.1105014 0.02996916
+390                                 G119:R3A.1           Antigen:Reagent  0.8573912 0.23433767
+391                       6:SIV.1A11.gp140:C1q Timepoint:Antigen:Reagent -1.2080066 0.33140352
+392                       3:SIVsm.E660.2A5:C1q Timepoint:Antigen:Reagent -1.2041431 0.33140352
+393                       8:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -1.1994090 0.33140352
+394                             G145.146:R2A.2           Antigen:Reagent  1.0345310 0.28700387
+395       8:SIVmac239.gp140.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -1.1928986 0.33140352
+396                         SIVsm.E660.2A5:C1q           Antigen:Reagent -0.8428950 0.23433767
+397                    3:SIVsmH4.p55.Gag:R3A.1 Timepoint:Antigen:Reagent  1.1799164 0.33140352
+398      J08.V1V2.mac239.AVI.His:aRhIgG.PE.low           Antigen:Reagent  0.8319354 0.23433767
+399         8:SIVcpz.EK505.gp120:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.1763722 0.33140352
+400     3:J08.V1V2.E660.084.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -1.1753024 0.33140352
+401              8:SIVsm.E660.84:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.1743313 0.33140352
+402             7:SIVmac251.BK.PR55:R2A.4.high Timepoint:Antigen:Reagent  1.1730296 0.33140352
+403                                      2:V1a         Timepoint:Antigen  0.8248354 0.23433767
+404                           5:G145.146:R3A.1 Timepoint:Antigen:Reagent  1.4274957 0.40588476
+405                                   1:x_PARI           Timepoint:Group  0.1406474 0.04005127
+406             8:SIV.1A11.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.1634028 0.33140352
+407               2:SIVmac239.gp120:R2A.4.high Timepoint:Antigen:Reagent -1.1616620 0.33140352
+408       6:J08.V1V2.mac239.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -1.1592952 0.33140352
+409                           2:SIVsm.E660.2A5         Timepoint:Antigen  0.8194707 0.23433767
+410        2:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.1573931 0.33140352
+411                               8:R2A.4.high         Timepoint:Reagent -0.8168443 0.23433767
+412             3:SIV.E543.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.1534191 0.33140352
+413                                        C1q                   Reagent -0.5742001 0.16570176
+414                                   8:x_PARI           Timepoint:Group  0.1382873 0.04005127
+415                              V1a:R2A.4.low           Antigen:Reagent -0.8085182 0.23433767
+416                     8:SIV.1A11.gp140:R3A.3 Timepoint:Antigen:Reagent  1.1396939 0.33140352
+417     6:J08.V1V2.E660.2A5.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -1.1374242 0.33140352
+418            J08.V1V2.E660.084.AVI.His:R2A.3           Antigen:Reagent -0.8031167 0.23433767
+419                   SIVcpz.EK505.gp120:R2A.3           Antigen:Reagent -0.8020855 0.23433767
+420                     6:SIV.E543.gp140:R2A.3 Timepoint:Antigen:Reagent -1.1292442 0.33140352
+421                      4:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -1.1280202 0.33140352
+422            7:SIVmac239.gp130:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.1275611 0.33140352
+423                           4:SIVsm.E660.2A5         Timepoint:Antigen  0.7969694 0.23433767
+424                       7:SIVcpz.EK505.gp120         Timepoint:Antigen  0.7969041 0.23433767
+425               4:SIVmac239.gp130:R2A.4.high Timepoint:Antigen:Reagent -1.1260707 0.33140352
+426                6:SIV.1A11.gp140:R2A.4.high Timepoint:Antigen:Reagent -1.1217070 0.33140352
+427                     4:SIVsm.E660.2A5:R2A.3 Timepoint:Antigen:Reagent -1.1191806 0.33140352
+428                      3:SIVsm.E660.84:R2A.3 Timepoint:Antigen:Reagent -1.1160316 0.33140352
+429                                    6:R2A.3         Timepoint:Reagent  0.7860483 0.23433767
+430                      2:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -1.1085406 0.33140352
+431                  3:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent  1.1070057 0.33140352
+432                                    6:R3A.1         Timepoint:Reagent -0.7801033 0.23433767
+433                4:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  0.7786110 0.23433767
+434                     7:SIV.1A11.gp140:R3A.3 Timepoint:Antigen:Reagent  1.0946178 0.33140352
+435                            6:V1a:R2A.4.low Timepoint:Antigen:Reagent -1.0935807 0.33140352
+436                 7:SIVcpz.EK505.gp120:R3A.3 Timepoint:Antigen:Reagent -1.0915096 0.33140352
+437        4:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.0901966 0.33140352
+438    7:J08.V1V2.mac239.AVI.His:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.0861806 0.33140352
+439            5:J08.V1V2.E660.2A5.AVI.His:C1q Timepoint:Antigen:Reagent -1.0842069 0.33140352
+440                            C1.TR:R2A.4.low           Antigen:Reagent  0.7663054 0.23433767
+441                    8:SIVsmH4.p55.Gag:R3A.3 Timepoint:Antigen:Reagent  1.0798663 0.33140352
+442                     4:SIV.E543.gp140:R3A.1 Timepoint:Antigen:Reagent -1.0704856 0.33140352
+443                  6:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent  1.0661870 0.33140352
+444               7:SIVsmH4.p55.Gag:R2A.4.high Timepoint:Antigen:Reagent  1.0590818 0.33140352
+445                                    7:R3A.3         Timepoint:Reagent  0.7455582 0.23433767
+446            6:SIVmac239.gp130:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.0483046 0.33140352
+447            2:J08.V1V2.E660.084.AVI.His:C1q Timepoint:Antigen:Reagent -1.0453150 0.33140352
+448      2:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.0434098 0.33140352
+449                                    2:R3A.1         Timepoint:Reagent -0.7377365 0.23433767
+450          8:J08.V1V2.E660.2A5.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.0387151 0.33140352
+451            J08.V1V2.E660.084.AVI.His:R3A.3           Antigen:Reagent -0.7337233 0.23433767
+452                          6:SIVsmH4.p55.Gag         Timepoint:Antigen  0.7325061 0.23433767
+453                4:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  0.7299401 0.23433767
+454                             G49:R2A.4.high           Antigen:Reagent  0.7296988 0.23433767
+455                      5:SIVsm.E660.84:R2A.3 Timepoint:Antigen:Reagent -1.0318466 0.33140352
+456            5:J08.V1V2.mac239.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.0310042 0.33140352
+457                  7:SIVmac239.gp140.AVI.His         Timepoint:Antigen  0.7247134 0.23433767
+458                                3:G49:R3A.1 Timepoint:Antigen:Reagent  1.0216402 0.33140352
+459                 6:SIVcpz.EK505.gp120:R2A.3 Timepoint:Antigen:Reagent -1.0191479 0.33140352
+460                                C1.TR:R3A.3           Antigen:Reagent  0.7147090 0.23433767
+461                            8:aRhIgG.PE.low         Timepoint:Reagent  0.7136694 0.23433767
+462              2:J08.V1V2.mac239.AVI.His:C1q Timepoint:Antigen:Reagent -1.0050598 0.33140352
+463                 5:SIVcpz.EK505.gp120:R3A.3 Timepoint:Antigen:Reagent -1.0009079 0.33140352
+464                    4:SIVmac239.gp120:R2A.3 Timepoint:Antigen:Reagent -0.9985694 0.33140352
+465                                          8                 Timepoint  0.5037558 0.16798199
+466             7:SIV.E543.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.9850398 0.33140352
+467                     5:SIV.1A11.gp140:R2A.3 Timepoint:Antigen:Reagent -0.9848846 0.33140352
+468                J08.V1V2.mac239.AVI.His:C1q           Antigen:Reagent -0.6950154 0.23433767
+469                            3:V1a:R2A.4.low Timepoint:Antigen:Reagent -0.9823562 0.33140352
+470                     3:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent  0.9813188 0.33140352
+471                    3:SIVmac239.gp130:R3A.1 Timepoint:Antigen:Reagent  0.9800387 0.33140352
+472                                          4                 Timepoint -0.4958532 0.16798199
+473                                          3                 Timepoint -0.4907740 0.16798199
+474                   SIVcpz.EK505.gp120:R3A.3           Antigen:Reagent -0.6840364 0.23433767
+475                                          2                 Timepoint -0.4884479 0.16798199
+476                     4:SIVsm.E660.2A5:R3A.3 Timepoint:Antigen:Reagent -0.9585682 0.33140352
+477                    8:SIVmac239.gp120:R3A.3 Timepoint:Antigen:Reagent  0.9486838 0.33140352
+478                                C1.TR:R2A.3           Antigen:Reagent  0.6707611 0.23433767
+479  7:J08.V1V2.E660.2A5.AVI.His:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.9479782 0.33140352
+480     5:J08.V1V2.E660.084.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.9465482 0.33140352
+481                            SIVmac239.gp120                   Antigen -0.4718219 0.16570176
+482                                     5:G119         Timepoint:Antigen  0.6639250 0.23433767
+483                                  6:V1a:C1q Timepoint:Antigen:Reagent -0.9379566 0.33140352
+484                                      1:C1q         Timepoint:Reagent -0.6622340 0.23433767
+485      4:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -0.9359196 0.33140352
+486                2:SIVsm.E660.2A5:R2A.4.high Timepoint:Antigen:Reagent -0.9348696 0.33140352
+487               3:SIVmac239.gp140:R2A.4.high Timepoint:Antigen:Reagent -0.9345339 0.33140352
+488                                    4:R3A.3         Timepoint:Reagent  0.6574366 0.23433767
+489                    5:SIVmac239.gp140:R2A.3 Timepoint:Antigen:Reagent -0.9247656 0.33140352
+490                      3:SIVsm.E660.84:R3A.3 Timepoint:Antigen:Reagent -0.9236028 0.33140352
+491                  2:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent  0.9213172 0.33140352
+492                            3:SIVsm.E660.84         Timepoint:Antigen  0.6510570 0.23433767
+493  7:J08.V1V2.E660.084.AVI.His:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.9157251 0.33140352
+494                                  1:SIV_Env           Timepoint:Group  0.1244444 0.04507969
+495                    2:SIVsmH4.p55.Gag:R3A.1 Timepoint:Antigen:Reagent  0.9142513 0.33140352
+496                 5:SIVcpz.EK505.gp120:R3A.1 Timepoint:Antigen:Reagent  0.9124135 0.33140352
+497       3:J08.V1V2.mac239.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.9106264 0.33140352
+498     3:J08.V1V2.E660.2A5.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.9064242 0.33140352
+499                      5:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent -0.9060246 0.33140352
+500     2:J08.V1V2.E660.084.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.9058334 0.33140352
+501      2:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -0.9054277 0.33140352
+502                      3:SIVsmH4.p55.Gag:C1q Timepoint:Antigen:Reagent -0.9038108 0.33140352
+503                      4:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent -0.9034471 0.33140352
+504             2:SIV.E543.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.9002672 0.33140352
+505                       8:SIV.1A11.gp140:C1q Timepoint:Antigen:Reagent -0.8978227 0.33140352
+506                                6:G49:R3A.1 Timepoint:Antigen:Reagent  0.8961098 0.33140352
+507                      2:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent -0.8949295 0.33140352
+508               4:SIVmac239.gp120:R2A.4.high Timepoint:Antigen:Reagent -0.8935098 0.33140352
+509                6:SIVsmH4.p55.Gag:R2A.4.low Timepoint:Antigen:Reagent -0.8906387 0.33140352
+510                               5:R2A.4.high         Timepoint:Reagent -0.6279642 0.23433767
+511               8:SIVmac239.gp130:R2A.4.high Timepoint:Antigen:Reagent -0.8880248 0.33140352
+512            8:J08.V1V2.E660.2A5.AVI.His:C1q Timepoint:Antigen:Reagent -0.8879600 0.33140352
+513               8:SIVsmH4.p55.Gag:R2A.4.high Timepoint:Antigen:Reagent  0.8863465 0.33140352
+514      4:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -0.8796811 0.33140352
+515                 7:SIVsm.E660.84:R2A.4.high Timepoint:Antigen:Reagent -0.8791016 0.33140352
+516                     6:SIV.E543.gp140:R3A.3 Timepoint:Antigen:Reagent -0.8735851 0.33140352
+517                    4:SIVmac239.gp120:R3A.3 Timepoint:Antigen:Reagent -0.8729789 0.33140352
+518                          5:SIVsmH4.p55.Gag         Timepoint:Antigen  0.6157636 0.23433767
+519                         G119:aRhIgG.PE.low           Antigen:Reagent  0.6146690 0.23433767
+520                           5:G119:R2A.4.low Timepoint:Antigen:Reagent -0.8653571 0.33140352
+521             4:SIV.E543.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.8623586 0.33140352
+522            3:SIVmac239.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.8612592 0.33140352
+523    J08.V1V2.E660.2A5.AVI.His:aRhIgG.PE.low           Antigen:Reagent  0.6082435 0.23433767
+524                      6:SIVsm.E660.84:R3A.3 Timepoint:Antigen:Reagent -0.8541634 0.33140352
+525            3:SIVmac239.gp130:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.8519123 0.33140352
+526                           8:G119:R2A.4.low Timepoint:Antigen:Reagent -0.8413035 0.33140352
+527            4:SIVmac239.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.8407314 0.33140352
+528                           3:G145.146:R3A.1 Timepoint:Antigen:Reagent  1.0293873 0.40588476
+529                                2:G49:R3A.1 Timepoint:Antigen:Reagent  0.8385543 0.33140352
+530                                    4:R2A.3         Timepoint:Reagent  0.5920943 0.23433767
+531             7:SIV.1A11.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.8355748 0.33140352
+532               SIVsm.E660.2A5:aRhIgG.PE.low           Antigen:Reagent  0.5884840 0.23433767
+533                     3:SIVsm.E660.2A5:R2A.3 Timepoint:Antigen:Reagent -0.8280018 0.33140352
+534                5:SIVsm.E660.2A5:R2A.4.high Timepoint:Antigen:Reagent -0.8275940 0.33140352
+535                 6:SIVcpz.EK505.gp120:R3A.3 Timepoint:Antigen:Reagent -0.8194023 0.33140352
+536       4:J08.V1V2.mac239.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.8191668 0.33140352
+537                      7:SIVsm.E660.84:R2A.3 Timepoint:Antigen:Reagent -0.8155515 0.33140352
+538            2:J08.V1V2.E660.2A5.AVI.His:C1q Timepoint:Antigen:Reagent -0.8141327 0.33140352
+539              4:J08.V1V2.mac239.AVI.His:C1q Timepoint:Antigen:Reagent -0.8110273 0.33140352
+540                            7:aRhIgG.PE.low         Timepoint:Reagent  0.5707228 0.23433767
+541                    2:SIVmac239.gp130:R3A.1 Timepoint:Antigen:Reagent  0.8062985 0.33140352
+542                      6:SIVsmH4.p55.Gag:C1q Timepoint:Antigen:Reagent -0.8042925 0.33140352
+543            7:J08.V1V2.E660.2A5.AVI.His:C1q Timepoint:Antigen:Reagent -0.8039137 0.33140352
+544                                      8:G49         Timepoint:Antigen  0.5674269 0.23433767
+545                     2:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent  0.8015631 0.33140352
+546                                    V1a:C1q           Antigen:Reagent -0.5657783 0.23433767
+547       8:J08.V1V2.mac239.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.7996451 0.33140352
+548         7:SIVcpz.EK505.gp120:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7965258 0.33140352
+549                           2:G145.146:R3A.1 Timepoint:Antigen:Reagent  0.9741032 0.40588476
+550                                  3:V1a:C1q Timepoint:Antigen:Reagent -0.7929837 0.33140352
+551            8:SIVmac239.gp120:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7926613 0.33140352
+552              7:SIVsm.E660.84:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7920266 0.33140352
+553                    5:SIVmac239.gp120:R3A.3 Timepoint:Antigen:Reagent  0.7919800 0.33140352
+554                 3:SIVcpz.EK505.gp120:R3A.1 Timepoint:Antigen:Reagent  0.7917350 0.33140352
+555               2:SIVmac239.gp140:R2A.4.high Timepoint:Antigen:Reagent -0.7908184 0.33140352
+556                5:SIVsmH4.p55.Gag:R2A.4.low Timepoint:Antigen:Reagent -0.7903804 0.33140352
+557                 3:SIVsm.E660.84:R2A.4.high Timepoint:Antigen:Reagent -0.7901776 0.33140352
+558              6:SIVsm.E660.84:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7876382 0.33140352
+559                     3:SIVsm.E660.2A5:R3A.1 Timepoint:Antigen:Reagent  0.7873683 0.33140352
+560            J08.V1V2.E660.084.AVI.His:R3A.1           Antigen:Reagent  0.5552925 0.23433767
+561    6:J08.V1V2.mac239.AVI.His:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7851710 0.33140352
+562                     7:SIVsm.E660.2A5:R3A.3 Timepoint:Antigen:Reagent  0.7816820 0.33140352
+563                                4:R2A.4.low         Timepoint:Reagent  0.5516608 0.23433767
+564                             G119:R2A.4.low           Antigen:Reagent  0.5503431 0.23433767
+565    J08.V1V2.E660.084.AVI.His:aRhIgG.PE.low           Antigen:Reagent  0.5486495 0.23433767
+566              7:SIVmac239.gp140.AVI.His:C1q Timepoint:Antigen:Reagent -0.7741829 0.33140352
+567                    7:SIVmac239.gp120:R3A.3 Timepoint:Antigen:Reagent  0.7741615 0.33140352
+568                           3:SIV.1A11.gp140         Timepoint:Antigen  0.5460723 0.23433767
+569                           6:G145.146:R3A.1 Timepoint:Antigen:Reagent  0.9411233 0.40588476
+570          8:J08.V1V2.E660.084.AVI.His:R3A.1 Timepoint:Antigen:Reagent -0.7651483 0.33140352
+571        7:SIVmac239.gp140.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -0.7609129 0.33140352
+572                                    3:R2A.3         Timepoint:Reagent  0.5377022 0.23433767
+573                           7:V1a:R2A.4.high Timepoint:Antigen:Reagent -0.7593479 0.33140352
+574                            2:V1a:R2A.4.low Timepoint:Antigen:Reagent -0.7574254 0.33140352
+575                        8:V1a:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7566638 0.33140352
+576            2:SIVmac239.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7523432 0.33140352
+577                      4:SIVsm.E660.84:R3A.3 Timepoint:Antigen:Reagent -0.7475064 0.33140352
+578            4:J08.V1V2.E660.084.AVI.His:C1q Timepoint:Antigen:Reagent -0.7463029 0.33140352
+579                4:SIVsm.E660.2A5:R2A.4.high Timepoint:Antigen:Reagent -0.7457645 0.33140352
+580                    8:SIVmac251.BK.PR55:C1q Timepoint:Antigen:Reagent  0.7450597 0.33140352
+581     4:J08.V1V2.E660.084.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.7434967 0.33140352
+582                                     8:G119         Timepoint:Antigen  0.5229041 0.23433767
+583                               G145.146:C1q           Antigen:Reagent  0.5227234 0.23433767
+584                           6:V1a:R2A.4.high Timepoint:Antigen:Reagent -0.7367960 0.33140352
+585                                    6:R3A.3         Timepoint:Reagent  0.5207472 0.23433767
+586                      4:SIVsm.E660.84:R2A.3 Timepoint:Antigen:Reagent -0.7254555 0.33140352
+587              5:J08.V1V2.mac239.AVI.His:C1q Timepoint:Antigen:Reagent -0.7243825 0.33140352
+588             5:SIVmac251.BK.PR55:R2A.4.high Timepoint:Antigen:Reagent  0.7208927 0.33140352
+589          4:J08.V1V2.E660.2A5.AVI.His:R3A.3 Timepoint:Antigen:Reagent -0.7196829 0.33140352
+590                     5:SIV.1A11.gp140:R3A.3 Timepoint:Antigen:Reagent  0.7182808 0.33140352
+591            2:SIVmac239.gp130:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7119897 0.33140352
+592                      4:SIVsmH4.p55.Gag:C1q Timepoint:Antigen:Reagent -0.7073454 0.33140352
+593                       4:SIVsm.E660.2A5:C1q Timepoint:Antigen:Reagent -0.7071292 0.33140352
+594             6:SIV.1A11.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7058904 0.33140352
+595                          SIVmac251.BK.PR55                   Antigen  0.3522496 0.16570176
+596                     8:SIV.1A11.gp140:R2A.3 Timepoint:Antigen:Reagent -0.7034411 0.33140352
+597                        5:SIVmac251.BK.PR55         Timepoint:Antigen -0.4958380 0.23433767
+598            4:SIVmac239.gp130:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.6997790 0.33140352
+599                                    3:R3A.3         Timepoint:Reagent  0.4947522 0.23433767
+600            6:SIVmac239.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.6979742 0.33140352
+601                                     3:G119         Timepoint:Antigen  0.4906541 0.23433767
+602                 2:SIVcpz.EK505.gp120:R3A.1 Timepoint:Antigen:Reagent  0.6910062 0.33140352
+603                          5:G119:R2A.4.high Timepoint:Antigen:Reagent -0.6898032 0.33140352
+604                                        V1a                   Antigen  0.3434028 0.16570176
+605          J08.V1V2.mac239.AVI.His:R2A.4.low           Antigen:Reagent -0.4849469 0.23433767
+606          7:J08.V1V2.E660.084.AVI.His:R3A.1 Timepoint:Antigen:Reagent -0.6851881 0.33140352
+607                                  5:G73:C1q Timepoint:Antigen:Reagent -0.6839487 0.33140352
+608                        3:SIVsm.E660.84:C1q Timepoint:Antigen:Reagent -0.6816804 0.33140352
+609                                      R2A.3                   Reagent  0.3400060 0.16570176
+610  6:J08.V1V2.E660.084.AVI.His:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.6777329 0.33140352
+611               7:SIVmac239.gp140:R2A.4.high Timepoint:Antigen:Reagent  0.6765194 0.33140352
+612                                  G73:R2A.2           Antigen:Reagent  0.4777397 0.23433767
+613                     2:SIVsm.E660.2A5:R3A.1 Timepoint:Antigen:Reagent  0.6729591 0.33140352
+614     2:J08.V1V2.E660.2A5.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.6725362 0.33140352
+615               7:SIVmac239.gp120:R2A.4.high Timepoint:Antigen:Reagent  0.6721742 0.33140352
+616                       6:SIVcpz.EK505.gp120         Timepoint:Antigen  0.4722716 0.23433767
+617              J08.V1V2.E660.2A5.AVI.His:C1q           Antigen:Reagent -0.4691928 0.23433767
+618       2:J08.V1V2.mac239.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.6622740 0.33140352
+619                     4:SIV.1A11.gp140:R3A.3 Timepoint:Antigen:Reagent -0.6618907 0.33140352
+620                           8:G49:R2A.4.high Timepoint:Antigen:Reagent -0.6606689 0.33140352
+621                 3:SIVcpz.EK505.gp120:R2A.3 Timepoint:Antigen:Reagent -0.6605839 0.33140352
+622  6:J08.V1V2.E660.2A5.AVI.His:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.6598461 0.33140352
+623     4:J08.V1V2.E660.2A5.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.6589649 0.33140352
+624                     7:SIV.1A11.gp140:R2A.3 Timepoint:Antigen:Reagent -0.6532161 0.33140352
+625                                   G119:C1q           Antigen:Reagent  0.4614958 0.23433767
+626              SIVmac239.gp120:aRhIgG.PE.low           Antigen:Reagent  0.4613828 0.23433767
+627                     2:SIVsm.E660.2A5:R2A.3 Timepoint:Antigen:Reagent -0.6497112 0.33140352
+
+
+--------------------------------------------------------------------------------
+Baseline-adjusted Data
+--------------------------------------------------------------------------------
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-8.5933 -0.5287 -0.0138  0.5245  6.3107 
+
+Residual standard error: 1.075 on 90128 degrees of freedom
+Multiple R-squared:  0.7254,	Adjusted R-squared:  0.7214 
+F-statistic: 180.5 on 1319 and 90128 DF,  p-value: < 2.2e-16
+
+table(results.adj8$coef %>% filter(pval < 0.05) %>% select(predictorGroup))
+                  Antigen           Antigen:Reagent                     Group 
+                        1                         9                         2 
+                  Reagent                 Timepoint         Timepoint:Antigen 
+                        2                         7                        82 
+Timepoint:Antigen:Reagent           Timepoint:Group         Timepoint:Reagent 
+                      361                        22                        37 
+table(results.adj8$coef %>% filter(pval < 0.01) %>% select(predictorGroup))
+                    Group                   Reagent                 Timepoint 
+                        2                         1                         4 
+        Timepoint:Antigen Timepoint:Antigen:Reagent           Timepoint:Group 
+                       77                       281                        22 
+        Timepoint:Reagent 
+                       31 
+
+results.adj8$coef %>%
+  filter(pval <= 0.05) %>%
+  select(var, predictorGroup, beta:pval) %>%
+  arrange(pval)
+                                           var            predictorGroup       beta         se
+1                                    5:SIV_Env           Timepoint:Group  2.2267797 0.04907333
+2                                    7:SIV_Env           Timepoint:Group  2.0187694 0.04907333
+3                                     5:x_PARI           Timepoint:Group  1.9870238 0.04359943
+4                             7:SIV_Mosaic_Env           Timepoint:Group  1.7401687 0.04539098
+5                                     7:x_PARI           Timepoint:Group  1.6704561 0.04359943
+6                             5:SIV_Mosaic_Env           Timepoint:Group  1.5628263 0.04539098
+7                                    6:SIV_Env           Timepoint:Group  1.5554864 0.04907333
+8                                     6:x_PARI           Timepoint:Group  1.3477105 0.04359943
+9                             6:SIV_Mosaic_Env           Timepoint:Group  1.0950966 0.04539098
+10                            8:SIV.E543.gp140         Timepoint:Antigen  6.0213347 0.25509777
+11                                   3:SIV_Env           Timepoint:Group  1.0341798 0.04907333
+12                            7:SIV.E543.gp140         Timepoint:Antigen  5.3242594 0.25509777
+13                                    3:x_PARI           Timepoint:Group  0.8890867 0.04359943
+14                                     8:R2A.2         Timepoint:Reagent -5.1920461 0.25509777
+15                            8:SIVsm.E660.2A5         Timepoint:Antigen  5.1330064 0.25509777
+16                           8:SIVmac239.gp140         Timepoint:Antigen  4.9909052 0.25509777
+17                                   2:SIV_Env           Timepoint:Group  0.9556830 0.04907333
+18                                     7:R2A.2         Timepoint:Reagent -4.9278656 0.25509777
+19                 8:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  4.6523560 0.25509777
+20                           7:SIVmac239.gp140         Timepoint:Antigen  4.5371224 0.25509777
+21                             8:SIVsm.E660.84         Timepoint:Antigen  4.4990684 0.25509777
+22                           8:SIVmac239.gp130         Timepoint:Antigen  4.4627557 0.25509777
+23                 8:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  4.4105311 0.25509777
+24                            7:SIVsm.E660.2A5         Timepoint:Antigen  4.1014644 0.25509777
+25                  8:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -5.5375571 0.36076272
+26                                    2:x_PARI           Timepoint:Group  0.6691344 0.04359943
+27                  7:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -5.5132606 0.36076272
+28                   8:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  3.8611481 0.25509777
+29                           8:SIVmac239.gp120         Timepoint:Antigen  3.8047955 0.25509777
+30                      8:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent  5.0370455 0.36076272
+31                           7:SIVmac239.gp130         Timepoint:Antigen  3.5542921 0.25509777
+32                     8:SIVmac239.gp120:R3A.1 Timepoint:Antigen:Reagent  5.0059406 0.36076272
+33                 7:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  3.4846224 0.25509777
+34                                     5:R2A.2         Timepoint:Reagent -3.4341665 0.25509777
+35                                 8:G73:R2A.2 Timepoint:Antigen:Reagent  4.8223149 0.36076272
+36                                 7:G73:R2A.2 Timepoint:Antigen:Reagent  4.6359198 0.36076272
+37       8:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -4.6292756 0.36076272
+38                 7:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  3.2644262 0.25509777
+39                      8:SIVsm.E660.2A5:R3A.1 Timepoint:Antigen:Reagent  4.6031478 0.36076272
+40                            5:SIV.E543.gp140         Timepoint:Antigen  3.1945572 0.25509777
+41                                   8:SIV_Gag           Timepoint:Group -0.5762605 0.04613750
+42                            8:SIV.1A11.gp140         Timepoint:Antigen  3.1674248 0.25509777
+43       8:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -4.4615269 0.36076272
+44                                   7:SIV_Gag           Timepoint:Group  0.5694616 0.04613750
+45                             7:SIVsm.E660.84         Timepoint:Antigen  3.1133935 0.25509777
+46                     7:SIVmac239.gp120:R3A.1 Timepoint:Antigen:Reagent  4.3942977 0.36076272
+47                                8:G119:R2A.2 Timepoint:Antigen:Reagent  4.3858198 0.36076272
+48                      7:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent  4.3803885 0.36076272
+49                                7:G119:R2A.2 Timepoint:Antigen:Reagent  4.3178998 0.36076272
+50                                       8:V1a         Timepoint:Antigen  3.0455082 0.25509777
+51                           8:SIVsmH4.p55.Gag         Timepoint:Antigen  3.0200045 0.25509777
+52                       8:SIVsm.E660.84:R3A.1 Timepoint:Antigen:Reagent  4.2580149 0.36076272
+53                   7:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  2.9933416 0.25509777
+54                      7:SIVsm.E660.2A5:R3A.1 Timepoint:Antigen:Reagent  4.2275385 0.36076272
+55                           6:SIVmac239.gp140         Timepoint:Antigen  2.9351067 0.25509777
+56                     8:SIVmac239.gp130:R3A.1 Timepoint:Antigen:Reagent  4.1453303 0.36076272
+57                           7:SIVmac239.gp120         Timepoint:Antigen  2.9113986 0.25509777
+58         8:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -4.1014288 0.36076272
+59                   8:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent  4.0972876 0.36076272
+60                                     8:R3A.1         Timepoint:Reagent -2.8866585 0.25509777
+61                            6:SIV.E543.gp140         Timepoint:Antigen  2.8739717 0.25509777
+62                                     6:R2A.2         Timepoint:Reagent -2.8551983 0.25509777
+63                           5:SIVmac239.gp140         Timepoint:Antigen  2.8544571 0.25509777
+64                     8:SIVsmH4.p55.Gag:R3A.1 Timepoint:Antigen:Reagent  4.0004458 0.36076272
+65                     7:SIVsmH4.p55.Gag:R3A.1 Timepoint:Antigen:Reagent  3.9389157 0.36076272
+66                            8:G145.146:R2A.2 Timepoint:Antigen:Reagent  4.8097934 0.44184229
+67                                     3:R2A.2         Timepoint:Reagent -2.7729220 0.25509777
+68                     8:SIVmac239.gp140:R3A.1 Timepoint:Antigen:Reagent  3.8935961 0.36076272
+69                  5:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -3.8584862 0.36076272
+70                           3:SIVmac239.gp140         Timepoint:Antigen  2.7030271 0.25509777
+71       7:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -3.6955223 0.36076272
+72                     5:SIVmac239.gp120:R3A.1 Timepoint:Antigen:Reagent  3.6914401 0.36076272
+73                         8:SIVsm.E660.84:C1q Timepoint:Antigen:Reagent -3.6885585 0.36076272
+74                            7:G145.146:R2A.2 Timepoint:Antigen:Reagent  4.4928655 0.44184229
+75       7:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -3.6309231 0.36076272
+76                     7:SIVmac239.gp130:R3A.1 Timepoint:Antigen:Reagent  3.5431545 0.36076272
+77                     7:SIVmac239.gp140:R3A.1 Timepoint:Antigen:Reagent  3.5356808 0.36076272
+78                  6:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -3.4606718 0.36076272
+79                       7:SIVsm.E660.84:R3A.1 Timepoint:Antigen:Reagent  3.4562463 0.36076272
+80                            8:SIV_Mosaic_Env           Timepoint:Group -0.4333842 0.04539098
+81                           5:SIVmac239.gp130         Timepoint:Antigen  2.4336778 0.25509777
+82                 6:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent -3.4003636 0.36076272
+83                        6:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -3.3946591 0.36076272
+84                      5:SIVsm.E660.2A5:R3A.1 Timepoint:Antigen:Reagent  3.3812498 0.36076272
+85                       8:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -3.3557732 0.36076272
+86                 8:SIVsmH4.p55.Gag:R2A.4.low Timepoint:Antigen:Reagent -3.3370563 0.36076272
+87                      5:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent  3.3268978 0.36076272
+88                           6:SIVmac239.gp130         Timepoint:Antigen  2.3414855 0.25509777
+89         7:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -3.2987967 0.36076272
+90                      8:SIV.E543.gp140:R3A.1 Timepoint:Antigen:Reagent  3.2970190 0.36076272
+91                                     7:R3A.1         Timepoint:Reagent -2.3303597 0.25509777
+92                            3:SIV.E543.gp140         Timepoint:Antigen  2.2962260 0.25509777
+93                   7:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent  3.2278667 0.36076272
+94                 3:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent -3.2204079 0.36076272
+95                            5:SIVsm.E660.2A5         Timepoint:Antigen  2.2464724 0.25509777
+96                           2:SIVmac239.gp140         Timepoint:Antigen  2.2424139 0.25509777
+97                                     2:R2A.2         Timepoint:Reagent -2.2295647 0.25509777
+98                                       7:V1a         Timepoint:Antigen  2.1943563 0.25509777
+99                 5:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  2.1884887 0.25509777
+100                           7:SIV.1A11.gp140         Timepoint:Antigen  2.1653966 0.25509777
+101                      6:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -3.0619619 0.36076272
+102                    5:SIVmac239.gp130:R3A.1 Timepoint:Antigen:Reagent  3.0512015 0.36076272
+103                  5:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  2.1485530 0.25509777
+104                    5:SIVmac239.gp140:R3A.1 Timepoint:Antigen:Reagent  3.0231183 0.36076272
+105                       3:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -2.9770321 0.36076272
+106                           6:SIVsm.E660.2A5         Timepoint:Antigen  2.0871893 0.25509777
+107                     7:SIV.E543.gp140:R3A.1 Timepoint:Antigen:Reagent  2.8910195 0.36076272
+108                          5:SIVmac239.gp120         Timepoint:Antigen  2.0404016 0.25509777
+109                 3:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -2.8451820 0.36076272
+110                5:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  1.9950323 0.25509777
+111                          6:SIVmac239.gp120         Timepoint:Antigen  1.9918219 0.25509777
+112                      3:SIVmac239.gp140:C1q Timepoint:Antigen:Reagent -2.7983073 0.36076272
+113                        7:SIVsm.E660.84:C1q Timepoint:Antigen:Reagent -2.7899100 0.36076272
+114                       6:SIVsm.E660.2A5:C1q Timepoint:Antigen:Reagent -2.7870258 0.36076272
+115                            8:V1a:R2A.4.low Timepoint:Antigen:Reagent -2.7197492 0.36076272
+116                           3:SIV_Mosaic_Env           Timepoint:Group  0.3382285 0.04539098
+117                      6:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent -2.6881250 0.36076272
+118                                3:G73:R2A.2 Timepoint:Antigen:Reagent  2.6835783 0.36076272
+119                          4:SIVmac239.gp140         Timepoint:Antigen  1.8603986 0.25509777
+120                       7:SIVsm.E660.2A5:C1q Timepoint:Antigen:Reagent -2.6188926 0.36076272
+121                       5:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -2.5911512 0.36076272
+122                                6:G73:R2A.2 Timepoint:Antigen:Reagent  2.5648244 0.36076272
+123                  6:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  1.7945048 0.25509777
+124                6:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  1.7928969 0.25509777
+125                4:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent -2.5321724 0.36076272
+126                                5:G73:R2A.2 Timepoint:Antigen:Reagent  2.5235606 0.36076272
+127                      6:SIVmac239.gp140:C1q Timepoint:Antigen:Reagent -2.5224610 0.36076272
+128        5:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -2.5161995 0.36076272
+129                           5:G145.146:R2A.2 Timepoint:Antigen:Reagent  3.0649302 0.44184229
+130      5:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -2.4941740 0.36076272
+131                      5:SIVsm.E660.84:R3A.1 Timepoint:Antigen:Reagent  2.4937084 0.36076272
+132      5:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -2.4382041 0.36076272
+133                      8:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent -2.4179034 0.36076272
+134                      4:SIVmac239.gp140:C1q Timepoint:Antigen:Reagent -2.4135917 0.36076272
+135                            5:SIVsm.E660.84         Timepoint:Antigen  1.7061231 0.25509777
+136                                    5:R3A.1         Timepoint:Reagent -1.7002303 0.25509777
+137                    5:SIVsmH4.p55.Gag:R3A.1 Timepoint:Antigen:Reagent  2.3894191 0.36076272
+138                               3:G119:R2A.2 Timepoint:Antigen:Reagent  2.3868631 0.36076272
+139                          7:SIVsmH4.p55.Gag         Timepoint:Antigen  1.6819609 0.25509777
+140                               6:G119:R2A.2 Timepoint:Antigen:Reagent  2.3735382 0.36076272
+141                2:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent -2.3635515 0.36076272
+142                           3:G145.146:R2A.2 Timepoint:Antigen:Reagent  2.8828929 0.44184229
+143                6:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  1.6429215 0.25509777
+144                           2:SIV.E543.gp140         Timepoint:Antigen  1.6420591 0.25509777
+145                 8:SIVcpz.EK505.gp120:R2A.3 Timepoint:Antigen:Reagent -2.3169236 0.36076272
+146                     5:SIV.E543.gp140:R3A.1 Timepoint:Antigen:Reagent  2.3122694 0.36076272
+147                 8:SIVcpz.EK505.gp120:R3A.1 Timepoint:Antigen:Reagent  2.3069662 0.36076272
+148                       8:SIVsm.E660.2A5:C1q Timepoint:Antigen:Reagent -2.3064789 0.36076272
+149                       7:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -2.3001221 0.36076272
+150                3:SIV.E543.gp140:R2A.4.high Timepoint:Antigen:Reagent -2.2920377 0.36076272
+151                  5:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent  2.2668497 0.36076272
+152                                    4:R2A.2         Timepoint:Reagent -1.5975214 0.25509777
+153                          3:SIVmac239.gp130         Timepoint:Antigen  1.5974764 0.25509777
+154                                2:G73:R2A.2 Timepoint:Antigen:Reagent  2.2532498 0.36076272
+155        6:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -2.2451056 0.36076272
+156                                    8:R2A.3         Timepoint:Reagent  1.5828462 0.25509777
+157                        6:SIVsm.E660.84:C1q Timepoint:Antigen:Reagent -2.2373570 0.36076272
+158                      3:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -2.2268638 0.36076272
+159                      2:SIVmac239.gp140:C1q Timepoint:Antigen:Reagent -2.2265657 0.36076272
+160                           6:G145.146:R2A.2 Timepoint:Antigen:Reagent  2.7034909 0.44184229
+161                7:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent -2.2043100 0.36076272
+162                      5:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -2.1993611 0.36076272
+163                           2:SIV_Mosaic_Env           Timepoint:Group  0.2758229 0.04539098
+164                  3:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  1.5275463 0.25509777
+165                       5:SIVsm.E660.2A5:C1q Timepoint:Antigen:Reagent -2.1587033 0.36076272
+166                                    7:R2A.3         Timepoint:Reagent  1.5181485 0.25509777
+167      6:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -2.1349948 0.36076272
+168                 7:SIVcpz.EK505.gp120:R2A.3 Timepoint:Antigen:Reagent -2.1275598 0.36076272
+169      6:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -2.1270259 0.36076272
+170                       2:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -2.1021641 0.36076272
+171                      3:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent -2.0948655 0.36076272
+172                    6:SIVmac239.gp120:R3A.1 Timepoint:Antigen:Reagent  2.0907449 0.36076272
+173                               8:G119:R3A.1 Timepoint:Antigen:Reagent  2.0840269 0.36076272
+174                 4:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -2.0710948 0.36076272
+175                3:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  1.4577217 0.25509777
+176               6:SIVmac239.gp130:R2A.4.high Timepoint:Antigen:Reagent -2.0574409 0.36076272
+177                           2:G145.146:R2A.2 Timepoint:Antigen:Reagent  2.5069687 0.44184229
+178                            6:SIVsm.E660.84         Timepoint:Antigen  1.4464577 0.25509777
+179                               5:G119:R2A.2 Timepoint:Antigen:Reagent  2.0317203 0.36076272
+180                        5:SIVsm.E660.84:C1q Timepoint:Antigen:Reagent -2.0248045 0.36076272
+181                                    5:R2A.3         Timepoint:Reagent  1.4303970 0.25509777
+182                               2:G119:R2A.2 Timepoint:Antigen:Reagent  2.0152766 0.36076272
+183                          3:SIVmac239.gp120         Timepoint:Antigen  1.4246105 0.25509777
+184                       4:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -2.0056118 0.36076272
+185              6:J08.V1V2.mac239.AVI.His:C1q Timepoint:Antigen:Reagent -2.0034574 0.36076272
+186                     4:SIV.E543.gp140:R2A.3 Timepoint:Antigen:Reagent -1.9977749 0.36076272
+187                           4:SIV.E543.gp140         Timepoint:Antigen  1.4072001 0.25509777
+188            6:J08.V1V2.E660.2A5.AVI.His:C1q Timepoint:Antigen:Reagent -1.9833115 0.36076272
+189                      7:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -1.9683212 0.36076272
+190                7:SIVsmH4.p55.Gag:R2A.4.low Timepoint:Antigen:Reagent -1.9402201 0.36076272
+191                 5:SIVcpz.EK505.gp120:R2A.3 Timepoint:Antigen:Reagent -1.9400767 0.36076272
+192                           8:G145.146:R3A.1 Timepoint:Antigen:Reagent  2.3716472 0.44184229
+193        3:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.9340268 0.36076272
+194                                      5:V1a         Timepoint:Antigen  1.3666761 0.25509777
+195                6:SIV.E543.gp140:R2A.4.high Timepoint:Antigen:Reagent -1.9230782 0.36076272
+196                  8:SIVmac239.gp140.AVI.His         Timepoint:Antigen  1.3583981 0.25509777
+197                                8:G49:R3A.1 Timepoint:Antigen:Reagent  1.9074380 0.36076272
+198                3:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  1.3482896 0.25509777
+199                                   4:x_PARI           Timepoint:Group  0.2304360 0.04359943
+200                     3:SIV.E543.gp140:R2A.3 Timepoint:Antigen:Reagent -1.9015117 0.36076272
+201                 7:SIVcpz.EK505.gp120:R3A.1 Timepoint:Antigen:Reagent  1.8834332 0.36076272
+202                                          6                 Timepoint -0.9536619 0.18286359
+203                            7:V1a:R2A.4.low Timepoint:Antigen:Reagent -1.8670068 0.36076272
+204                       3:SIVsm.E660.2A5:C1q Timepoint:Antigen:Reagent -1.8476165 0.36076272
+205                6:SIVsm.E660.2A5:R2A.4.high Timepoint:Antigen:Reagent -1.8334074 0.36076272
+206              8:J08.V1V2.mac239.AVI.His:C1q Timepoint:Antigen:Reagent -1.8264702 0.36076272
+207            6:J08.V1V2.E660.084.AVI.His:C1q Timepoint:Antigen:Reagent -1.8030936 0.36076272
+208    8:J08.V1V2.mac239.AVI.His:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.7905241 0.36076272
+209                       6:SIV.1A11.gp140:C1q Timepoint:Antigen:Reagent -1.7904492 0.36076272
+210                          2:SIVmac239.gp130         Timepoint:Antigen  1.2658138 0.25509777
+211                  2:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  1.2573778 0.25509777
+212                       8:SIVcpz.EK505.gp120         Timepoint:Antigen  1.2569941 0.25509777
+213      3:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.7702435 0.36076272
+214                 2:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -1.7593872 0.36076272
+215                       8:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -1.7518151 0.36076272
+216                           3:SIVsm.E660.2A5         Timepoint:Antigen  1.2271249 0.25509777
+217      3:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.7230530 0.36076272
+218            8:J08.V1V2.E660.084.AVI.His:C1q Timepoint:Antigen:Reagent -1.7193863 0.36076272
+219              3:J08.V1V2.mac239.AVI.His:C1q Timepoint:Antigen:Reagent -1.6895615 0.36076272
+220               3:SIVmac239.gp130:R2A.4.high Timepoint:Antigen:Reagent -1.6817225 0.36076272
+221                                7:G49:R3A.1 Timepoint:Antigen:Reagent  1.6756980 0.36076272
+222                      4:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -1.6620549 0.36076272
+223                    3:SIVmac239.gp120:R3A.1 Timepoint:Antigen:Reagent  1.6542782 0.36076272
+224            8:SIVmac239.gp130:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.6493975 0.36076272
+225            7:J08.V1V2.E660.084.AVI.His:C1q Timepoint:Antigen:Reagent -1.6482581 0.36076272
+226            3:J08.V1V2.E660.2A5.AVI.His:C1q Timepoint:Antigen:Reagent -1.6472998 0.36076272
+227                           6:SIV.1A11.gp140         Timepoint:Antigen  1.1640213 0.25509777
+228                2:SIV.E543.gp140:R2A.4.high Timepoint:Antigen:Reagent -1.6460512 0.36076272
+229                                     x_PARI                     Group  0.1406474 0.03082945
+230                           5:SIV.1A11.gp140         Timepoint:Antigen  1.1619464 0.25509777
+231                      2:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -1.6425752 0.36076272
+232                     2:SIV.E543.gp140:R2A.3 Timepoint:Antigen:Reagent -1.6424043 0.36076272
+233            5:J08.V1V2.E660.084.AVI.His:C1q Timepoint:Antigen:Reagent -1.6395777 0.36076272
+234                    3:SIVmac239.gp140:R3A.1 Timepoint:Antigen:Reagent  1.6311847 0.36076272
+235                2:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  1.1374115 0.25509777
+236                                  4:SIV_Env           Timepoint:Group  0.2165891 0.04907333
+237                                4:G73:R2A.2 Timepoint:Antigen:Reagent  1.5840188 0.36076272
+238                     4:SIV.E543.gp140:R3A.3 Timepoint:Antigen:Reagent -1.5831642 0.36076272
+239                          2:SIVmac239.gp120         Timepoint:Antigen  1.1136581 0.25509777
+240                     5:SIV.E543.gp140:R2A.3 Timepoint:Antigen:Reagent -1.5688550 0.36076272
+241                8:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent -1.5557144 0.36076272
+242     8:J08.V1V2.E660.084.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -1.5383707 0.36076272
+243                      6:SIVsm.E660.84:R2A.3 Timepoint:Antigen:Reagent -1.5338671 0.36076272
+244                    4:SIVmac239.gp130:R2A.3 Timepoint:Antigen:Reagent -1.5321422 0.36076272
+245                      5:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent -1.5222212 0.36076272
+246                    6:SIVmac239.gp140:R3A.1 Timepoint:Antigen:Reagent  1.5212948 0.36076272
+247                      4:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent -1.5196438 0.36076272
+248            3:J08.V1V2.E660.084.AVI.His:C1q Timepoint:Antigen:Reagent -1.5148348 0.36076272
+249            7:J08.V1V2.mac239.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.5116488 0.36076272
+250                      2:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent -1.5111261 0.36076272
+251                2:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  1.0671828 0.25509777
+252                               4:G119:R2A.2 Timepoint:Antigen:Reagent  1.5070970 0.36076272
+253                     6:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent  1.5039233 0.36076272
+254                           4:G145.146:R2A.2 Timepoint:Antigen:Reagent  1.8365935 0.44184229
+255                          4:SIVmac239.gp130         Timepoint:Antigen  1.0582229 0.25509777
+256                                    3:R3A.1         Timepoint:Reagent -1.0566625 0.25509777
+257               6:SIVmac239.gp120:R2A.4.high Timepoint:Antigen:Reagent -1.4902633 0.36076272
+258                    2:SIVmac239.gp120:R3A.1 Timepoint:Antigen:Reagent  1.4892498 0.36076272
+259                       8:SIV.1A11.gp140:C1q Timepoint:Antigen:Reagent -1.4802653 0.36076272
+260                                      6:V1a         Timepoint:Antigen  1.0456764 0.25509777
+261            5:J08.V1V2.E660.2A5.AVI.His:C1q Timepoint:Antigen:Reagent -1.4781291 0.36076272
+262                                  6:SIV_Gag           Timepoint:Group  0.1879316 0.04613750
+263                                    6:R2A.3         Timepoint:Reagent  1.0369414 0.25509777
+264                     6:SIVsm.E660.2A5:R3A.1 Timepoint:Antigen:Reagent  1.4510915 0.36076272
+265        8:SIVmac239.gp140.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.4422388 0.36076272
+266                 5:SIVsm.E660.84:R2A.4.high Timepoint:Antigen:Reagent -1.4345660 0.36076272
+267     6:J08.V1V2.E660.084.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -1.4311347 0.36076272
+268                               7:R2A.4.high         Timepoint:Reagent -1.0096104 0.25509777
+269                 8:SIVcpz.EK505.gp120:R3A.3 Timepoint:Antigen:Reagent -1.4267209 0.36076272
+270               3:SIVmac239.gp120:R2A.4.high Timepoint:Antigen:Reagent -1.4242931 0.36076272
+271                               7:G119:R3A.1 Timepoint:Antigen:Reagent  1.4214144 0.36076272
+272                            5:V1a:R2A.4.low Timepoint:Antigen:Reagent -1.4198730 0.36076272
+273                     8:SIV.E543.gp140:R2A.3 Timepoint:Antigen:Reagent -1.4113902 0.36076272
+274                    2:SIVmac239.gp140:R3A.1 Timepoint:Antigen:Reagent  1.4104869 0.36076272
+275                                      4:C1q         Timepoint:Reagent  0.9969375 0.25509777
+276          3:J08.V1V2.E660.2A5.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.3975047 0.36076272
+277                 6:SIVsm.E660.84:R2A.4.high Timepoint:Antigen:Reagent -1.3936202 0.36076272
+278                                      3:V1a         Timepoint:Antigen  0.9805837 0.25509777
+279                     7:SIV.E543.gp140:R2A.3 Timepoint:Antigen:Reagent -1.3803848 0.36076272
+280                                    8:R3A.3         Timepoint:Reagent  0.9724110 0.25509777
+281                    6:SIVmac239.gp130:R3A.1 Timepoint:Antigen:Reagent  1.3693040 0.36076272
+282                      3:SIVsm.E660.84:R2A.3 Timepoint:Antigen:Reagent -1.3640972 0.36076272
+283        2:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.3560336 0.36076272
+284                           7:G145.146:R3A.1 Timepoint:Antigen:Reagent  1.6577510 0.44184229
+285                       4:SIVsm.E660.2A5:C1q Timepoint:Antigen:Reagent -1.3506026 0.36076272
+286                5:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent -1.3485248 0.36076272
+287                           8:V1a:R2A.4.high Timepoint:Antigen:Reagent -1.3481516 0.36076272
+288                                      6:C1q         Timepoint:Reagent  0.9492744 0.25509777
+289                3:SIVsm.E660.2A5:R2A.4.high Timepoint:Antigen:Reagent -1.3422359 0.36076272
+290                                4:R2A.4.low         Timepoint:Reagent  0.9415282 0.25509777
+291              8:SIVmac239.gp140.AVI.His:C1q Timepoint:Antigen:Reagent -1.3248315 0.36076272
+292                                        C1q                   Reagent -0.6622340 0.18038136
+293  8:J08.V1V2.E660.2A5.AVI.His:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.3196648 0.36076272
+294                4:SIV.E543.gp140:R2A.4.high Timepoint:Antigen:Reagent -1.3186506 0.36076272
+295  8:J08.V1V2.E660.084.AVI.His:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.3114935 0.36076272
+296                     4:SIVsm.E660.2A5:R2A.3 Timepoint:Antigen:Reagent -1.3066222 0.36076272
+297                        3:SIVsm.E660.84:C1q Timepoint:Antigen:Reagent -1.3043456 0.36076272
+298               2:SIVmac239.gp130:R2A.4.high Timepoint:Antigen:Reagent -1.2974028 0.36076272
+299                                    SIV_Env                     Group  0.1244444 0.03470008
+300        4:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.2888371 0.36076272
+301             8:SIVmac251.BK.PR55:R2A.4.high Timepoint:Antigen:Reagent  1.2868071 0.36076272
+302                6:SIVsmH4.p55.Gag:R2A.4.low Timepoint:Antigen:Reagent -1.2826769 0.36076272
+303            8:J08.V1V2.E660.2A5.AVI.His:C1q Timepoint:Antigen:Reagent -1.2818821 0.36076272
+304                      5:SIVsm.E660.84:R2A.3 Timepoint:Antigen:Reagent -1.2799121 0.36076272
+305                    6:SIVsmH4.p55.Gag:R3A.1 Timepoint:Antigen:Reagent  1.2753664 0.36076272
+306              2:J08.V1V2.mac239.AVI.His:C1q Timepoint:Antigen:Reagent -1.2624462 0.36076272
+307                 6:SIVcpz.EK505.gp120:R2A.3 Timepoint:Antigen:Reagent -1.2602356 0.36076272
+308                          4:SIVmac239.gp120         Timepoint:Antigen  0.8847538 0.25509777
+309                                5:G49:R3A.1 Timepoint:Antigen:Reagent  1.2461324 0.36076272
+310                               8:R2A.4.high         Timepoint:Reagent -0.8758998 0.25509777
+311                            6:V1a:R2A.4.low Timepoint:Antigen:Reagent -1.2300791 0.36076272
+312                     8:SIV.1A11.gp140:R3A.3 Timepoint:Antigen:Reagent  1.2291787 0.36076272
+313                                          8                 Timepoint  0.6230095 0.18286359
+314          6:J08.V1V2.E660.2A5.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.2265818 0.36076272
+315                 8:SIVsm.E660.84:R2A.4.high Timepoint:Antigen:Reagent -1.2263195 0.36076272
+316      4:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.2259910 0.36076272
+317                    4:SIVmac239.gp120:R2A.3 Timepoint:Antigen:Reagent -1.2252460 0.36076272
+318       8:SIVmac239.gp140.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -1.2251771 0.36076272
+319                    7:SIVsmH4.p55.Gag:R3A.3 Timepoint:Antigen:Reagent  1.2197925 0.36076272
+320            3:J08.V1V2.mac239.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.2182155 0.36076272
+321      2:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.2174062 0.36076272
+322                    3:SIVsmH4.p55.Gag:R3A.1 Timepoint:Antigen:Reagent  1.2150206 0.36076272
+323          2:J08.V1V2.E660.2A5.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.2135566 0.36076272
+324                      3:SIVsmH4.p55.Gag:C1q Timepoint:Antigen:Reagent -1.2133404 0.36076272
+325                                    6:R3A.1         Timepoint:Reagent -0.8576264 0.25509777
+326     7:J08.V1V2.E660.084.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -1.2123222 0.36076272
+327                                          5                 Timepoint -0.6133845 0.18286359
+328            2:J08.V1V2.E660.2A5.AVI.His:C1q Timepoint:Antigen:Reagent -1.2080549 0.36076272
+329          7:J08.V1V2.E660.2A5.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.2034790 0.36076272
+330                     5:SIV.1A11.gp140:R2A.3 Timepoint:Antigen:Reagent -1.2021649 0.36076272
+331            7:J08.V1V2.E660.2A5.AVI.His:C1q Timepoint:Antigen:Reagent -1.1978359 0.36076272
+332      2:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.1954991 0.36076272
+333                                      2:V1a         Timepoint:Antigen  0.8445013 0.25509777
+334                                    4:R2A.3         Timepoint:Reagent  0.8429875 0.25509777
+335         8:SIVcpz.EK505.gp120:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.1879745 0.36076272
+336                     7:SIV.1A11.gp140:R3A.3 Timepoint:Antigen:Reagent  1.1841026 0.36076272
+337                5:SIVsmH4.p55.Gag:R2A.4.low Timepoint:Antigen:Reagent -1.1824186 0.36076272
+338             7:SIVmac251.BK.PR55:R2A.4.high Timepoint:Antigen:Reagent  1.1798455 0.36076272
+339     6:J08.V1V2.E660.2A5.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -1.1770306 0.36076272
+340                           5:G145.146:R3A.1 Timepoint:Antigen:Reagent  1.4318199 0.44184229
+341             8:SIV.1A11.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.1658145 0.36076272
+342                                          7                 Timepoint -0.5896555 0.18286359
+343            2:J08.V1V2.E660.084.AVI.His:C1q Timepoint:Antigen:Reagent -1.1631221 0.36076272
+344     3:J08.V1V2.E660.084.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -1.1628284 0.36076272
+345             8:SIV.E543.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.1608758 0.36076272
+346                     3:SIV.E543.gp140:R3A.3 Timepoint:Antigen:Reagent -1.1596871 0.36076272
+347             6:SIV.E543.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.1594397 0.36076272
+348                     6:SIV.E543.gp140:R2A.3 Timepoint:Antigen:Reagent -1.1569891 0.36076272
+349              8:SIVsm.E660.84:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.1555398 0.36076272
+350                                    2:R3A.1         Timepoint:Reagent -0.8152596 0.25509777
+351               7:SIVsmH4.p55.Gag:R2A.4.high Timepoint:Antigen:Reagent  1.1438015 0.36076272
+352                           2:SIVsm.E660.2A5         Timepoint:Antigen  0.8022619 0.25509777
+353                       2:SIVsm.E660.2A5:C1q Timepoint:Antigen:Reagent -1.1291533 0.36076272
+354               7:SIVmac239.gp140:R2A.4.high Timepoint:Antigen:Reagent  1.1287731 0.36076272
+355                    4:SIVmac239.gp130:R3A.3 Timepoint:Antigen:Reagent -1.1243718 0.36076272
+356          4:J08.V1V2.E660.2A5.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.1199502 0.36076272
+357                            3:V1a:R2A.4.low Timepoint:Antigen:Reagent -1.1188546 0.36076272
+358       6:J08.V1V2.mac239.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -1.1157368 0.36076272
+359                                    3:R2A.3         Timepoint:Reagent  0.7885954 0.25509777
+360                      6:SIVsmH4.p55.Gag:C1q Timepoint:Antigen:Reagent -1.1138221 0.36076272
+361                           4:SIVsm.E660.2A5         Timepoint:Antigen  0.7797606 0.25509777
+362                  3:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent  1.0999986 0.36076272
+363                      7:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent -1.0995717 0.36076272
+364                       5:SIV.1A11.gp140:C1q Timepoint:Antigen:Reagent -1.0972983 0.36076272
+365                       7:SIVcpz.EK505.gp120         Timepoint:Antigen  0.7756007 0.25509777
+366                  4:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  0.7744315 0.25509777
+367                     3:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent  1.0949749 0.36076272
+368                       3:SIV.1A11.gp140:C1q Timepoint:Antigen:Reagent -1.0832451 0.36076272
+369                     2:SIV.E543.gp140:R3A.3 Timepoint:Antigen:Reagent -1.0729229 0.36076272
+370                 7:SIVcpz.EK505.gp120:R3A.3 Timepoint:Antigen:Reagent -1.0710891 0.36076272
+371             3:SIV.E543.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.0691726 0.36076272
+372              4:J08.V1V2.mac239.AVI.His:C1q Timepoint:Antigen:Reagent -1.0684137 0.36076272
+373                      7:SIVsm.E660.84:R2A.3 Timepoint:Antigen:Reagent -1.0636170 0.36076272
+374            6:J08.V1V2.mac239.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.0634128 0.36076272
+375                6:SIV.1A11.gp140:R2A.4.high Timepoint:Antigen:Reagent -1.0598713 0.36076272
+376                  6:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent  1.0591800 0.36076272
+377                                      3:C1q         Timepoint:Reagent  0.7489400 0.25509777
+378            8:J08.V1V2.mac239.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.0566421 0.36076272
+379               2:SIVmac239.gp120:R2A.4.high Timepoint:Antigen:Reagent -1.0561222 0.36076272
+380                    8:SIVsmH4.p55.Gag:R3A.3 Timepoint:Antigen:Reagent  1.0541056 0.36076272
+381      4:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.0536775 0.36076272
+382                    3:SIVmac239.gp130:R3A.1 Timepoint:Antigen:Reagent  1.0508462 0.36076272
+383                        4:SIVsm.E660.84:C1q Timepoint:Antigen:Reagent -1.0504715 0.36076272
+384                       7:SIV.1A11.gp140:C1q Timepoint:Antigen:Reagent -1.0501222 0.36076272
+385                    5:SIVmac239.gp140:R2A.3 Timepoint:Antigen:Reagent -1.0497141 0.36076272
+386            4:J08.V1V2.mac239.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.0489823 0.36076272
+387            7:SIVmac239.gp130:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.0459632 0.36076272
+388                                    7:R3A.3         Timepoint:Reagent  0.7375358 0.25509777
+389                  7:SIVmac239.gp140.AVI.His         Timepoint:Antigen  0.7366643 0.25509777
+390            4:J08.V1V2.E660.2A5.AVI.His:C1q Timepoint:Antigen:Reagent -1.0329894 0.36076272
+391            2:J08.V1V2.mac239.AVI.His:R2A.2 Timepoint:Antigen:Reagent  1.0295214 0.36076272
+392                    8:SIVmac239.gp120:R3A.3 Timepoint:Antigen:Reagent  1.0288520 0.36076272
+393    7:J08.V1V2.mac239.AVI.His:aRhIgG.PE.low Timepoint:Antigen:Reagent -1.0255429 0.36076272
+394                           4:SIV_Mosaic_Env           Timepoint:Group  0.1283354 0.04539098
+395                                3:G49:R3A.1 Timepoint:Antigen:Reagent  1.0193031 0.36076272
+396                4:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  0.7204589 0.25509777
+397                      4:SIVsmH4.p55.Gag:C1q Timepoint:Antigen:Reagent -1.0168749 0.36076272
+398                     3:SIVsm.E660.2A5:R2A.3 Timepoint:Antigen:Reagent -1.0154434 0.36076272
+399                4:SIVsmH4.p55.Gag:R2A.4.low Timepoint:Antigen:Reagent -1.0131299 0.36076272
+400                                  6:V1a:C1q Timepoint:Antigen:Reagent -1.0093129 0.36076272
+401               4:SIVmac239.gp130:R2A.4.high Timepoint:Antigen:Reagent -1.0045209 0.36076272
+402                 5:SIVcpz.EK505.gp120:R3A.1 Timepoint:Antigen:Reagent  0.9846551 0.36076272
+403              5:J08.V1V2.mac239.AVI.His:C1q Timepoint:Antigen:Reagent -0.9817689 0.36076272
+404                 5:SIVcpz.EK505.gp120:R3A.3 Timepoint:Antigen:Reagent -0.9804874 0.36076272
+405                                6:R2A.4.low         Timepoint:Reagent  0.6900553 0.25509777
+406                      4:SIVsm.E660.84:R2A.3 Timepoint:Antigen:Reagent -0.9735210 0.36076272
+407                               5:R2A.4.high         Timepoint:Reagent -0.6870197 0.25509777
+408               8:SIVsmH4.p55.Gag:R2A.4.high Timepoint:Antigen:Reagent  0.9710662 0.36076272
+409                            8:aRhIgG.PE.low         Timepoint:Reagent  0.6851547 0.25509777
+410                4:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  0.6843574 0.25509777
+411            6:SIVmac239.gp130:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.9667066 0.36076272
+412                          6:SIVsmH4.p55.Gag         Timepoint:Antigen  0.6753783 0.25509777
+413                    2:SIVsmH4.p55.Gag:R3A.1 Timepoint:Antigen:Reagent  0.9493555 0.36076272
+414     3:J08.V1V2.E660.2A5.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.9460305 0.36076272
+415                                      8:C1q         Timepoint:Reagent -0.6683710 0.25509777
+416     5:J08.V1V2.E660.084.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.9340741 0.36076272
+417                           5:G119:R2A.4.low Timepoint:Antigen:Reagent -0.9330290 0.36076272
+418                     4:SIV.E543.gp140:R3A.1 Timepoint:Antigen:Reagent -0.9298017 0.36076272
+419                                    2:R2A.3         Timepoint:Reagent  0.6528117 0.25509777
+420                     8:SIV.1A11.gp140:R2A.3 Timepoint:Antigen:Reagent -0.9207213 0.36076272
+421                                    4:R3A.3         Timepoint:Reagent  0.6494142 0.25509777
+422                                  G73:R2A.2           Antigen:Reagent  0.6493481 0.25509777
+423                     2:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent  0.9152191 0.36076272
+424                  2:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent  0.9143101 0.36076272
+425                       4:SIV.1A11.gp140:C1q Timepoint:Antigen:Reagent -0.9118083 0.36076272
+426                         SIVsm.E660.2A5:C1q           Antigen:Reagent  0.6434734 0.25509777
+427                           8:G119:R2A.4.low Timepoint:Antigen:Reagent -0.9089755 0.36076272
+428                      3:SIVsm.E660.84:R3A.3 Timepoint:Antigen:Reagent -0.9063529 0.36076272
+429  7:J08.V1V2.E660.2A5.AVI.His:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.9030303 0.36076272
+430                 3:SIVcpz.EK505.gp120:R2A.3 Timepoint:Antigen:Reagent -0.9016715 0.36076272
+431             7:SIV.E543.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.9007933 0.36076272
+432                     4:SIVsm.E660.2A5:R3A.3 Timepoint:Antigen:Reagent -0.8962074 0.36076272
+433                            2:V1a:R2A.4.low Timepoint:Antigen:Reagent -0.8939239 0.36076272
+434                                6:G49:R3A.1 Timepoint:Antigen:Reagent  0.8937727 0.36076272
+435     2:J08.V1V2.E660.084.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.8933594 0.36076272
+436                                      7:C1q         Timepoint:Reagent -0.6239331 0.25509777
+437                          SIVsm.E660.84:C1q           Antigen:Reagent  0.6226652 0.25509777
+438            5:SIVmac239.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent  0.8801041 0.36076272
+439                                 G119:R2A.2           Antigen:Reagent  0.6221471 0.25509777
+440                2:SIVsm.E660.2A5:R2A.4.high Timepoint:Antigen:Reagent -0.8796643 0.36076272
+441                    2:SIVmac239.gp130:R3A.1 Timepoint:Antigen:Reagent  0.8771060 0.36076272
+442                                     5:G119         Timepoint:Antigen  0.6188143 0.25509777
+443                    5:SIVmac239.gp120:R3A.3 Timepoint:Antigen:Reagent  0.8721482 0.36076272
+444                        SIVmac239.gp120:C1q           Antigen:Reagent  0.6161967 0.25509777
+445                     7:SIV.1A11.gp140:R2A.3 Timepoint:Antigen:Reagent -0.8704963 0.36076272
+446                      2:SIVsm.E660.84:R2A.3 Timepoint:Antigen:Reagent -0.8699996 0.36076272
+447  7:J08.V1V2.E660.084.AVI.His:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.8692027 0.36076272
+448       3:J08.V1V2.mac239.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.8670680 0.36076272
+449               4:SIVmac239.gp140:R2A.4.high Timepoint:Antigen:Reagent -0.8657323 0.36076272
+450                                  3:V1a:C1q Timepoint:Antigen:Reagent -0.8643400 0.36076272
+451            4:J08.V1V2.E660.084.AVI.His:C1q Timepoint:Antigen:Reagent -0.8641100 0.36076272
+452                 3:SIVcpz.EK505.gp120:R3A.1 Timepoint:Antigen:Reagent  0.8639766 0.36076272
+453                            3:SIVsm.E660.84         Timepoint:Antigen  0.6098334 0.25509777
+454                    7:SIVmac239.gp120:R3A.3 Timepoint:Antigen:Reagent  0.8543297 0.36076272
+455                     7:SIVsm.E660.2A5:R3A.3 Timepoint:Antigen:Reagent  0.8440428 0.36076272
+456                           3:G145.146:R3A.1 Timepoint:Antigen:Reagent  1.0337115 0.44184229
+457                                      8:G49         Timepoint:Antigen  0.5930411 0.25509777
+458             7:SIV.1A11.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.8379865 0.36076272
+459                     2:SIVsm.E660.2A5:R2A.3 Timepoint:Antigen:Reagent -0.8371528 0.36076272
+460                      6:SIVsm.E660.84:R3A.3 Timepoint:Antigen:Reagent -0.8369135 0.36076272
+461                                2:G49:R3A.1 Timepoint:Antigen:Reagent  0.8362172 0.36076272
+462                  5:SIVmac251.BK.PR55:R2A.3 Timepoint:Antigen:Reagent -0.8356147 0.36076272
+463                     3:SIVsm.E660.2A5:R3A.1 Timepoint:Antigen:Reagent  0.8348533 0.36076272
+464                            SIVmac239.gp140                   Antigen  0.4120482 0.18038136
+465                         SIV.1A11.gp140:C1q           Antigen:Reagent  0.5824426 0.25509777
+466                3:SIVsmH4.p55.Gag:R2A.4.low Timepoint:Antigen:Reagent -0.8161346 0.36076272
+467             2:SIV.E543.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.8160207 0.36076272
+468          5:J08.V1V2.E660.2A5.AVI.His:R2A.2 Timepoint:Antigen:Reagent  0.8142812 0.36076272
+469                 7:SIVsm.E660.84:R2A.4.high Timepoint:Antigen:Reagent -0.8137995 0.36076272
+470        7:SIVmac239.gp140.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -0.8132424 0.36076272
+471                    7:SIVmac239.gp130:R2A.3 Timepoint:Antigen:Reagent -0.8131343 0.36076272
+472         7:SIVcpz.EK505.gp120:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.8081281 0.36076272
+473                           7:V1a:R2A.4.high Timepoint:Antigen:Reagent -0.8080790 0.36076272
+474                     5:SIV.1A11.gp140:R3A.3 Timepoint:Antigen:Reagent  0.8077656 0.36076272
+475              7:SIVmac239.gp140.AVI.His:C1q Timepoint:Antigen:Reagent -0.8035823 0.36076272
+476                 4:SIVcpz.EK505.gp120:R2A.3 Timepoint:Antigen:Reagent -0.7993079 0.36076272
+477                 6:SIVcpz.EK505.gp120:R3A.3 Timepoint:Antigen:Reagent -0.7989818 0.36076272
+478                           2:G145.146:R3A.1 Timepoint:Antigen:Reagent  0.9784274 0.44184229
+479               8:SIVmac239.gp140:R2A.4.high Timepoint:Antigen:Reagent  0.7929255 0.36076272
+480                    4:SIVmac239.gp120:R3A.3 Timepoint:Antigen:Reagent -0.7928107 0.36076272
+481                          5:SIVsmH4.p55.Gag         Timepoint:Antigen  0.5586357 0.25509777
+482                        8:V1a:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7884072 0.36076272
+483                    4:SIVsmH4.p55.Gag:R2A.3 Timepoint:Antigen:Reagent -0.7881281 0.36076272
+484               4:SIVmac239.gp120:R2A.4.high Timepoint:Antigen:Reagent -0.7879701 0.36076272
+485                           6:V1a:R2A.4.high Timepoint:Antigen:Reagent -0.7855271 0.36076272
+486                         SIV.E543.gp140:C1q           Antigen:Reagent  0.5524061 0.25509777
+487                                  R2A.4.low                   Reagent -0.3898674 0.18038136
+488             4:SIV.E543.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7781121 0.36076272
+489               7:SIVmac239.gp120:R2A.4.high Timepoint:Antigen:Reagent  0.7777140 0.36076272
+490       4:J08.V1V2.mac239.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.7756084 0.36076272
+491              7:J08.V1V2.mac239.AVI.His:C1q Timepoint:Antigen:Reagent -0.7737570 0.36076272
+492              7:SIVsm.E660.84:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7732351 0.36076272
+493                5:SIVsm.E660.2A5:R2A.4.high Timepoint:Antigen:Reagent -0.7723888 0.36076272
+494                           6:G145.146:R3A.1 Timepoint:Antigen:Reagent  0.9454475 0.44184229
+495                      8:SIVsmH4.p55.Gag:C1q Timepoint:Antigen:Reagent -0.7703898 0.36076272
+496            3:SIVmac239.gp130:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7703143 0.36076272
+497              6:SIVsm.E660.84:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7688467 0.36076272
+498                            7:aRhIgG.PE.low         Timepoint:Reagent  0.5422081 0.25509777
+499               8:SIVmac239.gp130:R2A.4.high Timepoint:Antigen:Reagent -0.7664751 0.36076272
+500                    8:SIVmac239.gp140:R2A.3 Timepoint:Antigen:Reagent -0.7647952 0.36076272
+501                 2:SIVcpz.EK505.gp120:R3A.1 Timepoint:Antigen:Reagent  0.7632478 0.36076272
+502                     4:SIV.1A11.gp140:R2A.3 Timepoint:Antigen:Reagent -0.7580145 0.36076272
+503       8:J08.V1V2.mac239.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.7560867 0.36076272
+504                        SIVmac239.gp130:C1q           Antigen:Reagent  0.5340346 0.25509777
+505                                          4                 Timepoint -0.3765995 0.18286359
+506          4:J08.V1V2.E660.2A5.AVI.His:R2A.3 Timepoint:Antigen:Reagent -0.7405313 0.36076272
+507                                      2:C1q         Timepoint:Reagent  0.5185670 0.25509777
+508                                          3                 Timepoint -0.3715203 0.18286359
+509     4:J08.V1V2.E660.084.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.7310227 0.36076272
+510                      4:SIVsm.E660.84:R3A.3 Timepoint:Antigen:Reagent -0.7302565 0.36076272
+511                                          2                 Timepoint -0.3691942 0.18286359
+512             5:SIVmac251.BK.PR55:R2A.4.high Timepoint:Antigen:Reagent  0.7277086 0.36076272
+513                                    6:R3A.3         Timepoint:Reagent  0.5127248 0.25509777
+514                 3:SIVsm.E660.84:R2A.4.high Timepoint:Antigen:Reagent -0.7248755 0.36076272
+515    6:J08.V1V2.mac239.AVI.His:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7245333 0.36076272
+516                     2:SIVsm.E660.2A5:R3A.1 Timepoint:Antigen:Reagent  0.7204442 0.36076272
+517                             G145.146:R2A.2           Antigen:Reagent  0.6238256 0.31242968
+518            8:SIVmac239.gp120:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7184279 0.36076272
+519                     6:SIV.E543.gp140:R3A.3 Timepoint:Antigen:Reagent -0.7170941 0.36076272
+520                    4:SIVmac251.BK.PR55:C1q Timepoint:Antigen:Reagent -0.7153829 0.36076272
+521     2:J08.V1V2.E660.2A5.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.7121426 0.36076272
+522                        5:SIVmac251.BK.PR55         Timepoint:Antigen -0.5021132 0.25509777
+523             6:SIV.1A11.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7083021 0.36076272
+
+
+--------------------------------------------------------------------------------
+Lagged Data
+--------------------------------------------------------------------------------
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-7.7219 -0.4741 -0.0140  0.4423  6.7887 
+
+Residual standard error: 1.071 on 90128 degrees of freedom
+Multiple R-squared:  0.5241,	Adjusted R-squared:  0.5172 
+F-statistic: 75.26 on 1319 and 90128 DF,  p-value: < 2.2e-16
+
+table(results.lag8$coef %>% filter(pval < 0.05) %>% select(predictorGroup))
+                  Antigen           Antigen:Reagent                     Group 
+                        1                         9                         2 
+                  Reagent                 Timepoint         Timepoint:Antigen 
+                        2                         2                        57 
+Timepoint:Antigen:Reagent           Timepoint:Group         Timepoint:Reagent 
+                      230                        22                        28 
+table(results.lag8$coef %>% filter(pval < 0.01) %>% select(predictorGroup))
+                    Group                   Reagent                 Timepoint 
+                        2                         1                         2 
+        Timepoint:Antigen Timepoint:Antigen:Reagent           Timepoint:Group 
+                       48                       161                        21 
+        Timepoint:Reagent 
+                       25 
+
+results.lag8$coef %>%
+  filter(pval <= 0.05) %>%
+  select(var, predictorGroup, beta:pval) %>%
+  arrange(pval)
+                                        var            predictorGroup       beta         se       tval
+1                                 8:SIV_Env           Timepoint:Group -2.0624665 0.04890704 -42.171159
+2                          8:SIV_Mosaic_Env           Timepoint:Group -2.2341315 0.04523718 -49.387068
+3                                  8:x_PARI           Timepoint:Group -1.8134638 0.04345169 -41.735170
+4                                 5:SIV_Env           Timepoint:Group  1.8857461 0.04890704  38.557765
+5                                  5:x_PARI           Timepoint:Group  1.6159404 0.04345169  37.189355
+6                          5:SIV_Mosaic_Env           Timepoint:Group  1.3739123 0.04523718  30.371310
+7                                 8:SIV_Gag           Timepoint:Group -1.1459063 0.04598116 -24.921211
+8                                 4:SIV_Env           Timepoint:Group -0.9420351 0.04890704 -19.261748
+9                                  4:x_PARI           Timepoint:Group -0.7992982 0.04345169 -18.395099
+10                                 6:x_PARI           Timepoint:Group -0.7799608 0.04345169 -17.950066
+11                                2:SIV_Env           Timepoint:Group  0.8312386 0.04890704  16.996296
+12                                6:SIV_Env           Timepoint:Group -0.7957377 0.04890704 -16.270413
+13                         7:SIV_Mosaic_Env           Timepoint:Group  0.5844935 0.04523718  12.920645
+14                                 2:x_PARI           Timepoint:Group  0.5284870 0.04345169  12.162633
+15                         6:SIV_Mosaic_Env           Timepoint:Group -0.5283083 0.04523718 -11.678632
+16                  5:SIVmac239.gp120:R3A.1 Timepoint:Antigen:Reagent  3.7632415 0.35954027  10.466815
+17                   5:SIVsm.E660.2A5:R3A.1 Timepoint:Antigen:Reagent  3.7099453 0.35954027  10.318581
+18                  5:SIVmac239.gp130:R3A.1 Timepoint:Antigen:Reagent  3.5794913 0.35954027   9.955745
+19                   5:SIV.E543.gp140:R3A.1 Timepoint:Antigen:Reagent  3.3827550 0.35954027   9.408557
+20                   5:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent  3.3170752 0.35954027   9.225880
+21                         7:SIV.E543.gp140         Timepoint:Antigen  2.3433674 0.25423336   9.217388
+22                    7:SIVsm.E660.84:R3A.1 Timepoint:Antigen:Reagent  3.1007180 0.35954027   8.624119
+23                   7:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent  2.9901213 0.35954027   8.316513
+24                                7:SIV_Gag           Timepoint:Group  0.3813457 0.04598116   8.293519
+25                         7:SIVsm.E660.2A5         Timepoint:Antigen  1.9970663 0.25423336   7.855249
+26                   7:SIVsm.E660.2A5:R3A.1 Timepoint:Antigen:Reagent  2.8239320 0.35954027   7.854286
+27                                    6:C1q         Timepoint:Reagent  1.9392095 0.25423336   7.627675
+28                  7:SIVsmH4.p55.Gag:R3A.1 Timepoint:Antigen:Reagent  2.6986534 0.35954027   7.505845
+29                                  2:R2A.2         Timepoint:Reagent -1.8998697 0.25423336  -7.472936
+30                     2:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -2.6545702 0.35954027  -7.383235
+31                                        8                 Timepoint  1.3319187 0.18224396   7.308438
+32                    5:SIVsm.E660.84:R3A.1 Timepoint:Antigen:Reagent  2.6257128 0.35954027   7.302973
+33                        2:SIVmac239.gp140         Timepoint:Antigen  1.8303658 0.25423336   7.199550
+34                    2:SIVmac239.gp140:C1q Timepoint:Antigen:Reagent -2.5356101 0.35954027  -7.052367
+35                                7:SIV_Env           Timepoint:Group  0.3388385 0.04890704   6.928216
+36                                  5:R3A.1         Timepoint:Reagent -1.7592709 0.25423336  -6.919906
+37                  5:SIVmac239.gp140:R3A.1 Timepoint:Antigen:Reagent  2.4849413 0.35954027   6.911441
+38                                  7:R2A.2         Timepoint:Reagent -1.7429723 0.25423336  -6.855797
+39                         5:SIV.E543.gp140         Timepoint:Antigen  1.6804369 0.25423336   6.609821
+40             7:SIVmac239.gp120:R2A.4.high Timepoint:Antigen:Reagent  2.3735170 0.35954027   6.601533
+41               7:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -2.3716043 0.35954027  -6.596213
+42              2:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent -2.3658960 0.35954027  -6.580337
+43                  7:SIVmac239.gp120:R3A.1 Timepoint:Antigen:Reagent  2.3551951 0.35954027   6.550574
+44                   7:SIV.E543.gp140:R3A.1 Timepoint:Antigen:Reagent  2.3544360 0.35954027   6.548463
+45              7:SIV.E543.gp140:R2A.4.high Timepoint:Antigen:Reagent  2.3177945 0.35954027   6.446551
+46              7:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  1.6335733 0.25423336   6.425488
+47                          7:SIVsm.E660.84         Timepoint:Antigen  1.6257122 0.25423336   6.394567
+48                  7:SIVmac239.gp130:R3A.1 Timepoint:Antigen:Reagent  2.2446580 0.35954027   6.243134
+49             7:SIVmac239.gp130:R2A.4.high Timepoint:Antigen:Reagent  2.2392162 0.35954027   6.227998
+50              7:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  1.5759219 0.25423336   6.198722
+51                  5:SIVsmH4.p55.Gag:R3A.1 Timepoint:Antigen:Reagent  2.2067726 0.35954027   6.137762
+52                                  7:R3A.1         Timepoint:Reagent -1.5502564 0.25423336  -6.097769
+53                    2:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -2.1766099 0.35954027  -6.053870
+54                         2:SIV.E543.gp140         Timepoint:Antigen  1.5351389 0.25423336   6.038306
+55                7:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent  2.1616796 0.35954027   6.012344
+56                    6:SIVmac239.gp140:C1q Timepoint:Antigen:Reagent -2.1530931 0.35954027  -5.988462
+57                         4:SIV_Mosaic_Env           Timepoint:Group -0.2704717 0.04523718  -5.978969
+58                                  5:R2A.2         Timepoint:Reagent -1.5069501 0.25423336  -5.927429
+59                                  4:R2A.2         Timepoint:Reagent  1.5050956 0.25423336   5.920134
+60                    2:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent -2.1273228 0.35954027  -5.916786
+61               5:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -2.1064069 0.35954027  -5.858612
+62               2:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -2.0784028 0.35954027  -5.780723
+63                5:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent  2.0682956 0.35954027   5.752612
+64              6:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent -2.0541834 0.35954027  -5.713361
+65                         5:SIVsm.E660.2A5         Timepoint:Antigen  1.4495031 0.25423336   5.701467
+66              5:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  1.4098776 0.25423336   5.545604
+67                  7:SIVmac239.gp140:R3A.1 Timepoint:Antigen:Reagent  1.9891386 0.35954027   5.532450
+68                    6:SIVsm.E660.84:R3A.1 Timepoint:Antigen:Reagent -1.9866148 0.35954027  -5.525431
+69                    8:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent -1.9345283 0.35954027  -5.380561
+70                    8:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -1.9214867 0.35954027  -5.344288
+71                          8:SIVsm.E660.84         Timepoint:Antigen  1.3444513 0.25423336   5.288257
+72                   6:SIVsm.E660.2A5:R3A.1 Timepoint:Antigen:Reagent -1.8826733 0.35954027  -5.236335
+73                    7:SIVmac239.gp140:C1q Timepoint:Antigen:Reagent  1.8484759 0.35954027   5.141221
+74             5:SIVmac239.gp140:R2A.4.high Timepoint:Antigen:Reagent  1.8436925 0.35954027   5.127917
+75                        8:SIVsmH4.p55.Gag         Timepoint:Antigen  1.2809158 0.25423336   5.038347
+76                          5:SIVsm.E660.84         Timepoint:Antigen  1.2710918 0.25423336   4.999705
+77    7:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.7939686 0.35954027  -4.989618
+78              5:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  1.2650922 0.25423336   4.976106
+79              8:SIVsmH4.p55.Gag:R2A.4.low Timepoint:Antigen:Reagent -1.7888744 0.35954027  -4.975449
+80                    6:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent -1.7821005 0.35954027  -4.956609
+81                        4:SIVmac239.gp140         Timepoint:Antigen -1.2546766 0.25423336  -4.935138
+82                     2:SIVsm.E660.2A5:C1q Timepoint:Antigen:Reagent -1.7726267 0.35954027  -4.930259
+83                        5:SIVmac239.gp130         Timepoint:Antigen  1.2465112 0.25423336   4.903020
+84                5:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  1.2454887 0.25423336   4.898998
+85                              4:G73:R2A.2 Timepoint:Antigen:Reagent -1.7489076 0.35954027  -4.864288
+86                  5:SIVmac239.gp120:R3A.3 Timepoint:Antigen:Reagent  1.7451270 0.35954027   4.853774
+87    7:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.7345239 0.35954027  -4.824283
+88          5:SIVmac239.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent  1.7208355 0.35954027   4.786211
+89             6:SIVmac239.gp120:R2A.4.high Timepoint:Antigen:Reagent -1.7149688 0.35954027  -4.769894
+90                         2:SIV_Mosaic_Env           Timepoint:Group  0.2152443 0.04523718   4.758129
+91                   6:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent -1.7093184 0.35954027  -4.754178
+92                             7:R2A.4.high         Timepoint:Reagent -1.2007828 0.25423336  -4.723152
+93                        7:SIVmac239.gp140         Timepoint:Antigen  1.1899675 0.25423336   4.680611
+94             7:SIVmac239.gp140:R2A.4.high Timepoint:Antigen:Reagent  1.6735409 0.35954027   4.654669
+95                   2:SIV.E543.gp140:R2A.3 Timepoint:Antigen:Reagent -1.6701492 0.35954027  -4.645235
+96                                    2:C1q         Timepoint:Reagent  1.1808010 0.25423336   4.644556
+97              6:SIV.E543.gp140:R2A.4.high Timepoint:Antigen:Reagent -1.6606991 0.35954027  -4.618951
+98                                    7:V1a         Timepoint:Antigen  1.1683459 0.25423336   4.595565
+99                                   x_PARI                     Group  0.1406474 0.03072499   4.577624
+100                 4:SIVmac239.gp120:R3A.1 Timepoint:Antigen:Reagent -1.6227952 0.35954027  -4.513528
+101   5:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.6144929 0.35954027  -4.490437
+102                 6:SIVmac239.gp130:R3A.1 Timepoint:Antigen:Reagent -1.6110900 0.35954027  -4.480972
+103                       2:SIVmac239.gp130         Timepoint:Antigen  1.1368701 0.25423336   4.471758
+104                             2:G73:R2A.2 Timepoint:Antigen:Reagent  1.6039017 0.35954027   4.460979
+105         2:J08.V1V2.E660.2A5.AVI.His:C1q Timepoint:Antigen:Reagent -1.6019771 0.35954027  -4.455626
+106                     5:SIVsm.E660.84:C1q Timepoint:Antigen:Reagent -1.5969982 0.35954027  -4.441778
+107               2:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  1.1287450 0.25423336   4.439799
+108                 5:SIVmac239.gp130:R3A.3 Timepoint:Antigen:Reagent  1.5843789 0.35954027   4.406680
+109             8:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  1.1095815 0.25423336   4.364421
+110             8:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  1.1005222 0.25423336   4.328787
+111     2:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.5546741 0.35954027  -4.324061
+112                 6:SIVmac239.gp120:R3A.1 Timepoint:Antigen:Reagent -1.5490530 0.35954027  -4.308427
+113                 2:SIVmac239.gp120:R3A.1 Timepoint:Antigen:Reagent  1.5408920 0.35954027   4.285729
+114                                   5:V1a         Timepoint:Antigen  1.0882527 0.25423336   4.280527
+115                        2:G145.146:R2A.2 Timepoint:Antigen:Reagent  1.8831431 0.44034510   4.276517
+116                       7:SIVmac239.gp130         Timepoint:Antigen  1.0838628 0.25423336   4.263260
+117                 6:SIVmac239.gp140:R3A.1 Timepoint:Antigen:Reagent -1.5270709 0.35954027  -4.247287
+118             2:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen  1.0792594 0.25423336   4.245152
+119                       5:SIVmac239.gp120         Timepoint:Antigen  1.0776610 0.25423336   4.238865
+120                     8:SIVsm.E660.84:C1q Timepoint:Antigen:Reagent -1.5213136 0.35954027  -4.231275
+121           2:J08.V1V2.mac239.AVI.His:C1q Timepoint:Antigen:Reagent -1.5198326 0.35954027  -4.227155
+122               7:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  1.0702040 0.25423336   4.209534
+123                                7:x_PARI           Timepoint:Group  0.1820982 0.04345169   4.190819
+124   5:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.5022845 0.35954027  -4.178348
+125                            4:G119:R2A.2 Timepoint:Antigen:Reagent -1.5019132 0.35954027  -4.177316
+126             2:SIV.E543.gp140:R2A.4.high Timepoint:Antigen:Reagent -1.4990967 0.35954027  -4.169482
+127                  6:SIV.E543.gp140:R3A.1 Timepoint:Antigen:Reagent -1.4943181 0.35954027  -4.156191
+128   2:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.4855704 0.35954027  -4.131861
+129                  5:SIV.1A11.gp140:R3A.3 Timepoint:Antigen:Reagent  1.4696562 0.35954027   4.087598
+130                 4:SIVmac239.gp120:R2A.3 Timepoint:Antigen:Reagent -1.4688821 0.35954027  -4.085445
+131             7:SIVsm.E660.2A5:R2A.4.high Timepoint:Antigen:Reagent  1.4688771 0.35954027   4.085431
+132                       2:SIVmac239.gp120         Timepoint:Antigen  1.0356714 0.25423336   4.073704
+133                  5:SIVsm.E660.2A5:R3A.3 Timepoint:Antigen:Reagent  1.4636083 0.35954027   4.070777
+134             7:SIV.1A11.gp140:R2A.4.high Timepoint:Antigen:Reagent  1.4619027 0.35954027   4.066033
+135                    5:SIVsm.E660.2A5:C1q Timepoint:Antigen:Reagent -1.4515741 0.35954027  -4.037306
+136            6:SIVmac239.gp130:R2A.4.high Timepoint:Antigen:Reagent -1.4453872 0.35954027  -4.020098
+137             2:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen  1.0216000 0.25423336   4.018355
+138                 4:SIVmac239.gp130:R3A.1 Timepoint:Antigen:Reagent -1.4375210 0.35954027  -3.998220
+139                        8:SIVsm.E660.2A5         Timepoint:Antigen  1.0143332 0.25423336   3.989772
+140                    3:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -1.4272742 0.35954027  -3.969720
+141                   5:SIVmac239.gp140:C1q Timepoint:Antigen:Reagent  1.4261350 0.35954027   3.966552
+142     5:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.4260029 0.35954027  -3.966184
+143                             7:G73:R2A.2 Timepoint:Antigen:Reagent  1.4217473 0.35954027   3.954348
+144                        4:SIV.E543.gp140         Timepoint:Antigen -0.9959462 0.25423336  -3.917449
+145              3:SIV.E543.gp140:R2A.4.low Timepoint:Antigen:Reagent -1.4048103 0.35954027  -3.907241
+146                   6:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -1.3966354 0.35954027  -3.884503
+147                            2:G119:R2A.2 Timepoint:Antigen:Reagent  1.3931295 0.35954027   3.874752
+148   2:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.3914026 0.35954027  -3.869949
+149                             6:R2A.4.low         Timepoint:Reagent  0.9796764 0.25423336   3.853453
+150                 2:SIVmac239.gp140:R3A.1 Timepoint:Antigen:Reagent  1.3852395 0.35954027   3.852808
+151              5:SIVcpz.EK505.gp120:R2A.3 Timepoint:Antigen:Reagent -1.3818565 0.35954027  -3.843398
+152                            5:R2A.4.high         Timepoint:Reagent -0.9759490 0.25423336  -3.838792
+153              7:SIVcpz.EK505.gp120:R3A.1 Timepoint:Antigen:Reagent  1.3718696 0.35954027   3.815622
+154                  5:SIV.E543.gp140:R3A.3 Timepoint:Antigen:Reagent  1.3692597 0.35954027   3.808362
+155                        4:G145.146:R2A.2 Timepoint:Antigen:Reagent -1.6701249 0.44034510  -3.792764
+156                    3:SIVsm.E660.2A5:C1q Timepoint:Antigen:Reagent -1.3619366 0.35954027  -3.787995
+157                                 4:R3A.1         Timepoint:Reagent  0.9606568 0.25423336   3.778642
+158                    6:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -1.3559141 0.35954027  -3.771244
+159             5:SIV.E543.gp140:R2A.4.high Timepoint:Antigen:Reagent  1.3501806 0.35954027   3.755297
+160                       7:SIVsmH4.p55.Gag         Timepoint:Antigen  0.9494548 0.25423336   3.734580
+161                                     C1q                   Reagent -0.6622340 0.17977013  -3.683782
+162                            7:G119:R2A.2 Timepoint:Antigen:Reagent  1.3222145 0.35954027   3.677514
+163           8:J08.V1V2.mac239.AVI.His:C1q Timepoint:Antigen:Reagent -1.3100996 0.35954027  -3.643819
+164                     2:SIVsm.E660.84:C1q Timepoint:Antigen:Reagent -1.3071671 0.35954027  -3.635663
+165                        8:SIV.1A11.gp140         Timepoint:Antigen  0.9195081 0.25423336   3.616788
+166                        7:SIV.1A11.gp140         Timepoint:Antigen  0.9188551 0.25423336   3.614219
+167                                 SIV_Env                     Group  0.1244444 0.03458250   3.598480
+168                                   7:C1q         Timepoint:Reagent -0.9109735 0.25423336  -3.583218
+169                                   4:C1q         Timepoint:Reagent  0.9102315 0.25423336   3.580299
+170                                 6:R2A.2         Timepoint:Reagent  0.9086632 0.25423336   3.574130
+171         2:J08.V1V2.E660.084.AVI.His:C1q Timepoint:Antigen:Reagent -1.2809291 0.35954027  -3.562686
+172           6:J08.V1V2.mac239.AVI.His:C1q Timepoint:Antigen:Reagent -1.2790748 0.35954027  -3.557529
+173                                 2:R2A.3         Timepoint:Reagent  0.9037048 0.25423336   3.554627
+174                    6:SIV.1A11.gp140:C1q Timepoint:Antigen:Reagent -1.2755935 0.35954027  -3.547846
+175                    6:SIVsm.E660.2A5:C1q Timepoint:Antigen:Reagent -1.2717959 0.35954027  -3.537284
+176                                 2:R3A.1         Timepoint:Reagent -0.8927828 0.25423336  -3.511667
+177                                   3:C1q         Timepoint:Reagent  0.8926071 0.25423336   3.510975
+178                    2:SIV.1A11.gp140:C1q Timepoint:Antigen:Reagent -1.2568566 0.35954027  -3.495732
+179     7:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.2523317 0.35954027  -3.483147
+180               4:J08.V1V2.mac239.AVI.His         Timepoint:Antigen -0.8817476 0.25423336  -3.468261
+181            7:SIVsmH4.p55.Gag:R2A.4.high Timepoint:Antigen:Reagent  1.2436087 0.35954027   3.458886
+182                     3:SIVsm.E660.84:C1q Timepoint:Antigen:Reagent -1.2425089 0.35954027  -3.455827
+183                                   8:V1a         Timepoint:Antigen  0.8708178 0.25423336   3.425270
+184            5:SIVmac239.gp120:R2A.4.high Timepoint:Antigen:Reagent  1.2237551 0.35954027   3.403666
+185                                   2:V1a         Timepoint:Antigen  0.8641673 0.25423336   3.399110
+186               6:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent -1.2146768 0.35954027  -3.378417
+187                             4:R2A.4.low         Timepoint:Reagent  0.8545775 0.25423336   3.361390
+188                 4:SIVmac239.gp130:R2A.3 Timepoint:Antigen:Reagent -1.2066415 0.35954027  -3.356068
+189                               5:SIV_Gag           Timepoint:Group  0.1542387 0.04598116   3.354389
+190                   3:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent -1.1999360 0.35954027  -3.337418
+191             7:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent  1.1937091 0.35954027   3.320098
+192                       7:SIVmac239.gp120         Timepoint:Antigen  0.8415900 0.25423336   3.310305
+193                             5:G49:R3A.1 Timepoint:Antigen:Reagent  1.1873617 0.35954027   3.302444
+194                                 5:R2A.3         Timepoint:Reagent  0.8383027 0.25423336   3.297375
+195             5:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent  1.1813031 0.35954027   3.285593
+196            2:SIVmac239.gp130:R2A.4.high Timepoint:Antigen:Reagent -1.1758530 0.35954027  -3.270435
+197                     7:SIVsm.E660.84:C1q Timepoint:Antigen:Reagent -1.1752182 0.35954027  -3.268669
+198          7:SIVmac251.BK.PR55:R2A.4.high Timepoint:Antigen:Reagent  1.1691846 0.35954027   3.251888
+199                       8:SIVmac239.gp120         Timepoint:Antigen  0.8154102 0.25423336   3.207330
+200                 4:SIVmac239.gp140:R3A.1 Timepoint:Antigen:Reagent -1.1435025 0.35954027  -3.180458
+201                    5:SIV.E543.gp140:C1q Timepoint:Antigen:Reagent -1.1379455 0.35954027  -3.165002
+202                 6:SIVmac251.BK.PR55:C1q Timepoint:Antigen:Reagent -1.1292762 0.35954027  -3.140889
+203             4:J08.V1V2.E660.084.AVI.His         Timepoint:Antigen -0.7954150 0.25423336  -3.128681
+204   8:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.1206751 0.35954027  -3.116967
+205             4:SIV.E543.gp140:R2A.4.high Timepoint:Antigen:Reagent  1.1203417 0.35954027   3.116039
+206                   3:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -1.1183232 0.35954027  -3.110426
+207                   2:SIVsm.E660.84:R2A.3 Timepoint:Antigen:Reagent -1.1180651 0.35954027  -3.109708
+208         5:J08.V1V2.mac239.AVI.His:R3A.3 Timepoint:Antigen:Reagent  1.1123139 0.35954027   3.093712
+209                        2:SIVsm.E660.2A5         Timepoint:Antigen  0.7850530 0.25423336   3.087923
+210              7:SIVcpz.EK505.gp120:R2A.3 Timepoint:Antigen:Reagent -1.1084119 0.35954027  -3.082859
+211   8:J08.V1V2.E660.084.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.1077498 0.35954027  -3.081017
+212                       8:SIVmac239.gp130         Timepoint:Antigen  0.7795199 0.25423336   3.066159
+213         4:J08.V1V2.mac239.AVI.His:R2A.3 Timepoint:Antigen:Reagent -1.0891127 0.35954027  -3.029181
+214                         5:V1a:R2A.4.low Timepoint:Antigen:Reagent -1.0853828 0.35954027  -3.018807
+215                                 6:R3A.1         Timepoint:Reagent  0.7650807 0.25423336   3.009364
+216                 4:SIVmac239.gp120:R3A.3 Timepoint:Antigen:Reagent -1.0811965 0.35954027  -3.007164
+217                 6:SIVsmH4.p55.Gag:R3A.1 Timepoint:Antigen:Reagent -1.0789485 0.35954027  -3.000911
+218                            6:R2A.4.high         Timepoint:Reagent  0.7600811 0.25423336   2.989698
+219                   5:SIVmac239.gp130:C1q Timepoint:Antigen:Reagent -1.0713409 0.35954027  -2.979752
+220                  4:SIVsm.E660.2A5:R3A.1 Timepoint:Antigen:Reagent -1.0685787 0.35954027  -2.972070
+221       5:J08.V1V2.E660.2A5.AVI.His:R3A.3 Timepoint:Antigen:Reagent  1.0678505 0.35954027   2.970044
+222                 5:SIVsmH4.p55.Gag:R3A.3 Timepoint:Antigen:Reagent  1.0552847 0.35954027   2.935095
+223             7:SIVsmH4.p55.Gag:R2A.4.low Timepoint:Antigen:Reagent -1.0495814 0.35954027  -2.919232
+224               8:J08.V1V2.mac239.AVI.His         Timepoint:Antigen  0.7391738 0.25423336   2.907462
+225                        5:SIV.1A11.gp140         Timepoint:Antigen  0.7380783 0.25423336   2.903153
+226              5:SIVsm.E660.84:R2A.4.high Timepoint:Antigen:Reagent -1.0433819 0.35954027  -2.901989
+227             3:SIVsmH4.p55.Gag:R2A.4.low Timepoint:Antigen:Reagent -1.0377713 0.35954027  -2.886384
+228                                 7:R2A.3         Timepoint:Reagent  0.7321003 0.25423336   2.879639
+229                         2:V1a:R2A.4.low Timepoint:Antigen:Reagent -1.0304223 0.35954027  -2.865944
+230                  2:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent  1.0288752 0.35954027   2.861641
+231                             3:R2A.4.low         Timepoint:Reagent  0.7259082 0.25423336   2.855283
+232                  2:SIVsm.E660.2A5:R2A.3 Timepoint:Antigen:Reagent -1.0245943 0.35954027  -2.849735
+233       8:J08.V1V2.E660.2A5.AVI.His:R2A.2 Timepoint:Antigen:Reagent -1.0156881 0.35954027  -2.824963
+234                    8:SIV.1A11.gp140:C1q Timepoint:Antigen:Reagent -1.0125857 0.35954027  -2.816335
+235             6:SIVsm.E660.2A5:R2A.4.high Timepoint:Antigen:Reagent -1.0058134 0.35954027  -2.797499
+236    6:J08.V1V2.mac239.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -1.0046091 0.35954027  -2.794149
+237             4:J08.V1V2.E660.2A5.AVI.His         Timepoint:Antigen -0.7095150 0.25423336  -2.790802
+238     8:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -1.0012725 0.35954027  -2.784869
+239                   2:SIVsmH4.p55.Gag:C1q Timepoint:Antigen:Reagent -0.9972333 0.35954027  -2.773634
+240                    3:SIV.1A11.gp140:C1q Timepoint:Antigen:Reagent -0.9912737 0.35954027  -2.757059
+241                         8:V1a:R2A.4.low Timepoint:Antigen:Reagent -0.9892408 0.35954027  -2.751405
+242                 2:SIVsmH4.p55.Gag:R3A.1 Timepoint:Antigen:Reagent  0.9844597 0.35954027   2.738107
+243                 4:SIVsmH4.p55.Gag:R2A.3 Timepoint:Antigen:Reagent -0.9843493 0.35954027  -2.737800
+244       4:J08.V1V2.E660.2A5.AVI.His:R2A.3 Timepoint:Antigen:Reagent -0.9769167 0.35954027  -2.717127
+245                   7:SIVmac239.gp120:C1q Timepoint:Antigen:Reagent  0.9723566 0.35954027   2.704444
+246           7:J08.V1V2.mac239.AVI.His:C1q Timepoint:Antigen:Reagent  0.9723140 0.35954027   2.704326
+247                             4:G49:R3A.1 Timepoint:Antigen:Reagent -0.9652067 0.35954027  -2.684558
+248                 4:SIVsmH4.p55.Gag:R3A.1 Timepoint:Antigen:Reagent -0.9621657 0.35954027  -2.676100
+249              5:SIVcpz.EK505.gp120:R3A.1 Timepoint:Antigen:Reagent  0.9594808 0.35954027   2.668632
+250                                       7                 Timepoint  0.4832601 0.18224396   2.651721
+251         6:SIVmac239.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.9519919 0.35954027  -2.647803
+252                        7:G145.146:R2A.2 Timepoint:Antigen:Reagent  1.1655491 0.44034510   2.646899
+253            2:SIVmac239.gp120:R2A.4.high Timepoint:Antigen:Reagent -0.9505825 0.35954027  -2.643883
+254                 2:SIVmac239.gp130:R3A.1 Timepoint:Antigen:Reagent  0.9479136 0.35954027   2.636460
+255    7:J08.V1V2.mac239.AVI.His:R2A.4.high Timepoint:Antigen:Reagent  0.9469413 0.35954027   2.633756
+256                       4:SIVmac239.gp130         Timepoint:Antigen -0.6681973 0.25423336  -2.628283
+257                  7:SIV.1A11.gp140:R3A.3 Timepoint:Antigen:Reagent  0.9436844 0.35954027   2.624697
+258                                   4:V1a         Timepoint:Antigen -0.6628283 0.25423336  -2.607165
+259                                   5:C1q         Timepoint:Reagent -0.6624046 0.25423336  -2.605498
+260                 5:SIVmac239.gp120:R2A.3 Timepoint:Antigen:Reagent  0.9277934 0.35954027   2.580499
+261                               G73:R2A.2           Antigen:Reagent  0.6493481 0.25423336   2.554142
+262                  2:SIV.E543.gp140:R3A.3 Timepoint:Antigen:Reagent -0.9164319 0.35954027  -2.548899
+263               4:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent -0.9154586 0.35954027  -2.546192
+264              2:SIVcpz.EK505.gp120:R2A.3 Timepoint:Antigen:Reagent -0.9129443 0.35954027  -2.539199
+265            5:SIVsmH4.p55.Gag:R2A.4.high Timepoint:Antigen:Reagent  0.9118815 0.35954027   2.536243
+266                      SIVsm.E660.2A5:C1q           Antigen:Reagent  0.6434734 0.25423336   2.531034
+267                     5:SIVmac251.BK.PR55         Timepoint:Antigen -0.6426820 0.25423336  -2.527922
+268               2:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent  0.9073030 0.35954027   2.523509
+269         6:J08.V1V2.E660.2A5.AVI.His:C1q Timepoint:Antigen:Reagent -0.8991046 0.35954027  -2.500706
+270                                 8:R3A.1         Timepoint:Reagent -0.6338220 0.25423336  -2.493072
+271               8:SIVmac239.gp140.AVI.His         Timepoint:Antigen  0.6336847 0.25423336   2.492532
+272         5:J08.V1V2.E660.084.AVI.His:C1q Timepoint:Antigen:Reagent -0.8932748 0.35954027  -2.484492
+273                  4:SIV.E543.gp140:R3A.1 Timepoint:Antigen:Reagent -0.8919588 0.35954027  -2.480831
+274                 7:SIVsmH4.p55.Gag:R3A.3 Timepoint:Antigen:Reagent  0.8810646 0.35954027   2.450531
+275  2:J08.V1V2.E660.084.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.8808853 0.35954027  -2.450032
+276                   3:SIVmac239.gp140:C1q Timepoint:Antigen:Reagent -0.8807859 0.35954027  -2.449756
+277                       SIVsm.E660.84:C1q           Antigen:Reagent  0.6226652 0.25423336   2.449188
+278                              G119:R2A.2           Antigen:Reagent  0.6221471 0.25423336   2.447150
+279                               6:SIV_Gag           Timepoint:Group  0.1123716 0.04598116   2.443862
+280                   8:SIVsm.E660.84:R3A.1 Timepoint:Antigen:Reagent  0.8775513 0.35954027   2.440759
+281                       4:SIVmac239.gp120         Timepoint:Antigen -0.6178434 0.25423336  -2.430222
+282                                   8:C1q         Timepoint:Reagent  0.6177961 0.25423336   2.430036
+283               2:SIVmac251.BK.PR55:R2A.3 Timepoint:Antigen:Reagent -0.8726942 0.35954027  -2.427250
+284                     SIVmac239.gp120:C1q           Antigen:Reagent  0.6161967 0.25423336   2.423744
+285                   7:SIVsm.E660.84:R3A.3 Timepoint:Antigen:Reagent  0.8677690 0.35954027   2.413552
+286   3:J08.V1V2.E660.2A5.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -0.8648158 0.35954027  -2.405338
+287                         6:G49:R2A.4.low Timepoint:Antigen:Reagent -0.8630108 0.35954027  -2.400317
+288               8:SIVmac251.BK.PR55:R3A.1 Timepoint:Antigen:Reagent  0.8624139 0.35954027   2.398657
+289             3:SIVmac239.gp140:R2A.4.low Timepoint:Antigen:Reagent -0.8592010 0.35954027  -2.389721
+290  6:J08.V1V2.E660.2A5.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.8579848 0.35954027  -2.386339
+291                  4:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent -0.8578403 0.35954027  -2.385937
+292                            7:G119:R3A.1 Timepoint:Antigen:Reagent  0.8558052 0.35954027   2.380276
+293                                   8:G49         Timepoint:Antigen  0.5982395 0.25423336   2.353112
+294          6:SIVsm.E660.2A5:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.8428889 0.35954027  -2.344352
+295                  7:SIVsm.E660.2A5:R3A.3 Timepoint:Antigen:Reagent  0.8412516 0.35954027   2.339798
+296         5:J08.V1V2.E660.2A5.AVI.His:C1q Timepoint:Antigen:Reagent -0.8390619 0.35954027  -2.333708
+297       4:J08.V1V2.E660.2A5.AVI.His:R3A.3 Timepoint:Antigen:Reagent -0.8357419 0.35954027  -2.324474
+298              2:SIVcpz.EK505.gp120:R3A.1 Timepoint:Antigen:Reagent  0.8354893 0.35954027   2.323771
+299                     6:SIVsm.E660.84:C1q Timepoint:Antigen:Reagent -0.8352177 0.35954027  -2.323016
+300                   3:SIVsmH4.p55.Gag:C1q Timepoint:Antigen:Reagent -0.8351662 0.35954027  -2.322873
+301                        8:SIV.E543.gp140         Timepoint:Antigen  0.5901551 0.25423336   2.321313
+302                             2:G49:R3A.1 Timepoint:Antigen:Reagent  0.8338800 0.35954027   2.319295
+303         3:J08.V1V2.E660.2A5.AVI.His:C1q Timepoint:Antigen:Reagent -0.8331671 0.35954027  -2.317312
+304                        5:G145.146:R3A.1 Timepoint:Antigen:Reagent  1.0143441 0.44034510   2.303521
+305         8:J08.V1V2.mac239.AVI.His:R2A.2 Timepoint:Antigen:Reagent -0.8259463 0.35954027  -2.297229
+306             2:SIVsm.E660.2A5:R2A.4.high Timepoint:Antigen:Reagent -0.8244591 0.35954027  -2.293092
+307                         SIVmac239.gp140                   Antigen  0.4120482 0.17977013   2.292084
+308                      SIV.1A11.gp140:C1q           Antigen:Reagent  0.5824426 0.25423336   2.290976
+309                       5:SIVmac239.gp140         Timepoint:Antigen  0.5820103 0.25423336   2.289276
+310         4:J08.V1V2.mac239.AVI.His:R3A.3 Timepoint:Antigen:Reagent -0.8167690 0.35954027  -2.271704
+311          5:SIVmac251.BK.PR55:R2A.4.high Timepoint:Antigen:Reagent  0.8112511 0.35954027   2.256357
+312                   6:SIVsm.E660.84:R3A.3 Timepoint:Antigen:Reagent -0.8088800 0.35954027  -2.249762
+313                        6:G145.146:R2A.2 Timepoint:Antigen:Reagent -0.9852649 0.44034510  -2.237483
+314                        2:G145.146:R3A.1 Timepoint:Antigen:Reagent  0.9827516 0.44034510   2.231776
+315            4:SIVmac239.gp130:R2A.4.high Timepoint:Antigen:Reagent  0.7987513 0.35954027   2.221591
+316       2:J08.V1V2.E660.2A5.AVI.His:R2A.2 Timepoint:Antigen:Reagent  0.7880946 0.35954027   2.191951
+317                      SIV.E543.gp140:C1q           Antigen:Reagent  0.5524061 0.25423336   2.172831
+318                               R2A.4.low                   Reagent -0.3898674 0.17977013  -2.168699
+319                             7:G49:R3A.1 Timepoint:Antigen:Reagent  0.7795882 0.35954027   2.168292
+320     3:J08.V1V2.mac239.AVI.His:R2A.4.low Timepoint:Antigen:Reagent -0.7766337 0.35954027  -2.160074
+321                    6:G145.146:R2A.4.low Timepoint:Antigen:Reagent -0.7748118 0.35954027  -2.155007
+322                        3:SIV.E543.gp140         Timepoint:Antigen  0.5472468 0.25423336   2.152537
+323                         7:V1a:R2A.4.low Timepoint:Antigen:Reagent -0.7734261 0.35954027  -2.151153
+324                  8:SIV.1A11.gp140:R3A.1 Timepoint:Antigen:Reagent  0.7703131 0.35954027   2.142495
+325                 4:SIVmac239.gp130:R3A.3 Timepoint:Antigen:Reagent -0.7687062 0.35954027  -2.138025
+326                    5:SIV.1A11.gp140:C1q Timepoint:Antigen:Reagent -0.7679325 0.35954027  -2.135874
+327                  2:SIVsm.E660.2A5:R3A.1 Timepoint:Antigen:Reagent  0.7679292 0.35954027   2.135864
+328             8:SIVsm.E660.2A5:R2A.4.high Timepoint:Antigen:Reagent  0.7639150 0.35954027   2.124700
+329                     6:SIVmac251.BK.PR55         Timepoint:Antigen  0.5396351 0.25423336   2.122598
+330         5:J08.V1V2.mac239.AVI.His:R2A.2 Timepoint:Antigen:Reagent -0.7598573 0.35954027  -2.113414
+331         7:SIVmac239.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent  0.7592023 0.35954027   2.111592
+332                     SIVmac239.gp130:C1q           Antigen:Reagent  0.5340346 0.25423336   2.100569
+333  2:J08.V1V2.E660.2A5.AVI.His:R2A.4.high Timepoint:Antigen:Reagent -0.7517489 0.35954027  -2.090861
+334    5:J08.V1V2.mac239.AVI.His:R2A.4.high Timepoint:Antigen:Reagent  0.7515974 0.35954027   2.090440
+335                             2:R2A.4.low         Timepoint:Reagent  0.5306446 0.25423336   2.087234
+336                 5:SIVmac239.gp130:R2A.3 Timepoint:Antigen:Reagent  0.7435147 0.35954027   2.067960
+337                   6:SIVsmH4.p55.Gag:C1q Timepoint:Antigen:Reagent -0.7431687 0.35954027  -2.066997
+338                   3:SIVsm.E660.84:R2A.3 Timepoint:Antigen:Reagent -0.7421631 0.35954027  -2.064200
+339            4:SIVmac239.gp120:R2A.4.high Timepoint:Antigen:Reagent  0.7418627 0.35954027   2.063365
+340                               2:V1a:C1q Timepoint:Antigen:Reagent -0.7374891 0.35954027  -2.051200
+341                   5:SIVsm.E660.84:R3A.3 Timepoint:Antigen:Reagent  0.7367228 0.35954027   2.049069
+342               7:SIVmac239.gp140.AVI.His         Timepoint:Antigen  0.5197475 0.25423336   2.044372
+343                            8:G119:R3A.1 Timepoint:Antigen:Reagent  0.7338434 0.35954027   2.041060
+344         8:SIVsmH4.p55.Gag:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7321219 0.35954027  -2.036272
+345          2:SIV.E543.gp140:aRhIgG.PE.low Timepoint:Antigen:Reagent -0.7317742 0.35954027  -2.035305
+346       5:J08.V1V2.E660.2A5.AVI.His:R2A.2 Timepoint:Antigen:Reagent -0.7311310 0.35954027  -2.033516
+347                 2:SIVmac239.gp130:R2A.3 Timepoint:Antigen:Reagent -0.7269671 0.35954027  -2.021935
+348       5:J08.V1V2.E660.084.AVI.His:R3A.3 Timepoint:Antigen:Reagent  0.7252005 0.35954027   2.017022
+349                          G145.146:R2A.2           Antigen:Reagent  0.6238256 0.31137101   2.003480
+350               7:SIVmac251.BK.PR55:R3A.3 Timepoint:Antigen:Reagent  0.7124809 0.35954027   1.981644
+351             4:SIVsm.E660.2A5:R2A.4.high Timepoint:Antigen:Reagent  0.7068819 0.35954027   1.966072
+352                 6:SIVmac239.gp140:R2A.3 Timepoint:Antigen:Reagent  0.7066240 0.35954027   1.965354
+353            8:SIVmac239.gp130:R2A.4.high Timepoint:Antigen:Reagent -0.7051508 0.35954027  -1.961257

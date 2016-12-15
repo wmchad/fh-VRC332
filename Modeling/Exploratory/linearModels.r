@@ -31,6 +31,9 @@ model4 <- as.formula(value ~ GroupNm * as.factor(tp) +
                          AnimalId) 
 model5 <- as.formula(value ~ re * ag)
 model6 <- as.formula(value ~ re * ag * as.factor(tp))
+model7 <- as.formula(value ~ re * ag * as.factor(tp) + AnimalId * as.factor(tp))
+model8 <- as.formula(value ~ re * ag * as.factor(tp) + GroupNm * as.factor(tp))
+model9 <- as.formula(value ~ re * ag * as.factor(tp) * GroupNm)
 
 tps <- 1:8
 grps <- unique(longData.orig$GroupNm)
@@ -231,7 +234,6 @@ ModelSummaryPlots(results.lag5$data, file.path(plotDir, "Model5", "Lag"), ags, r
 ## See SixthModelSummaries.txt for results
 ##################################################
 
-
 ##------------------------------------------------
 ## Original Data
 ##------------------------------------------------
@@ -258,4 +260,106 @@ results.lag6 <- RunAndSummarizeModel(longData.lag, "lag", model6, "model6",
                                      dataDir,
                                      tps, grps, animalIds, ags, res)
 ModelSummaryPlots(results.lag6$data, file.path(plotDir, "Model6", "Lag"), ags, res)
+
+
+##################################################
+## Seventh model
+## See SeventhModelSummaries.txt for results
+##################################################
+
+
+##------------------------------------------------
+## Original Data
+##------------------------------------------------
+
+results.orig7 <- RunAndSummarizeModel(longData.orig, "orig", model7, "model7",
+                                     dataDir,
+                                     tps, grps, animalIds, ags, res)
+ModelSummaryPlots(results.orig7$data, file.path(plotDir, "Model7", "Orig"), ags, res)
+
+##------------------------------------------------
+## Baseline-Adjusted Data
+##------------------------------------------------
+
+results.adj7 <- RunAndSummarizeModel(longData.adj, "adj", model7, "model7",
+                                     dataDir,
+                                     tps, grps, animalIds, ags, res)
+ModelSummaryPlots(results.adj7$data, file.path(plotDir, "Model7", "Adj"), ags, res)
+
+##------------------------------------------------
+## Lagged Data
+##------------------------------------------------
+
+results.lag7 <- RunAndSummarizeModel(longData.lag, "lag", model7, "model7",
+                                     dataDir,
+                                     tps, grps, animalIds, ags, res)
+ModelSummaryPlots(results.lag7$data, file.path(plotDir, "Model7", "Lag"), ags, res)
+
+
+##################################################
+## Eighth model
+## See EighthModelSummaries.txt for results
+##################################################
+
+
+##------------------------------------------------
+## Original Data
+##------------------------------------------------
+
+results.orig8 <- RunAndSummarizeModel(longData.orig, "orig", model8, "model8",
+                                     dataDir,
+                                     tps, grps, animalIds, ags, res)
+ModelSummaryPlots(results.orig8$data, file.path(plotDir, "Model8", "Orig"), ags, res)
+
+##------------------------------------------------
+## Baseline-Adjusted Data
+##------------------------------------------------
+
+results.adj8 <- RunAndSummarizeModel(longData.adj, "adj", model8, "model8",
+                                     dataDir,
+                                     tps, grps, animalIds, ags, res)
+ModelSummaryPlots(results.adj8$data, file.path(plotDir, "Model8", "Adj"), ags, res)
+
+##------------------------------------------------
+## Lagged Data
+##------------------------------------------------
+
+results.lag8 <- RunAndSummarizeModel(longData.lag, "lag", model8, "model8",
+                                     dataDir,
+                                     tps, grps, animalIds, ags, res)
+ModelSummaryPlots(results.lag8$data, file.path(plotDir, "Model8", "Lag"), ags, res)
+
+
+##################################################
+## Ninth model
+## See NinthModelSummaries.txt for results
+##################################################
+
+
+##------------------------------------------------
+## Original Data
+##------------------------------------------------
+
+results.orig9 <- RunAndSummarizeModel(longData.orig, "orig", model9, "model9",
+                                     dataDir,
+                                     tps, grps, animalIds, ags, res)
+ModelSummaryPlots(results.orig9$data, file.path(plotDir, "Model9", "Orig"), ags, res)
+
+##------------------------------------------------
+## Baseline-Adjusted Data
+##------------------------------------------------
+
+results.adj9 <- RunAndSummarizeModel(longData.adj, "adj", model9, "model9",
+                                     dataDir,
+                                     tps, grps, animalIds, ags, res)
+ModelSummaryPlots(results.adj9$data, file.path(plotDir, "Model9", "Adj"), ags, res)
+
+##------------------------------------------------
+## Lagged Data
+##------------------------------------------------
+
+results.lag9 <- RunAndSummarizeModel(longData.lag, "lag", model9, "model9",
+                                     dataDir,
+                                     tps, grps, animalIds, ags, res)
+ModelSummaryPlots(results.lag9$data, file.path(plotDir, "Model9", "Lag"), ags, res)
 
