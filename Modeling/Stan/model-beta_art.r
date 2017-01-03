@@ -6,6 +6,9 @@ options(mc.cores = parallel::detectCores())
 fnFolder <- "~/Projects/VRC332/Code/fh-vrc332/Functions"
 source(file.path(fnFolder, "Modeling/LinearModels-Support.r"))
 
+modelFolder <- "~/Projects/VRC332/Code/fh-vrc332/Modeling/Stan/"
+dataFolder <- "~/Projects/VRC332/Data/Modeling/Stan/"
+
 log_sum_exp <- function(x) {
     maxx <- max(x)
     maxx + log(sum(exp(x-maxx)))
@@ -53,7 +56,7 @@ model_dat <- list(N = N,
                   y = y)
 
 setwd("~/Projects/VRC332/Code/fh-vrc332/Modeling/Stan/")
-fit <- stan("model-beta_art.stan", data=model_dat, iter=1000, chains=4)
+fit <- stan(file.path(modelFolder, "model-beta_art.stan"), data=model_dat, iter=1000, chains=4)
 
 fit_summary <- as.data.frame(summary(fit)$summary)
 
@@ -87,7 +90,7 @@ model_dat2 <- list(N = N2,
                    y = y2)
 
 setwd("~/Projects/VRC332/Code/fh-vrc332/Modeling/Stan/")
-fit2 <- stan("model-beta_art_mix.stan", data=model_dat2, iter=1000, chains=4)
+fit2 <- stan(file.path(modelFolder, "model-beta_art_mix.stan"), data=model_dat2, iter=1000, chains=4)
 saveRDS(fit2, "model-beta_art_mix.rds")
 
 fit2_summary <- as.data.frame(summary(fit2)$summary)
@@ -278,14 +281,15 @@ model_dat3 <- list(N = N3,
                    y = y3)
 
 setwd("~/Projects/VRC332/Code/fh-vrc332/Modeling/Stan/")
-fit3 <- stan("model-ts_clust.stan", data=model_dat3, iter=1000, chains=4)
+fit3 <- stan(file.path(modelFolder, "model-ts_clust.stan"), data=model_dat3, iter=1000, chains=4)
 ## saveRDS(fit3, "model-ts_clust.rds")
 
 fit3_summary <- as.data.frame(summary(fit3)$summary)
 fit3_summary$var <- rownames(fit3_summary)
 
-## write.table(fit3_summary, "fit3_summary.txt", quote=FALSE, row.names=FALSE)
-## fit3_summary <- read.table("fit3_summary.txt", header=TRUE)
+## write.table(fit3_summary, file.path(dataFolder, "fit3_summary.txt"),
+##             quote=FALSE, row.names=FALSE)
+## fit3_summary <- read.table(file.path(dataFolder, "fit3_summary.txt"), header=TRUE)
 
 mus <- fit3_summary %>% filter(str_sub(var, 1, 3)=="mu[")
 
@@ -338,15 +342,15 @@ model_dat4 <- list(N = N4,
                    y = y4)
 
 setwd("~/Projects/VRC332/Code/fh-vrc332/Modeling/Stan/")
-fit4 <- stan("model-ts_clust_group.stan", data=model_dat4, iter=1000, chains=4)
+fit4 <- stan(file.path(modelFolder, "model-ts_clust_group.stan"), data=model_dat4, iter=1000, chains=4)
 
 saveRDS(fit4, "model-ts_clust.rds")
 
 fit4_summary <- as.data.frame(summary(fit4)$summary)
 fit4_summary$var <- rownames(fit4_summary)
 
-## write.table(fit4_summary, "fit4_summary.txt", quote=FALSE, row.names=FALSE)
-## fit4_summary <- read.table("fit4_summary.txt", header=TRUE)
+## write.table(fit4_summary, file.path(dataFolder, "fit4_summary.txt"), quote=FALSE, row.names=FALSE)
+## fit4_summary <- read.table(file.path(dataFolder, "fit4_summary.txt"), header=TRUE)
 
 mus <- fit4_summary %>% filter(str_sub(var, 1, 3)=="mu[")
 
@@ -439,15 +443,15 @@ model_dat5 <- list(N = N5,
                    y = y5)
 
 setwd("~/Projects/VRC332/Code/fh-vrc332/Modeling/Stan/")
-fit5 <- stan("model-ts_clust_group.stan", data=model_dat5, iter=1000, chains=4)
+fit5 <- stan(file.path(modelFolder, "model-ts_clust_group.stan"), data=model_dat5, iter=1000, chains=4)
 
 saveRDS(fit5, "model-ts_clust_agregrp.rds")
 
 fit5_summary <- as.data.frame(summary(fit5)$summary)
 fit5_summary$var <- rownames(fit5_summary)
 
-## write.table(fit5_summary, "fit5_summary.txt", quote=FALSE, row.names=FALSE)
-## fit5_summary <- read.table("fit5_summary.txt", header=TRUE)
+## write.table(fit5_summary, file.path(dataFolder, "fit5_summary.txt"), quote=FALSE, row.names=FALSE)
+## fit5_summary <- read.table(file.path(dataFolder, "fit5_summary.txt"), header=TRUE)
 
 mus <- fit5_summary %>% filter(str_sub(var, 1, 3)=="mu[")
 
@@ -566,17 +570,17 @@ model_dat6 <- list(N = N6,
                    obs_to_subgroup = obs_to_subgroup6,
                    y = y6)
 
-setwd("~/Projects/VRC332/Code/fh-vrc332/Modeling/Stan/")
-fit6 <- stan("model-ts_clust_group.stan", data=model_dat6, iter=1000, chains=4)
+fit6 <- stan(file.path(modelFolder, "model-ts_clust_group.stan"),
+             data=model_dat6, iter=2000, chains=1)
 
-## saveRDS(fit6, "model-ts1-6_clust_agregrp.rds")
-## fit6 <- readRDS("model-ts1-6_clust_agregrp.rds")
+## saveRDS(fit6, file.path(dataFolder, "model-ts1-6_clust_agregrp.rds"))
+## fit6 <- readRDS(file.path(dataFolder, "model-ts1-6_clust_agregrp.rds"))
 
 fit6_summary <- as.data.frame(summary(fit6)$summary)
 fit6_summary$var <- rownames(fit6_summary)
 
-## write.table(fit6_summary, "fit6_summary.txt", quote=FALSE, row.names=FALSE)
-## fit6_summary <- read.table("fit6_summary.txt", header=TRUE)
+## write.table(fit6_summary, file.path(dataFolder, "fit6_summary.txt"), quote=FALSE, row.names=FALSE)
+## fit6_summary <- read.table(file.path(dataFolder, "fit6_summary.txt"), header=TRUE)
 
 mus <- fit6_summary %>% filter(str_sub(var, 1, 3)=="mu[")
 
@@ -598,26 +602,108 @@ cluster_assignments <- apply(softzmatrix, 1, clust_assign)
 
 agregrp$cluster <- cluster_assignments
 
-clustColors <- brewer.pal(5, "Set1")
+clustColors <- brewer.pal(10, "RdYlGn")
 
-clustTrans <- data_frame(cluster=c(1,5,8:10),
-                         clusterName=c("LowMid2", "High", "LowMid1", "Mid", "Low"))
+clustTrans <- data_frame(cluster=1:10,
+                         clusterName=c("f-LowMid2", "i-High1", "d-Low2", "a-Neg", "e-LowMid",
+                                       "b-None", "c-Low1", "h-MidHigh", "j-High2", "g-Mid"),
+                         clusterName2=c("b-Mid", "c-High", "a-Low", "a-Low", "b-Mid",
+                                        "a-Low", "a-Low", "c-High", "c-High", "b-Mid"),
+                         reorder=c(6,9,4,1,5,2,3,8,10,7),
+                         reorder2=c(2,3,1,1,2,1,1,3,3,2))
 
-agregrp <- agregrp %>% left_join(clustTrans)
+agregrp <- agregrp %>% left_join(clustTrans, by=c("cluster"="cluster"))
 
 multiPie.grp.ag <- ggplot(agregrp) + geom_bar(aes(x=factor(1), fill=factor(clusterName)), width=1) +
     coord_polar(theta="y") + theme_void(base_size=8) + facet_wrap(~GroupNm+ag, nrow=5) +
     scale_fill_manual(values=clustColors,
                       limits=levels(factor(agregrp$clusterName)))
 
+multiPie.grp.ag2 <- ggplot(agregrp) + geom_bar(aes(x=factor(1),
+                                                   fill=factor(clusterName2)), width=1) +
+    coord_polar(theta="y") +
+    theme_void(base_size=8) +
+    facet_wrap(~GroupNm+ag, nrow=5) +
+    scale_fill_manual(values=clustColors[c(1,3,8)],
+                      limits=levels(factor(agregrp$clusterName2)))
+
 mudf <- mudf %>% left_join(clustTrans, by=c("clust" = "cluster"))
 
-ggplot(mudf %>% filter(clust %in% c(1,5,8:10))) +
+ggplot(mudf) +
     geom_line(aes(tp, value, color=clusterName)) +
     scale_color_manual(values=clustColors,
-                      limits=levels(factor(agregrp$clusterName)))
+                       limits=levels(factor(agregrp$clusterName)))
+
+table((agregrp %>% filter(GroupNm=="SIV_Env"))$reorder,
+  (agregrp %>% filter(GroupNm=="x_PARI"))$reorder)
+##     1  2  3  4  5  6  7  8  9 10
+## 1   3  0  0  0  0  0  0  0  0  0
+## 2  11 15  2  0  0  0  0  0  0  0
+## 3   1  4 22  0  0  0  0  0  0  0
+## 4   0  2  8 15  2  0  0  0  0  0
+## 5   0  0  1  5 13  0  0  0  0  0
+## 6   0  0  0  0  1  7  0  0  0  0
+## 7   0  0  0  0  1  1 12  0  0  0
+## 8   0  0  0  0  0  0  3  5  0  0
+## 9   0  0  0  0  0  0  1  1 13  0
+## 10  0  0  0  0  0  0  0  0  3  9
+
+table((agregrp %>% filter(GroupNm=="SIV_Env"))$reorder,
+  (agregrp %>% filter(GroupNm=="SIV_Mosaic_Env"))$reorder)
+##     1  2  3  4  5  6  7  8  9 10
+## 1   3  0  0  0  0  0  0  0  0  0
+## 2   0 28  0  0  0  0  0  0  0  0
+## 3   2 18  7  0  0  0  0  0  0  0
+## 4   2  2 17  6  0  0  0  0  0  0
+## 5   0  1  6 12  0  0  0  0  0  0
+## 6   0  0  0  4  1  3  0  0  0  0
+## 7   0  0  0  0  8  5  1  0  0  0
+## 8   0  0  0  0  0  2  1  5  0  0
+## 9   0  0  0  0  0  0 10  4  1  0
+## 10  0  0  0  0  0  0  0  8  1  3
+
+grpClust <- data_frame(Control = (agregrp %>% filter(GroupNm=="Control"))$reorder,
+                       SIV_Env = (agregrp %>% filter(GroupNm=="SIV_Env"))$reorder,
+                       SIV_Gag = (agregrp %>% filter(GroupNm=="SIV_Gag"))$reorder,
+                       SIV_Mosaic_Env = (agregrp %>% filter(GroupNm=="SIV_Mosaic_Env"))$reorder,
+                       x_PARI= (agregrp %>% filter(GroupNm=="x_PARI"))$reorder)
+
+GroupCompPlot <- function(data, column1, column2) {
+    args <- as.list(match.call())
+    plotData <- data %>% count_(c(args$column1, args$column2))
+    names(plotData) <- c("col1", "col2", "count")
+    ggplot(plotData) +
+        geom_point(aes(col1, col2, size=count)) +
+        geom_abline(slope=1, intercept=0, lty=2) +
+        scale_x_continuous(limits=c(1,10), breaks=1:10) +
+        scale_y_continuous(limits=c(1,10), breaks=1:10) +
+        labs(x=args$column1, y=args$column2)
+}
+
+GroupCompPlot(grpClust, Control SIV_Env)
+GroupCompPlot(grpClust, Control SIV_Gag)
+GroupCompPlot(grpClust, SIV_Env, x_PARI)
+GroupCompPlot(grpClust, SIV_Env, SIV_Mosaic_Env)
+GroupCompPlot(grpClust, SIV_Env, SIV_Gag)
 
 
+agregrp %>%
+    group_by(ag, GroupNm) %>%
+    summarize(weight=sum(reorder)) %>% 
+    arrange(weight) %>%
+    tail(n=20)
+
+agregrp %>%
+    group_by(re, GroupNm) %>%
+    summarize(weight=sum(reorder)) %>% 
+    arrange(weight) %>%
+    tail(n=20)
+
+agregrp %>%
+    group_by(ag, re) %>%
+    summarize(weight=sum(reorder)) %>%
+    arrange(weight) %>%
+    tail(n=20)
 
 
 ######################################################################
@@ -650,16 +736,16 @@ model_dat7 <- list(N = N7,
                    y = y7)
 
 setwd("~/Projects/VRC332/Code/fh-vrc332/Modeling/Stan/")
-fit7 <- stan("model-ts_clust_group.stan", data=model_dat7, iter=1000, chains=4)
+fit7 <- stan(file.path(modelFolder, "model-ts_clust_group.stan"), data=model_dat7, iter=1000, chains=4)
 
-## saveRDS(fit7, "model-ts1-6_clust_agregrp_b.rds")
-## fit7 <- readRDS("model-ts1-6_clust_agregrp_b.rds")
+## saveRDS(fit7, file.path(dataFolder, "model-ts1-6_clust_agregrp_b.rds"))
+## fit7 <- readRDS(file.path(dataFolder, "model-ts1-6_clust_agregrp_b.rds"))
 
 fit7_summary <- as.data.frame(summary(fit7)$summary)
 fit7_summary$var <- rownames(fit7_summary)
 
-## write.table(fit7_summary, "fit7_summary.txt", quote=FALSE, row.names=FALSE)
-## fit7_summary <- read.table("fit7_summary.txt", header=TRUE)
+## write.table(fit7_summary, file.path(dataFolder, "fit7_summary.txt"), quote=FALSE, row.names=FALSE)
+## fit7_summary <- read.table(file.path(dataFolder, "fit7_summary.txt"), header=TRUE)
 
 mus <- fit7_summary %>% filter(str_sub(var, 1, 3)=="mu[")
 
@@ -695,7 +781,92 @@ multiPie.grp.ag <- ggplot(agregrp) + geom_bar(aes(x=factor(1), fill=factor(clust
 
 mudf7 <- mudf7 %>% left_join(clustTrans7, by=c("clust" = "cluster"))
 
-ggplot(mudf7 %>% filter(clust %in% c(1,3,6,8,9))) +
-    geom_line(aes(tp, value, color=factor(clusterName))) +
+ggplot(mudf7 %>% filter(clust %in% c(5:7))) +
+    geom_line(aes(tp, value, color=factor(clust))) +
+    scale_color_manual(values=clustColors,
+                       limits=levels(factor(agregrp$clusterName)))
+
+
+
+
+
+
+######################################################################
+tsData <- longData.adj %>% select(AnimalId:value) %>%
+  spread(tp, value)
+names(tsData)[5:12] <- str_c("tp", 1:8)
+tsData <- tsData %>% select(AnimalId:tp6)
+
+agregrp <- tsData %>% select(ag, re, GroupNm) %>% distinct()
+agregrp$groupId <- 1:nrow(agregrp)
+
+tsData <- tsData %>%
+    left_join(agregrp, by=c("ag" = "ag",
+                            "re" = "re",
+                            "GroupNm" = "GroupNm"))
+
+N_subgroups8 <- length(unique(tsData$groupId))
+obs_to_subgroup8 <- tsData$groupId
+
+N8 <- nrow(tsData)
+D8 <- 6
+K8 <- 10
+y8 <- tsData[,5:10]
+
+model_dat8 <- list(N = N8,
+                   D = D8,
+                   K = K8,
+                   N_subgroups = N_subgroups8,
+                   obs_to_subgroup = obs_to_subgroup8,
+                   y = y8)
+
+fit8 <- stan(file.path(modelFolder, "model-ts_clust_group_sigma.stan"),
+             data=model_dat8, iter=2000, chains=1)
+
+## saveRDS(fit8, file.path(dataFolder, "model-ts1-6_clust_sigma.rds"))
+## fit8 <- readRDS(file.path(dataFolder, "model-ts1-6_clust_sigma.rds"))
+
+fit8_summary <- as.data.frame(summary(fit8)$summary)
+fit8_summary$var <- rownames(fit8_summary)
+
+## write.table(fit8_summary, file.path(dataFolder, "fit8_summary.txt"), quote=FALSE, row.names=FALSE)
+## fit8_summary <- read.table(file.path(dataFolder, "fit8_summary.txt"), header=TRUE)
+
+mus <- fit8_summary %>% filter(str_sub(var, 1, 3)=="mu[")
+
+mumatrix <- matrix(nrow=K8, ncol=D8, byrow=TRUE, data=mus$mean)
+
+mudf8 <- as.data.frame(mumatrix)
+mudf8$clust <- 1:K8
+
+mudf8 <- mudf8 %>% gather(clust)
+names(mudf8) <- c("clust", "tp", "value")
+mudf8 <- mudf8 %>% mutate(tp=str_sub(tp, 2, 2))
+mudf8$tp <- as.numeric(mudf8$tp)
+
+
+softzs <- fit8_summary %>% filter(str_sub(var, 1, 6) == "soft_z")
+softzmatrix <- matrix(nrow=N_subgroups8, ncol=K8, byrow=TRUE, data=softzs$mean)
+
+cluster_assignments8 <- apply(softzmatrix, 1, clust_assign)
+
+agregrp$cluster <- cluster_assignments8
+
+clustColors <- brewer.pal(5, "Set1")
+
+clustTrans8 <- data_frame(cluster=c(3, 9, 6, 1, 8),
+                         clusterName=c("Low1", "Low2", "LowMid", "Mid", "High"))
+
+agregrp <- agregrp %>% left_join(clustTrans8)
+
+multiPie.grp.ag <- ggplot(agregrp) + geom_bar(aes(x=factor(1), fill=factor(clusterName)), width=1) +
+    coord_polar(theta="y") + theme_void(base_size=8) + facet_wrap(~GroupNm+ag, nrow=5) +
+    scale_fill_manual(values=clustColors,
+                      limits=levels(factor(agregrp$clusterName)))
+
+mudf8 <- mudf8 %>% left_join(clustTrans8, by=c("clust" = "cluster"))
+
+ggplot(mudf8 %>% filter(clust %in% c(1:10))) +
+    geom_line(aes(tp, value, color=factor(clust))) +
     scale_color_manual(values=clustColors,
                        limits=levels(factor(agregrp$clusterName)))
