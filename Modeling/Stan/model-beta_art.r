@@ -605,12 +605,17 @@ agregrp$cluster <- cluster_assignments
 clustColors <- brewer.pal(10, "RdYlGn")
 
 clustTrans <- data_frame(cluster=1:10,
-                         clusterName=c("f-LowMid2", "i-High1", "d-Low2", "a-Neg", "e-LowMid",
-                                       "b-None", "c-Low1", "h-MidHigh", "j-High2", "g-Mid"),
+                         clusterName=c("f-LowMid2 (26)", "i-High1 (34)", "d-Low2 (88)",
+                                       "a-Neg (128)", "e-LowMid (46)", "b-None (228)",
+                                       "c-Low1 (153)", "h-MidHigh (33)", "j-High2 (24)",
+                                       "g-Mid (45)"),
                          clusterName2=c("b-Mid", "c-High", "a-Low", "a-Low", "b-Mid",
                                         "a-Low", "a-Low", "c-High", "c-High", "b-Mid"),
+                         clusterName3=c("b-High", "b-High", "a-Low", "a-Low", "a-Low",
+                                        "a-Low", "a-Low", "b-High", "b-High", "b-High"),
                          reorder=c(6,9,4,1,5,2,3,8,10,7),
-                         reorder2=c(2,3,1,1,2,1,1,3,3,2))
+                         reorder2=c(2,3,1,1,2,1,1,3,3,2),
+                         reorder3=c(2,2,1,1,1,1,1,2,2,2))
 
 agregrp <- agregrp %>% left_join(clustTrans, by=c("cluster"="cluster"))
 
@@ -627,12 +632,26 @@ multiPie.grp.ag2 <- ggplot(agregrp) + geom_bar(aes(x=factor(1),
     scale_fill_manual(values=clustColors[c(1,3,8)],
                       limits=levels(factor(agregrp$clusterName2)))
 
+multiPie.grp.ag3 <- ggplot(agregrp) + geom_bar(aes(x=factor(1),
+                                                   fill=factor(clusterName3)), width=1) +
+    coord_polar(theta="y") +
+    theme_void(base_size=8) +
+    facet_wrap(~GroupNm+ag, nrow=5) +
+    scale_fill_manual(values=clustColors[c(1,8)],
+                      limits=levels(factor(agregrp$clusterName3)))
+
 mudf <- mudf %>% left_join(clustTrans, by=c("clust" = "cluster"))
 
-ggplot(mudf) +
+linePlot <- ggplot(mudf) +
     geom_line(aes(tp, value, color=clusterName)) +
     scale_color_manual(values=clustColors,
                        limits=levels(factor(agregrp$clusterName)))
+
+setwd("~/Projects/VRC332/Plots/Modeling/Stan/ts1-6-clust-agregrp")
+ggsave("linePlot.png", linePlot, width=12, height=6)
+ggsave("pieFull.png", multiPie.grp.ag, width=20, height=8)
+ggsave("pie-3class.png", multiPie.grp.ag2, width=20, height=8)
+ggsave("pie-2class.png", multiPie.grp.ag3, width=20, height=8)
 
 table((agregrp %>% filter(GroupNm=="SIV_Env"))$reorder,
   (agregrp %>% filter(GroupNm=="x_PARI"))$reorder)
@@ -821,7 +840,7 @@ model_dat8 <- list(N = N8,
                    y = y8)
 
 fit8 <- stan(file.path(modelFolder, "model-ts_clust_group_sigma.stan"),
-             data=model_dat8, iter=2000, chains=1)
+             data=model_dat8, iter=1000, chains=1)
 
 ## saveRDS(fit8, file.path(dataFolder, "model-ts1-6_clust_sigma.rds"))
 ## fit8 <- readRDS(file.path(dataFolder, "model-ts1-6_clust_sigma.rds"))
@@ -850,12 +869,15 @@ softzmatrix <- matrix(nrow=N_subgroups8, ncol=K8, byrow=TRUE, data=softzs$mean)
 
 cluster_assignments8 <- apply(softzmatrix, 1, clust_assign)
 
+logsoftmax8 <- apply(softzmatrix, 1, logsoftmax)
+
 agregrp$cluster <- cluster_assignments8
+agregrp$clusterProb8 <- apply(exp(logsoftmax8), 2, max)
 
-clustColors <- brewer.pal(5, "Set1")
+clustColors <- brewer.pal(4, "Set1")
 
-clustTrans8 <- data_frame(cluster=c(3, 9, 6, 1, 8),
-                         clusterName=c("Low1", "Low2", "LowMid", "Mid", "High"))
+clustTrans8 <- data_frame(cluster=c(8,7,10,1),
+                         clusterName=c("Low1", "Low2", "High", "Single"))
 
 agregrp <- agregrp %>% left_join(clustTrans8)
 
@@ -870,3 +892,111 @@ ggplot(mudf8 %>% filter(clust %in% c(1:10))) +
     geom_line(aes(tp, value, color=factor(clust))) +
     scale_color_manual(values=clustColors,
                        limits=levels(factor(agregrp$clusterName)))
+
+
+
+ggplot(mudf8 %>% filter(clust %in% c(1,7,8,10))) +
+    geom_line(aes(tp, value, color=factor(clust))) +
+    geom_line(aes(tp, value, color=factor(clust)), mudf, lty=2)
+
+
+tsDataClust <- tsData %>%
+    left_join(agregrp %>% select(groupId:clusterProb8),
+              by=c("groupId" = "groupId"))
+
+
+tsDataClust.long <- tsDataClust %>% select(AnimalId, tp1:clusterName) %>%
+    melt(id.vars=c("AnimalId", "groupId", "cluster", "clusterName")) %>%
+    mutate(tp=str_sub(variable, 3, 3), ts=paste(AnimalId, groupId)) %>% select(-variable)
+
+selClust <- 8
+ggplot(tsDataClust.long %>% filter(cluster==selClust)) +
+    geom_line(aes(tp, value, group=ts), color="darkgrey", alpha=0.2) +
+    geom_line(aes(tp, value), mudf %>% filter(clust==selClust), color="black", size=1.5)
+
+
+selClust <- 9
+mudf %>% filter(clust==selClust)
+tsDataClust.long %>% filter(cluster==selClust) %>% group_by(tp) %>% summarize(avg=mean(value))
+
+mudf$tp <- as.numeric(mudf$tp)
+tsDataClust.long$tp <- as.numeric(tsDataClust.long$tp)
+
+tsDataClust.long <- tsDataClust.long %>%
+    left_join(mudf %>% select(clust:value), by=c("cluster"="clust", "tp"="tp")) %>%
+    rename(value = value.x, clustMean = value.y) %>% mutate(resid = value - clustMean)
+
+
+selClust <- 9
+ggplot(tsDataClust.long %>% filter(cluster==selClust)) +
+    geom_line(aes(tp, resid, group=ts), color="darkgrey", alpha=0.2) +
+    geom_abline(slope=0, intercept=0)
+
+clustDevExt <- tsDataClust.long %>%
+    group_by(cluster, tp) %>%
+    summarize(maxVal=max(resid), minVal=min(resid))
+
+ggplot(clustDevExt) +
+    geom_line(aes(tp, maxVal, color=factor(cluster))) +
+    geom_line(aes(tp, minVal, color=factor(cluster)))
+
+
+tsRmses <- tsDataClust.long %>%
+    group_by(AnimalId, groupId) %>%
+    summarize(rmse=sqrt(mean(resid^2))) %>%
+    ungroup() %>%
+    left_join(agregrp %>% select(ag:clusterName))
+
+ggplot(tsRmses) +
+    geom_density(aes(rmse, color=clusterName)) +
+    scale_color_manual(values=clustColors)
+
+tsRmses %>% group_by(clusterName) %>% summarize(maxRmse=max(rmse))
+tsRmses %>% group_by(ag, re, GroupNm) %>% summarize(maxRmse=max(rmse))
+
+animalRmses <- tsRmses %>% group_by(AnimalId) %>%
+    summarize(meanRmse=mean(rmse),
+              maxRmse=max(rmse),
+              minRmse=min(rmse)) %>%
+    left_join(fcData %>% select(AnimalId, GroupNm, NoChallenges:LogSetpointVL)) %>%
+    filter(LogPeakVL >= 0)
+
+ggplot(animalRmses %>% filter(LogPeakVL >= 0)) +
+    geom_point(aes(meanRmse, LogSetpointVL, color=GroupNm))
+
+summary(lm(LogSetpointVL ~ minRmse + meanRmse + maxRmse, data=animalRmses))
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.4651 -1.1308 -0.1034  1.1063  2.6066 
+
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)   
+## (Intercept)   3.4860     1.0394   3.354  0.00137 **
+## minRmse      -0.5393     8.2587  -0.065  0.94815   
+## meanRmse      4.7480     1.7453   2.720  0.00848 **
+## maxRmse      -1.0082     0.4194  -2.404  0.01928 * 
+## ---
+## Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+## Residual standard error: 1.354 on 61 degrees of freedom
+## Multiple R-squared:  0.1308,	Adjusted R-squared:  0.08808 
+## F-statistic: 3.061 on 3 and 61 DF,  p-value: 0.03476
+
+summary(lm(LogSetpointVL ~ GroupNm, data=animalRmses))
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.66196 -1.09754  0.08664  0.97539  2.84692 
+
+## Coefficients:
+##                       Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)             4.3606     0.3720  11.722   <2e-16 ***
+## GroupNmSIV_Env         -0.2149     0.5495  -0.391   0.6971    
+## GroupNmSIV_Gag         -1.2296     0.5166  -2.380   0.0205 *  
+## GroupNmSIV_Mosaic_Env  -0.2417     0.5083  -0.476   0.6361    
+## GroupNmx_PARI           0.4861     0.5369   0.905   0.3690    
+## ---
+## Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+## Residual standard error: 1.341 on 60 degrees of freedom
+## Multiple R-squared:  0.1612,	Adjusted R-squared:  0.1053 
+## F-statistic: 2.883 on 4 and 60 DF,  p-value: 0.02991

@@ -14,7 +14,7 @@ transformed data {
 
 parameters {
   vector[D] mu[K]; // cluster means
-  vector<lower=0>[D] sigma[K]; // cluster variances
+  vector<lower=0>[D] sigma[K]; // cluster variances (sdev)
 }
 
 transformed parameters {
@@ -25,9 +25,8 @@ transformed parameters {
 
   for (n in 1:N)
     for (k in 1:K)
-      for (d in 1:D)
-        soft_z[obs_to_subgroup[n], k] = soft_z[obs_to_subgroup[n], k] +
-	  normal_lpdf(y[n][d] | mu[k][d], sigma[k][d]);
+      soft_z[obs_to_subgroup[n], k] = soft_z[obs_to_subgroup[n], k] +
+        normal_lpdf(y[n] | mu[k], sigma[k]);
 }
 
 model {
